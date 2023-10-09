@@ -14,3 +14,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Readscape"
 include ':app'
+include ':core'
+include ':core:data'
+include ':core:ui'
+include ':core:database'
+include ':core:model'
