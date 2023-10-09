@@ -5,20 +5,22 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.database.model.UserEntity
 import com.example.model.User
 
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users")
-    fun getAllUsers(): List<User>
+    fun getAllUsers(): List<UserEntity>
 
     @Query("SELECT * FROM users WHERE id = :userId")
-    fun getUserById(userId: Int): User?
+    fun getUserById(userId: Int): UserEntity?
     @Query("SELECT * FROM users WHERE email = :email")
-    fun getUserByEmail(email: String): User?
+    fun getUserByEmail(email: String): UserEntity?
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUsers(vararg user: User)
+    fun insertUsers(vararg user: UserEntity)
 
     @Delete
-    fun deleteUser(user: User)
+    fun deleteUser(user: UserEntity)
 }
+

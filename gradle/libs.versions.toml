@@ -1,0 +1,55 @@
+[versions]
+androidxCore = "1.8.0"
+kotlin = "1.8.0"
+lifecycle = "2.3.1"
+activityCompose = "1.5.1"
+composeBom = "2022.10.00"
+composeUi = "1.0.0"
+composeGraphics = "1.0.0"
+composeToolingPreview = "1.0.0"
+composeMaterial3 = "1.0.0"
+junit4 = "4.13.2"
+testExtJUnit = "1.1.5"
+espressoCore = "3.5.1"
+composeTestBom = "2022.10.00"
+composeUiTestJUnit4 = "1.0.0"
+composeUiTooling = "1.0.0"
+composeUiTestManifest = "1.0.0"
+room = "2.5.1"
+kotlinxSerializationJson = "1.2.2"
+mockitoCore = "3.12.4"
+kotlinTestJUnit = "1.5.21"
+kotlinxCoroutinesTest = "1.6.4"
+androidTestRunner = "1.5.2"
+ksp = "1.9.10-1.0.13"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "composeUi" }
+compose-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "composeGraphics" }
+compose-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "composeToolingPreview" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial3" }
+junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
+test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "testExtJUnit" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+compose-test-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeTestBom" }
+compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "composeUiTestJUnit4" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "composeUiTooling" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "composeUiTestManifest" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-common = { group = "androidx.room", name = "room-common", version.ref = "room"}
+room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockitoCore" }
+kotlin-test-junit = { group = "org.jetbrains.kotlin", name = "kotlin-test-junit", version.ref = "kotlinTestJUnit" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+android-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidTestRunner" }
+
+[plugins]
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
