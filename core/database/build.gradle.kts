@@ -1,7 +1,8 @@
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp") version "1.9.10-1.0.13"
+    alias(libs.plugins.com.android.library)
+    alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -36,13 +37,13 @@ android {
 dependencies {
 
     implementation(libs.androidx.core.ktx)
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.10.0")
+    implementation(libs.appcompat)
+    implementation(libs.material)
     implementation(project(mapOf("path" to ":core:model")))
-    implementation("androidx.test:core-ktx:1.5.0")
-    implementation("androidx.test.ext:junit-ktx:1.1.5")
-    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation(libs.androidx.test.core.ktx)
+    implementation(libs.androidx.test.ext.junit.ktx)
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
 
 
     //room
@@ -51,8 +52,8 @@ dependencies {
     implementation(libs.room.runtime)
     testImplementation(libs.room.testing)
     ksp(libs.room.compiler)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+    implementation(libs.kotlinx.serialization.json)
     androidTestImplementation(libs.android.test.runner)
-    androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation(libs.androidx.test.rules)
 
 }
