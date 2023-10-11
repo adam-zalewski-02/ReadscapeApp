@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.database.dao.UserDao
 import com.example.database.model.UserEntity
 
-@Database(entities = [UserEntity::class], version = 1)
+@Database(entities = [UserEntity::class], version = 1, exportSchema = false)
 abstract class BookDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     companion object {
