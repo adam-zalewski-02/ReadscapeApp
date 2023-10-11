@@ -33,6 +33,13 @@ import com.example.database.dao.fake.FakeUserDao
 import com.example.database.model.UserEntity
 
 @Composable
+fun LoginRoute(
+    onRegisterButtonClick: () -> Unit
+) {
+
+}
+
+@Composable
 fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -81,6 +88,10 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+        
+        Button(onClick = {  }) {
+            
+        }
 
     }
 }
