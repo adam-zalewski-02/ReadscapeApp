@@ -40,7 +40,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(project(mapOf("path" to ":core:model")))
+    implementation(projects.core.model)
     implementation(libs.androidx.test.core.ktx)
     implementation(libs.androidx.test.ext.junit.ktx)
     testImplementation(platform(libs.junit.bom))

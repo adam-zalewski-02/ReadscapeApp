@@ -48,6 +48,13 @@ android {
 }
 
 dependencies {
+    implementation projects.feature.authentication
+
+    implementation(projects.core.ui)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.data)
+    implementation(projects.core.model)
+
     implementation libs.androidx.core.ktx
     implementation platform(libs.kotlin.bom)
     implementation libs.lifecycle.runtime.ktx
@@ -64,19 +71,5 @@ dependencies {
     androidTestImplementation libs.compose.ui.test.junit4
     debugImplementation libs.compose.ui.tooling
     debugImplementation libs.compose.ui.test.manifest
-
-    //room
-    implementation libs.room.runtime
-    ksp libs.room.compiler
-    implementation libs.room.ktx
-    testImplementation libs.room.testing
-    implementation libs.kotlinx.serialization.json
-
-    //test
-    testImplementation libs.mockito.core
-    testImplementation libs.kotlin.test.junit
-    testImplementation libs.kotlinx.coroutines.test
-
-    androidTestImplementation(libs.android.test.runner)
 
 }

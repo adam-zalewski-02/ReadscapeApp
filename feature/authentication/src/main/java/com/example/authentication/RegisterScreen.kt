@@ -1,7 +1,5 @@
 package com.example.authentication
 
-
-import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,30 +17,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
-import com.example.database.dao.fake.FakeUserDao
-import com.example.database.model.UserEntity
 
 @Composable
-fun LoginRoute(
-    onRegisterButtonClick: () -> Unit
-) {
-
-}
-
-@Composable
-fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
+fun RegisterScreen() {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var repeatedPassword by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -78,35 +64,28 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = { loginViewModel.loginUser(email, password) },
+        OutlinedTextField(
+            value = repeatedPassword,
+            onValueChange = { repeatedPassword = it },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(72.dp)
-        ) {
-            Text("Login")
-        }
+                .padding(8.dp),
+            label = { Text("Password") },
+            leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = null) },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
+            visualTransformation = PasswordVisualTransformation()
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         Button(onClick = {
 
         },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(72.dp)
-            ) {
+        ) {
             Text(text = "Register")
         }
-
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    val fakeUserDao = FakeUserDao()
-    fakeUserDao.insertUsers(UserEntity(1, "test@example.com", "password123"))
-    val viewModel = LoginViewModel(fakeUserDao)
-    LoginScreen(loginViewModel = viewModel)
 }

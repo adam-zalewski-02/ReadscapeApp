@@ -40,7 +40,7 @@ android {
 }
 
 dependencies {
-    implementation(project(mapOf("path" to ":core:database")))
+    implementation(projects.core.database)
     implementation(libs.androidx.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
