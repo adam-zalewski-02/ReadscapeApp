@@ -28,19 +28,29 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import com.example.database.dao.fake.FakeUserDao
 import com.example.database.model.UserEntity
 
 @Composable
-fun LoginRoute(
-    onRegisterButtonClick: () -> Unit
+internal fun LoginRoute(
+    onRegisterClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: LoginViewModel = viewModel()
 ) {
-
+    LoginScreen(
+        onRegisterClick = onRegisterClick,
+        modifier = modifier,
+        viewModel = viewModel
+    )
 }
 
+
 @Composable
-fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
+fun LoginScreen(
+    onRegisterClick: () -> Unit,
+    modifier: Modifier,
+    viewModel: LoginViewModel
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -79,7 +89,7 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { loginViewModel.loginUser(email, password) },
+            onClick = { viewModel.loginUser(email, password) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(72.dp)
@@ -90,7 +100,7 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
         Spacer(modifier = Modifier.height(16.dp))
         
         Button(onClick = {
-
+            onRegisterClick()
         },
             modifier = Modifier
                 .fillMaxWidth()
@@ -98,7 +108,6 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel()) {
             ) {
             Text(text = "Register")
         }
-
     }
 }
 
@@ -108,5 +117,11 @@ fun LoginScreenPreview() {
     val fakeUserDao = FakeUserDao()
     fakeUserDao.insertUsers(UserEntity(1, "test@example.com", "password123"))
     val viewModel = LoginViewModel(fakeUserDao)
-    LoginScreen(loginViewModel = viewModel)
+
+
+    LoginScreen(
+        onRegisterClick = {  },
+        modifier = Modifier,
+        viewModel = viewModel
+    )
 }
