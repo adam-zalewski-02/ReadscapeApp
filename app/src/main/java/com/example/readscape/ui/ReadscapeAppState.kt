@@ -10,6 +10,9 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.authentication.navigation.loginRoute
+import com.example.authentication.navigation.navigateToLoginScreen
+import com.example.readscape.navigation.TopLevelDestination
 
 
 @Composable
@@ -38,6 +41,16 @@ class ReadscapeAppState(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
+    val currentTopLevelDestination: TopLevelDestination?
+        @Composable get() = when (currentDestination?.route) {
+            loginRoute -> TopLevelDestination.LOGIN
+            else -> null
+        }
+
     val shouldShowBottomBar: Boolean
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
+
+    fun navigateToLoginScreen() {
+        navController.navigateToLoginScreen()
+    }
 }
