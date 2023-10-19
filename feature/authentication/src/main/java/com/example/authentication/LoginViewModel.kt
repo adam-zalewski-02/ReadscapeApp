@@ -6,10 +6,15 @@ import com.example.database.dao.UserDao
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.database.model.UserEntity
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel(private val userDao: UserDao) : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val userDao: UserDao
+) : ViewModel() {
     private val _loginResult = MutableLiveData<Boolean>()
     private val _registrationResult = MutableLiveData<Boolean>()
     val loginResult: LiveData<Boolean>

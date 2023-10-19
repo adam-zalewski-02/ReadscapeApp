@@ -3,6 +3,7 @@ androidGradlePlugin = "8.1.2"
 androidxCore = "1.12.0"
 androidxTestRules = "1.5.0"
 androidTestRunner = "1.5.2"
+androidxHiltNavigationCompose = "1.0.0"
 androidxNavigation = "2.7.4"
 kotlin = "1.8.22"
 lifecycle = "2.6.2"
@@ -36,6 +37,7 @@ appcompat = "1.6.1"
 material = "1.10.0"
 hilt = "2.47"
 hiltExt = "1.0.0"
+workRuntime = "2.8.1"
 
 
 [libraries]
@@ -45,7 +47,9 @@ androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "
 androidx-test-ext-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx"}
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxNavigation" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
+androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
 kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin" }
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junitBom"}
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter"}

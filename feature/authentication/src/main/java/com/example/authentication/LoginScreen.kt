@@ -1,7 +1,6 @@
 package com.example.authentication
 
 
-import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -30,26 +28,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import com.example.database.dao.fake.FakeUserDao
 import com.example.database.model.UserEntity
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 internal fun LoginRoute(
     onRegisterClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: LoginViewModel = viewModel()
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     LoginScreen(
         onRegisterClick = onRegisterClick,
-        modifier = modifier,
-        viewModel = viewModel
+        onLoginClick = viewModel::loginUser,
+        modifier = modifier
     )
 }
 
 
 @Composable
-fun LoginScreen(
+internal fun LoginScreen(
     onRegisterClick: () -> Unit,
-    modifier: Modifier,
-    viewModel: LoginViewModel
+    onLoginClick: (String, String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -89,7 +88,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { viewModel.loginUser(email, password) },
+            onClick = { onLoginClick(email, password) },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(72.dp)
@@ -118,10 +117,4 @@ fun LoginScreenPreview() {
     fakeUserDao.insertUsers(UserEntity(1, "test@example.com", "password123"))
     val viewModel = LoginViewModel(fakeUserDao)
 
-
-    LoginScreen(
-        onRegisterClick = {  },
-        modifier = Modifier,
-        viewModel = viewModel
-    )
 }
