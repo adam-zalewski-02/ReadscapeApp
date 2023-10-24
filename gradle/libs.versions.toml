@@ -5,37 +5,39 @@ androidxTestRules = "1.5.0"
 androidTestRunner = "1.5.2"
 androidxHiltNavigationCompose = "1.0.0"
 androidxNavigation = "2.7.4"
+hiltCompiler = "2.48.1"
 kotlin = "1.8.22"
 lifecycle = "2.6.2"
 activityCompose = "1.8.0"
-composeBom = "2023.10.00"
-composeUi = "1.5.3"
-composeGraphics = "1.5.3"
-composeToolingPreview = "1.5.3"
+composeBom = "2023.10.01"
+composeUi = "1.5.4"
+composeGraphics = "1.5.4"
+composeToolingPreview = "1.5.4"
 composeMaterial3 = "1.1.2"
 coreKtx = "1.5.0"
 junit4 = "4.13.2"
 junitKtx = "1.1.5"
 junitBom = "5.10.0"
-junitJupiter = "1.0.0"
+junitJupiter = "5.10.0"
 testExtJUnit = "1.1.5"
 espressoCore = "3.5.1"
-composeTestBom = "2023.10.00"
-composeUiTestJUnit4 = "1.5.3"
-composeUiTooling = "1.5.3"
-composeUiTestManifest = "1.5.3"
-room = "2.5.2"
+composeTestBom = "2023.10.01"
+composeUiTestJUnit4 = "1.5.4"
+composeUiTooling = "1.5.4"
+composeUiTestManifest = "1.5.4"
+room = "2.6.0"
+kapt = "1.9.10"
 kotlinxSerializationJson = "1.5.1"
 mockitoCore = "5.3.1"
 kotlinTestJUnit = "1.9.10"
-kotlinxCoroutinesTest = "1.6.4"
+kotlinxCoroutinesTest = "1.7.1"
 ksp = "1.9.10-1.0.13"
 org-jetbrains-kotlin-jvm = "1.9.10"
 agp = "8.1.2"
 org-jetbrains-kotlin-android = "1.9.10"
 appcompat = "1.6.1"
 material = "1.10.0"
-hilt = "2.47"
+hilt = "2.48.1"
 hiltExt = "1.0.0"
 workRuntime = "2.8.1"
 
@@ -50,6 +52,7 @@ androidx-navigation-testing = { group = "androidx.navigation", name = "navigatio
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
+dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompiler" }
 kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin" }
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junitBom"}
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter"}
@@ -89,6 +92,7 @@ hilt-ext-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hi
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kapt"}
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
 com-android-library = { id = "com.android.library", version.ref = "agp" }
