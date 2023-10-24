@@ -1,7 +1,7 @@
 plugins {
     alias libs.plugins.android.application
     alias libs.plugins.org.jetbrains.kotlin.android
-    alias libs.plugins.ksp
+    alias libs.plugins.kapt
     id 'com.google.dagger.hilt.android'
 }
 
@@ -50,7 +50,7 @@ android {
 }
 
 dependencies {
-    implementation projects.feature.authentication
+    implementation(projects.feature.authentication)
 
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
@@ -80,8 +80,13 @@ dependencies {
     implementation libs.androidx.work.runtime
 
     implementation libs.hilt.android
-    ksp libs.dagger.hilt.compiler
+    kapt libs.dagger.hilt.compiler
 }
+
 hilt {
     enableExperimentalClasspathAggregation = true
+    enableAggregatingTask = true
+}
+kapt {
+    correctErrorTypes true
 }

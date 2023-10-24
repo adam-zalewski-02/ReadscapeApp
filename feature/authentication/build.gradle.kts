@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kapt)
 
 }
 
@@ -52,9 +53,9 @@ dependencies {
     implementation(libs.compose.tooling.preview)
     implementation(libs.compose.material3)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
-    ksp(libs.hilt.ext.compiler)
+    //implementation(libs.hilt.android)
+    //kapt(libs.hilt.compiler)
+    //kapt(libs.hilt.ext.compiler)
     implementation(libs.hilt.ext.work)
     implementation(libs.androidx.hilt.navigation.compose)
 
@@ -68,4 +69,9 @@ dependencies {
     debugImplementation(libs.compose.ui.test.manifest)
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0-alpha02")
+}
+
+kapt {
+    correctErrorTypes = true
+
 }
