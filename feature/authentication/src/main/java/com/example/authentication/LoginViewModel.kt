@@ -34,6 +34,7 @@ class LoginViewModel @Inject constructor(
             val existingUser = userDao.getUserByEmail(email)
             if (existingUser == null) {
                 val newUser = UserEntity(0, email = email, password = password)
+                userDao.insertUsers(newUser)
                 _registrationResult.postValue(true)
             } else {
                 _registrationResult.postValue(false)

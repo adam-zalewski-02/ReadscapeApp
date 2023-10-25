@@ -56,5 +56,9 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     androidTestImplementation(libs.android.test.runner)
     androidTestImplementation(libs.androidx.test.rules)
+    implementation("com.google.dagger:dagger:2.48.1")
+    ksp("com.google.dagger:dagger-compiler:2.48.1")
+    implementation("com.google.dagger:hilt-core:2.48.1")
+    implementation("com.google.dagger:hilt-android:2.48.1")
 
 }

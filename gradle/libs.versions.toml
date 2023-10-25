@@ -5,8 +5,9 @@ androidxTestRules = "1.5.0"
 androidTestRunner = "1.5.2"
 androidxHiltNavigationCompose = "1.0.0"
 androidxNavigation = "2.7.4"
+androidxLifecycle = "2.6.2"
 hiltCompiler = "2.48.1"
-kotlin = "1.8.22"
+kotlin = "1.9.0"
 lifecycle = "2.6.2"
 activityCompose = "1.8.0"
 composeBom = "2023.10.01"
@@ -19,6 +20,8 @@ junit4 = "4.13.2"
 junitKtx = "1.1.5"
 junitBom = "5.10.0"
 junitJupiter = "5.10.0"
+lifecycleViewmodel = "2.6.2"
+lifecycleViewmodelKtx = "2.6.2"
 testExtJUnit = "1.1.5"
 espressoCore = "3.5.1"
 composeTestBom = "2023.10.01"
@@ -44,6 +47,9 @@ workRuntime = "2.8.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-hilt-navigation-fragment = { module = "androidx.hilt:hilt-navigation-fragment", version.ref = "androidxHiltNavigationCompose" }
+androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycleViewmodel" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 androidx-test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtx" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTestRules" }
 androidx-test-ext-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx"}
@@ -52,6 +58,7 @@ androidx-navigation-testing = { group = "androidx.navigation", name = "navigatio
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
+androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompiler" }
 kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin" }
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junitBom"}

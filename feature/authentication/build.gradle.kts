@@ -53,9 +53,9 @@ dependencies {
     implementation(libs.compose.tooling.preview)
     implementation(libs.compose.material3)
     implementation(libs.androidx.navigation.compose)
-    //implementation(libs.hilt.android)
-    //kapt(libs.hilt.compiler)
-    //kapt(libs.hilt.ext.compiler)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    ksp(libs.hilt.ext.compiler)
     implementation(libs.hilt.ext.work)
     implementation(libs.androidx.hilt.navigation.compose)
 
@@ -68,10 +68,17 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0-alpha02")
+
+    /*implementation("com.google.dagger:dagger:2.48.1")
+    kapt("com.google.dagger:dagger-compiler:2.48.1")
+
+
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.fragment)*/
 }
 
 kapt {
     correctErrorTypes = true
-
 }
