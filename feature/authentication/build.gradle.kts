@@ -67,16 +67,6 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
-
-
-    /*implementation("com.google.dagger:dagger:2.48.1")
-    kapt("com.google.dagger:dagger-compiler:2.48.1")
-
-
-    implementation(libs.androidx.lifecycle.viewModelCompose)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.fragment)*/
 }
 
 kapt {
