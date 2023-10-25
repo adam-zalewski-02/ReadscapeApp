@@ -26,18 +26,24 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 internal fun RegisterRoute(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     RegisterScreen(
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        onRegisterClick = viewModel::registerUser,
     )
 }
 
 @Composable
-fun RegisterScreen(onBackClick: () -> Unit) {
+fun RegisterScreen(
+    onBackClick: () -> Unit,
+    onRegisterClick: (String, String, String) -> Unit
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var repeatedPassword by remember { mutableStateOf("") }
@@ -48,7 +54,7 @@ fun RegisterScreen(onBackClick: () -> Unit) {
             .padding(16.dp)
     ) {
         IconButton(
-            onClick = { /*TODO*/ }
+            onClick = { onBackClick() }
         ) {
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
         }
@@ -97,7 +103,7 @@ fun RegisterScreen(onBackClick: () -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-
+            onRegisterClick(email, password, repeatedPassword)
         },
             modifier = Modifier
                 .fillMaxWidth()
@@ -117,5 +123,5 @@ fun RegisterScreenPreview() {
     var password by remember { mutableStateOf("") }
     var repeatedPassword by remember { mutableStateOf("") }
 
-    RegisterScreen(onBackClick = {})
+
 }

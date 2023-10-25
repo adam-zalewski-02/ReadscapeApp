@@ -26,18 +26,24 @@ class LoginViewModel @Inject constructor(
             val user = userDao.getUserByEmail(email)
 
             _loginResult.postValue(user != null && user.password == password)
+            if (loginResult.value == true) {
+                println("true")
+            }
         }
     }
 
-    fun registerUser(email: String, password: String) {
+    fun registerUser(email: String, password: String, repeatedPassword: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val existingUser = userDao.getUserByEmail(email)
-            if (existingUser == null) {
-                val newUser = UserEntity(0, email = email, password = password)
-                userDao.insertUsers(newUser)
-                _registrationResult.postValue(true)
-            } else {
-                _registrationResult.postValue(false)
+            if (repeatedPassword == password) {
+                val existingUser = userDao.getUserByEmail(email)
+                if (existingUser == null) {
+                    val newUser = UserEntity(0, email = email, password = password)
+                    userDao.insertUsers(newUser)
+                    _registrationResult.postValue(true)
+                    println("user added")
+                } else {
+                    _registrationResult.postValue(false)
+                }
             }
         }
     }

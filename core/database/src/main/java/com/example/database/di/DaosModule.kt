@@ -1,5 +1,6 @@
-package com.example.database
+package com.example.database.di
 
+import com.example.database.BookDatabase
 import com.example.database.dao.UserDao
 import dagger.Module
 import dagger.Provides
