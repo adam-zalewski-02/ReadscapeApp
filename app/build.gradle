@@ -57,7 +57,7 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.core.data)
     implementation(projects.core.model)
-
+    implementation(projects.core.network)
     implementation libs.androidx.core.ktx
     implementation platform(libs.kotlin.bom)
     implementation libs.lifecycle.runtime.ktx
