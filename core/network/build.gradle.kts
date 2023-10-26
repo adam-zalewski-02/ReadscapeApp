@@ -46,4 +46,5 @@ dependencies {
     implementation(libs.retrofit.kotlin.serialization)
     implementation(libs.kotlinx.serialization.json)
     implementation("javax.inject:javax.inject:1")
+    implementation(libs.okhttp.logging)
 }
