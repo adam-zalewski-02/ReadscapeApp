@@ -15,17 +15,19 @@ import retrofit2.http.Path
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val BASE_URL = "http://localhost:3000/"
+private const val BASE_URL = "http://localhost:3000"
 private interface RetrofitReadscapeNetworkApi {
-    @GET(value = "")
+    @GET(value = "/users")
     suspend fun getUsers(): NetworkResponse<List<NetworkUser>>
-    @GET(value = "{id}")
+    @GET(value = "/users/{id}")
     suspend fun getUser(@Path("id") id: Int): NetworkResponse<NetworkUser>
 
-    @POST(value = "register")
+    @POST(value = "/auth/login")
+    suspend fun login(@Body email: String, password: String): NetworkResponse<NetworkUser>
+    @POST(value = "/auth/register")
     suspend fun register(@Body user: NetworkUser): NetworkResponse<Unit>
 
-    @DELETE(value = "{id}")
+    @DELETE(value = "/users/{id}")
     suspend fun deleteUser(@Path("id") id: Int): NetworkResponse<Unit>
 }
 
