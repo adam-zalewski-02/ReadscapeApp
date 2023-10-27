@@ -2,13 +2,9 @@ package com.example.network.retrofit
 import com.example.network.BuildConfig
 import com.example.network.ReadscapeNetworkDataSource
 import com.example.network.model.NetworkUser
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
 import okhttp3.Call
-import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
@@ -61,8 +57,6 @@ class RetrofitReadscapeNetwork @Inject constructor(
     override suspend fun insertUser(user: NetworkUser) {
         networkApi.register(user)
     }
-
-
 
     override suspend fun deleteUser(user: NetworkUser) {
         networkApi.deleteUser(1)
