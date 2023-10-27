@@ -12,7 +12,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 23
+        minSdk = 24
         targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -43,6 +43,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.network)
     implementation(projects.core.database)
     implementation(libs.androidx.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
@@ -54,6 +55,7 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.android)
+    implementation(project(mapOf("path" to ":core:data")))
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.ext.compiler)
     implementation(libs.hilt.ext.work)

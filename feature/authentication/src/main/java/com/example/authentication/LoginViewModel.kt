@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.database.dao.UserDao
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.example.data.repository.DefaultUserRepository
 import com.example.database.model.UserEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val userDao: UserDao
+    private val userDao: UserDao,
+    private val userRepository: DefaultUserRepository
 ) : ViewModel() {
     private val _loginResult = MutableLiveData<Boolean>()
     private val _registrationResult = MutableLiveData<Boolean>()
@@ -23,12 +25,11 @@ class LoginViewModel @Inject constructor(
         get() = _registrationResult
     fun loginUser(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val user = userDao.getUserByEmail(email)
-
-            _loginResult.postValue(user != null && user.password == password)
-            if (loginResult.value == true) {
-                println("true")
-            }
+            //val user = userDao.getUserByEmail(email)
+            //val user = userRepository.getUser(email, password)
+            //_loginResult.postValue(user != null && user.password == password)
+            //println(user)
+            println(userRepository.getUsers())
         }
     }
 

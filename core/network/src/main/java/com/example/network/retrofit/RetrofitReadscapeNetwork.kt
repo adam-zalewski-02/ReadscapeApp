@@ -1,12 +1,16 @@
 package com.example.network.retrofit
+import com.example.network.BuildConfig
 import com.example.network.ReadscapeNetworkDataSource
 import com.example.network.model.NetworkUser
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -15,55 +19,53 @@ import retrofit2.http.Path
 import javax.inject.Inject
 import javax.inject.Singleton
 
-private const val BASE_URL = "http://localhost:3000"
+private const val BASE_URL = BuildConfig.BACKEND_URL
 private interface RetrofitReadscapeNetworkApi {
     @GET(value = "/users")
-    suspend fun getUsers(): NetworkResponse<List<NetworkUser>>
+    suspend fun getUsers(): List<NetworkUser>
     @GET(value = "/users/{id}")
-    suspend fun getUser(@Path("id") id: Int): NetworkResponse<NetworkUser>
+    suspend fun getUser(@Path("id") id: Int): NetworkUser
 
     @POST(value = "/auth/login")
-    suspend fun login(@Body email: String, password: String): NetworkResponse<NetworkUser>
+    suspend fun login(@Body email: String, password: String): NetworkUser
     @POST(value = "/auth/register")
-    suspend fun register(@Body user: NetworkUser): NetworkResponse<Unit>
+    suspend fun register(@Body user: NetworkUser): Unit
 
     @DELETE(value = "/users/{id}")
-    suspend fun deleteUser(@Path("id") id: Int): NetworkResponse<Unit>
+    suspend fun deleteUser(@Path("id") id: Int): Unit
 }
-
-@Serializable
-private data class NetworkResponse<T> (
-    val data: T
-)
 
 @Singleton
 class RetrofitReadscapeNetwork @Inject constructor(
-    networkJson: Json,
     okhttpCallFactory: Call.Factory,
 ): ReadscapeNetworkDataSource {
+
+    private val moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
 
     private val networkApi = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .callFactory(okhttpCallFactory)
-        .addConverterFactory(
-            networkJson.asConverterFactory("application/json".toMediaType()),
-        )
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
         .create(RetrofitReadscapeNetworkApi::class.java)
     override suspend fun getUsers(): List<NetworkUser> {
-        return networkApi.getUsers().data
+        return networkApi.getUsers()
     }
 
-    override suspend fun getUser(id: Int): NetworkUser {
-        return networkApi.getUser(id).data
+    override suspend fun getUser(email: String, password: String): NetworkUser {
+        return networkApi.login(email, password)
     }
 
     override suspend fun insertUser(user: NetworkUser) {
         networkApi.register(user)
     }
 
+
+
     override suspend fun deleteUser(user: NetworkUser) {
-        networkApi.deleteUser(user.id)
+        networkApi.deleteUser(1)
     }
 
 }

@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -9,7 +10,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 23
+        minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -35,7 +36,7 @@ android {
 }
 
 dependencies {
-
+    implementation(projects.core.network)
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -43,4 +44,13 @@ dependencies {
     testImplementation(libs.junit4)
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("javax.inject:javax.inject:1")
+
+    implementation("com.google.dagger:dagger:2.48.1")
+    ksp("com.google.dagger:dagger-compiler:2.48.1")
+    implementation("com.google.dagger:hilt-core:2.48.1")
+    implementation("com.google.dagger:hilt-android:2.48.1")
+    ksp(libs.hilt.compiler)
+    ksp(libs.hilt.ext.compiler)
+
 }

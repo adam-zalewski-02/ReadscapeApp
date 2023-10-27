@@ -4,7 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NetworkUser(
-    val id: Int,
+    val _id: String,
     val email: String,
-
+    val password: String,
+    val registrationDate: Long
 )

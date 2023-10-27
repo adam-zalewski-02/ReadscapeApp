@@ -2,11 +2,21 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
+    buildFeatures {
+        buildConfig = true
+    }
+    buildTypes {
+        debug {
+            buildConfigField("String", "BACKEND_URL", "\"http://192.168.0.244:3000\"")
+        }
+    }
     namespace = "com.example.network"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 24
@@ -47,4 +57,17 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation("javax.inject:javax.inject:1")
     implementation(libs.okhttp.logging)
+
+    implementation("com.google.dagger:dagger:2.48.1")
+    ksp("com.google.dagger:dagger-compiler:2.48.1")
+    implementation("com.google.dagger:hilt-core:2.48.1")
+    implementation("com.google.dagger:hilt-android:2.48.1")
+    ksp(libs.hilt.compiler)
+    ksp(libs.hilt.ext.compiler)
+
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+
+    implementation("com.squareup.moshi:moshi:1.14.0")
+    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
 }

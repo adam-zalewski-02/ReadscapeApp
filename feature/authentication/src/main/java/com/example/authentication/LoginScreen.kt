@@ -115,6 +115,6 @@ internal fun LoginScreen(
 fun LoginScreenPreview() {
     val fakeUserDao = FakeUserDao()
     fakeUserDao.insertUsers(UserEntity(1, "test@example.com", "password123"))
-    val viewModel = LoginViewModel(fakeUserDao)
+    //val viewModel = LoginViewModel(fakeUserDao)
 
 }
