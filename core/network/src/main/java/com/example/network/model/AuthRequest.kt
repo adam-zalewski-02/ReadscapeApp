@@ -3,7 +3,7 @@ package com.example.network.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginRequest(
+data class AuthRequest(
     val email: String,
     val password: String
 )

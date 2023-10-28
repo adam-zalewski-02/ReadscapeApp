@@ -1,7 +1,7 @@
 package com.example.data.repository
 
 import com.example.network.ReadscapeNetworkDataSource
-import com.example.network.model.LoginResponse
+import com.example.network.model.AuthResponse
 import com.example.network.model.NetworkUser
 import javax.inject.Inject
 
@@ -12,12 +12,12 @@ class DefaultUserRepository @Inject constructor(
         return dataSource.getUsers()
     }
 
-    override suspend fun getUser(email:String, password: String): LoginResponse {
+    override suspend fun getUser(email:String, password: String): AuthResponse {
         return dataSource.getUser(email, password)
     }
 
-    override suspend fun addUser(user: NetworkUser) {
-        dataSource.insertUser(user)
+    override suspend fun addUser(email:String, password: String): AuthResponse {
+        return dataSource.insertUser(email, password)
     }
 
     override fun updateUser(user: NetworkUser) {
