@@ -26,10 +26,9 @@ class LoginViewModel @Inject constructor(
     fun loginUser(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             //val user = userDao.getUserByEmail(email)
-            //val user = userRepository.getUser(email, password)
+            val user = userRepository.getUser(email, password)
             //_loginResult.postValue(user != null && user.password == password)
-            //println(user)
-            println(userRepository.getUsers())
+            println(user)
         }
     }
 

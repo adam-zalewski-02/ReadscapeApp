@@ -1,6 +1,8 @@
 package com.example.network.retrofit
 import com.example.network.BuildConfig
 import com.example.network.ReadscapeNetworkDataSource
+import com.example.network.model.LoginResponse
+import com.example.network.model.LoginRequest
 import com.example.network.model.NetworkUser
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -23,12 +25,12 @@ private interface RetrofitReadscapeNetworkApi {
     suspend fun getUser(@Path("id") id: Int): NetworkUser
 
     @POST(value = "/auth/login")
-    suspend fun login(@Body email: String, password: String): NetworkUser
+    suspend fun login(@Body request: LoginRequest): LoginResponse
     @POST(value = "/auth/register")
-    suspend fun register(@Body user: NetworkUser): Unit
+    suspend fun register(@Body user: NetworkUser)
 
     @DELETE(value = "/users/{id}")
-    suspend fun deleteUser(@Path("id") id: Int): Unit
+    suspend fun deleteUser(@Path("id") id: Int)
 }
 
 @Singleton
@@ -50,8 +52,12 @@ class RetrofitReadscapeNetwork @Inject constructor(
         return networkApi.getUsers()
     }
 
-    override suspend fun getUser(email: String, password: String): NetworkUser {
-        return networkApi.login(email, password)
+    override suspend fun getUser(email: String, password: String): LoginResponse {
+        val request = LoginRequest(
+            email = email,
+            password = password
+        )
+        return networkApi.login(request)
     }
 
     override suspend fun insertUser(user: NetworkUser) {
