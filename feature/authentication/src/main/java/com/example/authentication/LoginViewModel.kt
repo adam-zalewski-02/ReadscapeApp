@@ -26,16 +26,19 @@ class LoginViewModel @Inject constructor(
     fun loginUser(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             //val user = userDao.getUserByEmail(email)
-            val user = userRepository.getUser(email, password)
+            val response = userRepository.getUser(email, password)
             //_loginResult.postValue(user != null && user.password == password)
-            println(user)
+            println(response)
         }
     }
 
     fun registerUser(email: String, password: String, repeatedPassword: String) {
         viewModelScope.launch(Dispatchers.IO) {
             if (repeatedPassword == password) {
-                val existingUser = userDao.getUserByEmail(email)
+                val response = userRepository.addUser(email, password)
+                println(response)
+
+                /*val existingUser = userDao.getUserByEmail(email)
                 if (existingUser == null) {
                     val newUser = UserEntity(0, email = email, password = password)
                     userDao.insertUsers(newUser)
@@ -43,7 +46,7 @@ class LoginViewModel @Inject constructor(
                     println("user added")
                 } else {
                     _registrationResult.postValue(false)
-                }
+                }*/
             }
         }
     }
