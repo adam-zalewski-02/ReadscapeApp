@@ -3,11 +3,7 @@ package com.example.network.retrofit
 import com.example.model.book.Volume
 import com.example.network.GoogleNetworkDataSource
 import com.example.network.model.book.BookApiResponse
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Call
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import javax.inject.Inject
