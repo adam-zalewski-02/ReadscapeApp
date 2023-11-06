@@ -22,7 +22,10 @@ fun ReadscapeNavHost(
         startDestination = startDestination,
         modifier = modifier
     ) {
-        loginScreen(onRegisterClick = navController::navigateToRegisterScreen)
+        loginScreen(
+            onRegisterClick = navController::navigateToRegisterScreen,
+            //onLoginClick = navController::navigateToHomeScreen
+        )
         registerScreen(onBackClick = navController::navigateToLoginScreen)
     }
 }

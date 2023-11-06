@@ -23,7 +23,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+//import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import com.example.database.dao.fake.FakeUserDao
@@ -36,7 +36,9 @@ internal fun LoginRoute(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    //val uiState by viewModel.loginState
     LoginScreen(
+        //uiState = uiState,
         onRegisterClick = onRegisterClick,
         onLoginClick = viewModel::loginUser,
         modifier = modifier
@@ -46,6 +48,7 @@ internal fun LoginRoute(
 
 @Composable
 internal fun LoginScreen(
+    //uiState: AuthenticationUiState,
     onRegisterClick: () -> Unit,
     onLoginClick: (String, String) -> Unit,
     modifier: Modifier = Modifier,
