@@ -1,4 +1,5 @@
 [versions]
+activityKtx = "1.8.1"
 androidGradlePlugin = "8.1.2"
 androidxCore = "1.12.0"
 androidxTestRules = "1.5.0"
@@ -42,6 +43,7 @@ appcompat = "1.6.1"
 material = "1.10.0"
 hilt = "2.48.1"
 hiltExt = "1.0.0"
+tracing = "1.1.0"
 workRuntime = "2.8.1"
 retrofitKotlinxSerializationJson = "1.0.0"
 retrofit = "2.9.0"
@@ -50,6 +52,7 @@ coil = "2.2.2"
 moshi = "1.14.0"
 
 [libraries]
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidx-hilt-navigation-fragment = { module = "androidx.hilt:hilt-navigation-fragment", version.ref = "androidxHiltNavigationCompose" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycleViewmodel" }
@@ -60,7 +63,9 @@ androidx-test-ext-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx",
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxNavigation" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
+androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
+androidx-tracing = { module = "androidx.tracing:tracing", version.ref = "tracing" }
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompiler" }

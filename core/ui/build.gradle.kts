@@ -54,4 +54,6 @@ dependencies {
     implementation(libs.compose.graphics)
     implementation(libs.compose.tooling.preview)
     implementation(libs.compose.material3)
+
+    api(libs.androidx.compose.material.iconsExtended)
 }

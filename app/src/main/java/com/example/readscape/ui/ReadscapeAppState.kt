@@ -7,12 +7,16 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.navOptions
+import androidx.tracing.trace
 import com.example.authentication.navigation.loginRoute
 import com.example.authentication.navigation.navigateToLoginScreen
 import com.example.bookshop.navigation.bookShopRoute
+import com.example.bookshop.navigation.navigateToBookShopScreen
 import com.example.readscape.navigation.TopLevelDestination
 
 
@@ -49,9 +53,27 @@ class ReadscapeAppState(
         }
 
     val shouldShowBottomBar: Boolean
-        get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
+        @Composable get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact && currentDestination?.route != loginRoute
 
     fun navigateToLoginScreen() {
         navController.navigateToLoginScreen()
+    }
+
+    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
+
+    fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
+        trace("Navigation: ${topLevelDestination.name}") {
+            val topLevelNavOptions = navOptions {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+
+            when (topLevelDestination) {
+                TopLevelDestination.BOOKSHOP -> navController.navigateToBookShopScreen(topLevelNavOptions)
+            }
+        }
     }
 }
