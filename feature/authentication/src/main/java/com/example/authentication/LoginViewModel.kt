@@ -9,6 +9,9 @@ import com.example.data.repository.DefaultUserRepository
 import com.example.database.model.UserEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,21 +20,16 @@ class LoginViewModel @Inject constructor(
     private val userDao: UserDao,
     private val userRepository: DefaultUserRepository
 ) : ViewModel() {
-    private val _loginState = MutableLiveData<AuthenticationUiState>()
-    val loginState: LiveData<AuthenticationUiState>
-        get() = _loginState
+    private val _loginState = MutableStateFlow<AuthenticationUiState>(AuthenticationUiState.Loading)
+    val loginState: StateFlow<AuthenticationUiState> = _loginState.asStateFlow()
 
     fun loginUser(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _loginState.postValue(AuthenticationUiState.Loading)
-
-            val response = userRepository.getUser(email, password)
-
-            if (response.success) {
-                _loginState.postValue(AuthenticationUiState.Success(true))
-                println(response)
-            } else {
-                _loginState.postValue(AuthenticationUiState.Error("Login failed"))
+            try {
+                val response = userRepository.getUser(email, password)
+                _loginState.value = AuthenticationUiState.Success(response.success)
+            } catch (e: Exception) {
+                _loginState.value = AuthenticationUiState.Error
             }
         }
     }
@@ -48,6 +46,6 @@ class LoginViewModel @Inject constructor(
 
 sealed class AuthenticationUiState {
     object Loading : AuthenticationUiState()
+    object Error : AuthenticationUiState()
     data class Success(val isLoggedIn: Boolean) : AuthenticationUiState()
-    data class Error(val errorMessage: String) : AuthenticationUiState()
 }

@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -23,35 +24,38 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-//import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import com.example.database.dao.fake.FakeUserDao
 import com.example.database.model.UserEntity
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 internal fun LoginRoute(
     onRegisterClick: () -> Unit,
+    onLoginClick: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
-    //val uiState by viewModel.loginState
+    val loginState by viewModel.loginState.collectAsStateWithLifecycle()
     LoginScreen(
-        //uiState = uiState,
         onRegisterClick = onRegisterClick,
-        onLoginClick = viewModel::loginUser,
-        modifier = modifier
+        onLoginButtonClick = viewModel::loginUser,
+        onLoginClick = onLoginClick,
+        modifier = modifier,
+        loginState = loginState
     )
 }
 
 
 @Composable
 internal fun LoginScreen(
-    //uiState: AuthenticationUiState,
     onRegisterClick: () -> Unit,
-    onLoginClick: (String, String) -> Unit,
+    onLoginButtonClick: (String, String) -> Unit,
+    onLoginClick: () -> Unit,
     modifier: Modifier = Modifier,
+    loginState: AuthenticationUiState
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -91,7 +95,9 @@ internal fun LoginScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = { onLoginClick(email, password) },
+            onClick = {
+                onLoginButtonClick(email, password)
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(72.dp)
@@ -109,6 +115,17 @@ internal fun LoginScreen(
                 .height(72.dp)
             ) {
             Text(text = "Register")
+        }
+    }
+    when(loginState) {
+        is AuthenticationUiState.Loading -> {
+            println("loading...")
+        }
+        is AuthenticationUiState.Error -> {
+            println("Error...")
+        }
+        is AuthenticationUiState.Success -> {
+            onLoginClick()
         }
     }
 }

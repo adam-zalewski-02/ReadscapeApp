@@ -35,6 +35,11 @@ fun ReadscapeApp(
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        bottomBar = {
+            if (appState.shouldShowBottomBar) {
+
+            }
+        }
     ) { padding ->
         Row(
             Modifier

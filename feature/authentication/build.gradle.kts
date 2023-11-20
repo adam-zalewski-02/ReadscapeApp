@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.android)
     implementation(project(mapOf("path" to ":core:data")))
+    //implementation(project(mapOf("path" to ":core:ui")))
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.ext.compiler)
     implementation(libs.hilt.ext.work)
@@ -69,6 +70,10 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
+
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    kapt("androidx.lifecycle:lifecycle-compiler:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 }
 
 kapt {

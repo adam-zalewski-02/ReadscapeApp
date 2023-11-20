@@ -1,7 +1,9 @@
 package com.example.readscape.navigation
 
-enum class TopLevelDestination {
-    LOGIN(
-
+enum class TopLevelDestination(
+  val title: String
+) {
+    BOOKSHOP(
+        title = "Bookshop"
     )
 }

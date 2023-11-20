@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.authentication.navigation.loginRoute
 import com.example.authentication.navigation.navigateToLoginScreen
+import com.example.bookshop.navigation.bookShopRoute
 import com.example.readscape.navigation.TopLevelDestination
 
 
@@ -43,7 +44,7 @@ class ReadscapeAppState(
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
-            loginRoute -> TopLevelDestination.LOGIN
+            bookShopRoute -> TopLevelDestination.BOOKSHOP
             else -> null
         }
 

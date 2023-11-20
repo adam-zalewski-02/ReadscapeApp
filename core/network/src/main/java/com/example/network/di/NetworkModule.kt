@@ -1,9 +1,13 @@
 package com.example.network.di
 
+import android.content.Context
+import coil.ImageLoader
+import coil.util.DebugLogger
 import com.example.network.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
@@ -31,5 +35,24 @@ object NetworkModule {
                     }
                 },
         )
+        .build()
+
+    @Provides
+    @Singleton
+    fun imageLoader(
+        okhttpCallFactory: Call.Factory,
+        @ApplicationContext application: Context,
+
+    ) : ImageLoader = ImageLoader.Builder(application)
+        .callFactory(okhttpCallFactory)
+        .components {
+
+        }
+        .respectCacheHeaders(false)
+        .apply {
+            if (BuildConfig.DEBUG) {
+                logger(DebugLogger())
+            }
+        }
         .build()
 }

@@ -2,6 +2,7 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -32,6 +33,12 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
+    }
 }
 
 dependencies {
@@ -42,4 +49,9 @@ dependencies {
     testImplementation(libs.junit4)
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation(libs.compose.ui)
+    implementation(libs.compose.graphics)
+    implementation(libs.compose.tooling.preview)
+    implementation(libs.compose.material3)
 }

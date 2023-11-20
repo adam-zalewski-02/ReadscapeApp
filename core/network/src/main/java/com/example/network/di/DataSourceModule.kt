@@ -1,6 +1,8 @@
 package com.example.network.di
 
+import com.example.network.GoogleNetworkDataSource
 import com.example.network.ReadscapeNetworkDataSource
+import com.example.network.retrofit.RetrofitGoogleNetwork
 import com.example.network.retrofit.RetrofitReadscapeNetwork
 import dagger.Module
 import dagger.Provides
@@ -20,4 +22,13 @@ object DataSourceModule {
     ): ReadscapeNetworkDataSource {
         return RetrofitReadscapeNetwork(okhttpCallFactory)
     }
+
+    @Provides
+    @Singleton
+    fun providesGoogleNetworkDataSource(
+        okhttpCallFactory: Call.Factory,
+    ) : GoogleNetworkDataSource {
+        return RetrofitGoogleNetwork(okhttpCallFactory)
+    }
 }
+

@@ -70,4 +70,6 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
     ksp(libs.moshi.kotlin.codegen)
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
 }

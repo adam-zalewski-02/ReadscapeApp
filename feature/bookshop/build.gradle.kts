@@ -43,6 +43,11 @@ android {
 }
 
 dependencies {
+    implementation(project(mapOf("path" to ":core:data")))
+    implementation(project(mapOf("path" to ":core:model")))
+    implementation(project(mapOf("path" to ":feature:authentication")))
+    implementation(project(mapOf("path" to ":core:ui")))
+
     implementation(projects.core.network)
     implementation(projects.core.database)
     implementation(libs.androidx.core.ktx)
@@ -55,8 +60,6 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.android)
-    implementation(project(mapOf("path" to ":core:data")))
-    implementation(project(mapOf("path" to ":core:model")))
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.ext.compiler)
     implementation(libs.hilt.ext.work)
@@ -70,6 +73,12 @@ dependencies {
     androidTestImplementation(libs.hilt.android.testing)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test.manifest)
+
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    kapt("androidx.lifecycle:lifecycle-compiler:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }
 
 kapt {

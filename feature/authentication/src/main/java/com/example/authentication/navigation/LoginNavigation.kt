@@ -5,9 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.example.authentication.LoginRoute
-import com.example.authentication.LoginScreen
 import com.example.authentication.RegisterRoute
-import com.example.authentication.RegisterScreen
 
 const val loginRoute = "login_route"
 const val registerRoute = "register_route"
@@ -19,11 +17,11 @@ fun NavController.navigateToRegisterScreen(navOptions: NavOptions? = null) {
     this.navigate(registerRoute, navOptions)
 }
 
-fun NavGraphBuilder.loginScreen(onRegisterClick: () -> Unit) {
+fun NavGraphBuilder.loginScreen(onRegisterClick: () -> Unit, onLoginClick: () -> Unit) {
     composable(
         route = loginRoute,
     ) {
-        LoginRoute(onRegisterClick)
+        LoginRoute(onRegisterClick, onLoginClick)
     }
 }
 
