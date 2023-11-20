@@ -1,9 +1,9 @@
 package com.example.readscape.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.readscape.R
 import com.example.ui.icon.ReadscapeIcons
 import com.example.bookshop.R as bookshopR
-import com.example.readscape.R
 
 enum class TopLevelDestination(
     val selectedIcon: ImageVector,

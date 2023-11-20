@@ -1,7 +1,8 @@
 package com.example.network.model.book
 
-import kotlinx.serialization.Serializable
 import com.example.model.book.Volume
+import kotlinx.serialization.Serializable
+
 @Serializable
 data class BookApiResponse(
     val kind: String,

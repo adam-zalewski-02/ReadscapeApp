@@ -1,8 +1,8 @@
 package com.example.network.retrofit
 import com.example.network.BuildConfig
 import com.example.network.ReadscapeNetworkDataSource
-import com.example.network.model.AuthResponse
 import com.example.network.model.AuthRequest
+import com.example.network.model.AuthResponse
 import com.example.network.model.NetworkUser
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
