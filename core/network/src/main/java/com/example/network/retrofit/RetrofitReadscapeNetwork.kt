@@ -4,6 +4,9 @@ import com.example.network.ReadscapeNetworkDataSource
 import com.example.network.model.AuthRequest
 import com.example.network.model.AuthResponse
 import com.example.network.model.NetworkUser
+import com.example.network.model.catalog.CatalogPostResponse
+import com.example.network.model.catalog.CatalogRequest
+import com.example.network.model.catalog.CatalogResponse
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Call
@@ -23,11 +26,15 @@ private interface RetrofitReadscapeNetworkApi {
     suspend fun getUsers(): List<NetworkUser>
     @GET(value = "/users/{id}")
     suspend fun getUser(@Path("id") id: Int): NetworkUser
+    @GET(value = "/collections/{userId}")
+    suspend fun getCollection(@Path("userId") userId: String) : CatalogResponse
 
     @POST(value = "/auth/login")
     suspend fun login(@Body request: AuthRequest): AuthResponse
     @POST(value = "/auth/register")
     suspend fun register(@Body request: AuthRequest): AuthResponse
+    @POST(value = "/collections/{userId}")
+    suspend fun insertIntoCollection(@Path("userId") userId: String, @Body request: CatalogRequest) : CatalogPostResponse
 
     @DELETE(value = "/users/{id}")
     suspend fun deleteUser(@Path("id") id: Int)
@@ -70,6 +77,17 @@ class RetrofitReadscapeNetwork @Inject constructor(
 
     override suspend fun deleteUser(user: NetworkUser) {
         networkApi.deleteUser(1)
+    }
+
+    override suspend fun getCollection(userId: String): CatalogResponse {
+        return networkApi.getCollection(userId)
+    }
+
+    override suspend fun addToCollection(userId: String, bookId: String): CatalogPostResponse {
+        val postRequest = CatalogRequest(
+            bookId = bookId
+        )
+        return networkApi.insertIntoCollection(userId, postRequest)
     }
 
 }

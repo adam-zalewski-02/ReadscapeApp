@@ -10,6 +10,8 @@ import com.example.authentication.navigation.navigateToRegisterScreen
 import com.example.authentication.navigation.registerScreen
 import com.example.bookshop.navigation.bookShopScreen
 import com.example.bookshop.navigation.navigateToBookShopScreen
+import com.example.catalog.navigation.catalogScreen
+import com.example.catalog.navigation.navigateToCatalogScreen
 import com.example.readscape.ui.ReadscapeAppState
 
 @Composable
@@ -30,5 +32,6 @@ fun ReadscapeNavHost(
         )
         registerScreen(onBackClick = navController::navigateToLoginScreen)
         bookShopScreen()
+        catalogScreen()
     }
 }

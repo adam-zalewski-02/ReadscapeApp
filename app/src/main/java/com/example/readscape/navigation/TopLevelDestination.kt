@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.readscape.R
 import com.example.ui.icon.ReadscapeIcons
 import com.example.bookshop.R as bookshopR
+import com.example.catalog.R as catalogR
 
 enum class TopLevelDestination(
     val selectedIcon: ImageVector,
@@ -12,9 +13,15 @@ enum class TopLevelDestination(
     val titleTextId: Int,
 ) {
     BOOKSHOP(
+        selectedIcon = ReadscapeIcons.Add,
+        unselectedIcon = ReadscapeIcons.Add,
+        iconTextId = bookshopR.string.bookshop,
+        titleTextId = R.string.app_name
+    ),
+    CATALOG(
         selectedIcon = ReadscapeIcons.Bookmark,
         unselectedIcon = ReadscapeIcons.BookmarkBorder,
-        iconTextId = bookshopR.string.bookshop,
+        iconTextId = catalogR.string.catalog,
         titleTextId = R.string.app_name
     )
 }

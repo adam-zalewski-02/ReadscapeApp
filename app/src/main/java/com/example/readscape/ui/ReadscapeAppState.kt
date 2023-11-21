@@ -14,8 +14,11 @@ import androidx.navigation.navOptions
 import androidx.tracing.trace
 import com.example.authentication.navigation.loginRoute
 import com.example.authentication.navigation.navigateToLoginScreen
+import com.example.authentication.navigation.registerRoute
 import com.example.bookshop.navigation.bookShopRoute
 import com.example.bookshop.navigation.navigateToBookShopScreen
+import com.example.catalog.navigation.catalogRoute
+import com.example.catalog.navigation.navigateToCatalogScreen
 import com.example.readscape.navigation.TopLevelDestination
 
 
@@ -48,11 +51,12 @@ class ReadscapeAppState(
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
             bookShopRoute -> TopLevelDestination.BOOKSHOP
+            catalogRoute -> TopLevelDestination.CATALOG
             else -> null
         }
 
     val shouldShowBottomBar: Boolean
-        @Composable get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact && currentDestination?.route != loginRoute
+        @Composable get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact && currentDestination?.route != loginRoute && currentDestination?.route != registerRoute
 
     fun navigateToLoginScreen() {
         navController.navigateToLoginScreen()
@@ -72,6 +76,7 @@ class ReadscapeAppState(
 
             when (topLevelDestination) {
                 TopLevelDestination.BOOKSHOP -> navController.navigateToBookShopScreen(topLevelNavOptions)
+                TopLevelDestination.CATALOG -> navController.navigateToCatalogScreen(topLevelNavOptions)
             }
         }
     }
