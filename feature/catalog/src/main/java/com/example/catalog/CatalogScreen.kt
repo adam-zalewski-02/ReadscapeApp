@@ -50,8 +50,7 @@ internal fun CatalogScreen(
 ) {
     when(state) {
         is CatalogUiState.Loading -> Loading(modifier)
-        is CatalogUiState.Success -> Content(books = state.volumes, modifier)
-        is CatalogUiState.SuccessWithVolumes -> println("loading...")
+        is CatalogUiState.Success -> Content(books = state.books, modifier)
         is CatalogUiState.Error -> Text("Error")
     }
 }

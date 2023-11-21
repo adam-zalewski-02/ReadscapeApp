@@ -16,7 +16,7 @@ import javax.inject.Inject
 class CatalogViewModel @Inject constructor(
     private val userRepository: DefaultUserRepository,
     private val bookRepository: DefaultBookRepository
-): ViewModel() {
+) : ViewModel() {
     private val _books = MutableStateFlow<CatalogUiState>(CatalogUiState.Loading)
     val books: StateFlow<CatalogUiState>
         get() = _books
@@ -31,36 +31,39 @@ class CatalogViewModel @Inject constructor(
                 val catalogResponse = CurrentUserManager.getCurrentUser()
                     ?.let { userRepository.getCollection(it.userId) }
                 if (catalogResponse != null) {
-                    _books.value = CatalogUiState.SuccessWithVolumes(catalogResponse.data)
-                    getBooks(catalogResponse.data)
+                    val bookIds = catalogResponse.data
+                    val books = getItemsForIds(bookIds)
+                    _books.value = CatalogUiState.Success(books)
+                    println("HERE")
+                    println(_books.value)
                 }
             } catch (e: Exception) {
-
+                println("---------------------------------------------")
+                println(e.message.toString())
+                _books.value = CatalogUiState.Error
             }
         }
     }
 
-    private fun getBooks(bookIds: List<String>) {
-        viewModelScope.launch {
-            try {
-                val volumeList =  mutableListOf<Volume>()
-                bookIds.forEach { volumeId ->
-                    val volume = bookRepository.getVolumeById(volumeId)
-                    volumeList.add(volume)
-                    println(volumeId)
-                }
-                _books.value = CatalogUiState.Success(volumeList)
-            } catch (e: Exception) {
-
+    private suspend fun getItemsForIds(ids: List<String>): List<Volume> {
+        val itemsList = mutableListOf<Volume>()
+        try {
+            for (id in ids) {
+                val item = bookRepository.getVolumeById(id)
+                itemsList.add(item)
             }
+        } catch (e: Exception) {
+            _books.value = CatalogUiState.Error
+            println(e.message.toString())
         }
+        return itemsList
     }
-
 }
 
+
+
 sealed class CatalogUiState {
-    data class SuccessWithVolumes(val books: List<String>) : CatalogUiState()
-    data class Success(val volumes: List<Volume>) : CatalogUiState()
-    object Loading: CatalogUiState()
-    object Error: CatalogUiState()
+    data class Success(val books: List<Volume>) : CatalogUiState()
+    object Loading : CatalogUiState()
+    object Error : CatalogUiState()
 }
