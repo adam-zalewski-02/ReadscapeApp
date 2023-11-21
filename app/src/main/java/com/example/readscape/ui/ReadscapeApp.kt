@@ -63,6 +63,10 @@ fun ReadscapeApp(
                 ),
         ) {
             Column(Modifier.fillMaxSize()) {
+                val destination = appState.currentTopLevelDestination
+                if (destination != null) {
+
+                }
                 ReadscapeNavHost(appState = appState)
             }
         }
@@ -84,7 +88,7 @@ private fun ReadscapeBottomBar(
             val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
             ReadscapeNavigationBarItem(
                 selected = selected, 
-                onClick = {onNavigateToDestination}, 
+                onClick = {onNavigateToDestination(destination)},
                 icon = { 
                     Icon(
                         imageVector = destination.unselectedIcon,
