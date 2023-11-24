@@ -3,5 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">192.168.0.244</domain>
         <domain includeSubdomains="true">books.google.com</domain>
+        <domain includeSubdomains="true">172.30.103.93</domain>
     </domain-config>
 </network-security-config>

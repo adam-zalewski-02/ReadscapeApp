@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.bookshop"
+    namespace = "com.example.bookdetail"
     compileSdk = 34
 
     defaultConfig {

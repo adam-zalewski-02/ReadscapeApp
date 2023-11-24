@@ -29,15 +29,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.model.book.Volume
+import com.example.ui.BookItem
 import com.example.ui.Loading
 
 @Composable
 internal fun CatalogRoute(
+    onBookClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewmodel: CatalogViewModel = hiltViewModel()
 ) {
     val catalogState by viewmodel.books.collectAsStateWithLifecycle()
     CatalogScreen(
+        onBookClick = onBookClick,
         modifier = modifier,
         catalogState
     )
@@ -45,18 +48,20 @@ internal fun CatalogRoute(
 
 @Composable
 internal fun CatalogScreen(
+    onBookClick: (String) -> Unit,
     modifier: Modifier = Modifier,
     state: CatalogUiState
 ) {
     when(state) {
         is CatalogUiState.Loading -> Loading(modifier)
-        is CatalogUiState.Success -> Content(books = state.books, modifier)
+        is CatalogUiState.Success -> Content(onBookClick,books = state.books, modifier)
         is CatalogUiState.Error -> Text("Error")
     }
 }
 
 @Composable
 internal fun Content(
+    onBookClick: (String) -> Unit,
     books: List<Volume>,
     modifier: Modifier = Modifier
 ) {
@@ -67,59 +72,9 @@ internal fun Content(
     ) {
         items(books) { book ->
             BookItem(
-                book = book
+                book = book,
+                onBookClick = {onBookClick(book.id)}
             )
         }
     }
-}
-
-
-@Composable
-fun BookItem(
-    book: Volume
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp),
-        shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Gray,
-        )
-    ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(book.volumeInfo.imageLinks?.thumbnail)
-                    .build(),
-                contentDescription = book.volumeInfo.title,
-                alignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize(),
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                Text(
-                    text = book.volumeInfo.title,
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    text = book.volumeInfo.authors.toString(),
-                    color = Color.White,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Normal,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-        }
-    }
-    Spacer(modifier = Modifier.height(16.dp))
 }

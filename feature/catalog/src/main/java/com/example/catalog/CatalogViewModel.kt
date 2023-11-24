@@ -34,7 +34,6 @@ class CatalogViewModel @Inject constructor(
                     val bookIds = catalogResponse.data
                     val books = getItemsForIds(bookIds)
                     _books.value = CatalogUiState.Success(books)
-                    println("HERE")
                     println(_books.value)
                 }
             } catch (e: Exception) {

@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.model)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
@@ -56,4 +57,6 @@ dependencies {
     implementation(libs.compose.material3)
 
     api(libs.androidx.compose.material.iconsExtended)
+    implementation("io.coil-kt:coil-compose:2.5.0")
+
 }
