@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.repository.DefaultUserRepository
 import com.example.database.dao.UserDao
+import com.example.model.CurrentUserManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +25,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = userRepository.getUser(email, password)
+                CurrentUserManager.setCurrentUser(response.user._id)
                 _loginState.value = AuthenticationUiState.Success(response.success)
             } catch (e: Exception) {
                 _loginState.value = AuthenticationUiState.Error

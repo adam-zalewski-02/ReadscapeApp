@@ -16,7 +16,7 @@ private interface RetrofitGoogleNetworkApi {
     suspend fun getAllVolumes() : BookApiResponse
 
     @GET(value = "volumes/{id}")
-    suspend fun getVolumeById(@Path("id") id: String) : BookApiResponse
+    suspend fun getVolumeById(@Path("id") id: String) : Volume
 }
 @Singleton
 class RetrofitGoogleNetwork @Inject constructor(
@@ -34,6 +34,6 @@ class RetrofitGoogleNetwork @Inject constructor(
     }
 
     override suspend fun getVolumeById(volumeId: String): Volume {
-        return genericRetrofitNetwork.networkApi.getVolumeById(volumeId).items.first()
+        return genericRetrofitNetwork.networkApi.getVolumeById(volumeId)
     }
 }

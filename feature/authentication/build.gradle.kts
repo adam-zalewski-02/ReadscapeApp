@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.android)
     implementation(project(mapOf("path" to ":core:data")))
+    implementation(project(mapOf("path" to ":core:model")))
     //implementation(project(mapOf("path" to ":core:ui")))
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.ext.compiler)
