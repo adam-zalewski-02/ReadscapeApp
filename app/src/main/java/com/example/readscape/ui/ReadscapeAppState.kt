@@ -75,8 +75,19 @@ class ReadscapeAppState(
             }
 
             when (topLevelDestination) {
-                TopLevelDestination.BOOKSHOP -> navController.navigateToBookShopScreen(topLevelNavOptions)
-                TopLevelDestination.CATALOG -> navController.navigateToCatalogScreen(topLevelNavOptions)
+                TopLevelDestination.BOOKSHOP -> {
+                    navController.popBackStack(
+                        catalogRoute,
+                        inclusive = true
+                    )
+                    navController.navigateToBookShopScreen(topLevelNavOptions)}
+                TopLevelDestination.CATALOG -> {
+                    navController.popBackStack(
+                        catalogRoute,
+                        inclusive = true
+                    )
+                    navController.navigateToCatalogScreen(topLevelNavOptions)
+                }
             }
         }
     }
