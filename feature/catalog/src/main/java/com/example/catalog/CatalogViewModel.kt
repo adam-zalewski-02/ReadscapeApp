@@ -6,7 +6,6 @@ import com.example.data.repository.DefaultBookRepository
 import com.example.data.repository.DefaultUserRepository
 import com.example.model.CurrentUserManager
 import com.example.model.book.Volume
-import com.example.shared.SharedViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
