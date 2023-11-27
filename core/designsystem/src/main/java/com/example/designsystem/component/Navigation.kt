@@ -1,4 +1,4 @@
-package com.example.ui
+package com.example.designsystem.component
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.NavigationBar

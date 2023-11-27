@@ -24,6 +24,7 @@
             <option value="$PROJECT_DIR$/feature/bookdetail" />
             <option value="$PROJECT_DIR$/feature/bookshop" />
             <option value="$PROJECT_DIR$/feature/catalog" />
+            <option value="$PROJECT_DIR$/feature/settings" />
           </set>
         </option>
       </GradleProjectSettings>

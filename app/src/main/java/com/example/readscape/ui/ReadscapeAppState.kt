@@ -58,6 +58,8 @@ class ReadscapeAppState(
     val shouldShowBottomBar: Boolean
         @Composable get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact && currentDestination?.route != loginRoute && currentDestination?.route != registerRoute
 
+    val shouldShowTopAppBar: Boolean
+        @Composable get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact && currentDestination?.route == bookShopRoute
     fun navigateToLoginScreen() {
         navController.navigateToLoginScreen()
     }

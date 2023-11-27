@@ -15,16 +15,16 @@ android {
         minSdk = 24
         targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+        //consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
+            /*proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
-            )
+            )*/
         }
     }
     compileOptions {
@@ -47,6 +47,7 @@ dependencies {
     implementation(project(mapOf("path" to ":core:model")))
     implementation(project(mapOf("path" to ":feature:authentication")))
     implementation(project(mapOf("path" to ":core:ui")))
+    implementation(projects.core.designsystem)
 
     implementation(projects.core.network)
     implementation(projects.core.database)

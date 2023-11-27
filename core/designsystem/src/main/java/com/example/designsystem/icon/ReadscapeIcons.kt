@@ -1,4 +1,4 @@
-package com.example.ui.icon
+package com.example.designsystem.icon
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
