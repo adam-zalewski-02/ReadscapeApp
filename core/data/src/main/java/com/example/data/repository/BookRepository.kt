@@ -6,6 +6,8 @@ import javax.inject.Inject
 interface BookRepository {
     suspend fun getAllVolumes(): List<Volume>
     suspend fun getVolumeById(volumeId: String): Volume
+
+    suspend fun getVolumesByTitle(title: String): List<Volume>
 }
 
 class DefaultBookRepository @Inject constructor(
@@ -17,6 +19,10 @@ class DefaultBookRepository @Inject constructor(
 
     override suspend fun getVolumeById(volumeId: String): Volume {
         return dataSource.getVolumeById(volumeId)
+    }
+
+    override suspend fun getVolumesByTitle(title: String): List<Volume> {
+        return dataSource.getVolumesByTitle(title)
     }
 
 }

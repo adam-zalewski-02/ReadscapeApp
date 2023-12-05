@@ -36,7 +36,7 @@ class BookShopViewModel @Inject constructor(
 
 sealed class BookShopUiState {
     data class Success(val books: List<Volume>) : BookShopUiState()
-    object Loading : BookShopUiState()
-    object Error : BookShopUiState()
+    data object Loading : BookShopUiState()
+    data object Error : BookShopUiState()
 
 }
