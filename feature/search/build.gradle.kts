@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.android)
+    implementation(project(mapOf("path" to ":core:domain")))
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.ext.compiler)
     implementation(libs.hilt.ext.work)

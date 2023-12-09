@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.settings"
+    namespace = "com.example.domain"
     compileSdk = 34
 
     defaultConfig {
@@ -38,7 +38,11 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation(project(mapOf("path" to ":core:data")))
+    implementation(project(mapOf("path" to ":core:model")))
     testImplementation(libs.junit4)
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("javax.inject:javax.inject:1")
+
 }

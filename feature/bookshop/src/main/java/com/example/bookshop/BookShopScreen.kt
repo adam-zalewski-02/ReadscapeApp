@@ -21,7 +21,7 @@ internal fun BookShopRoute(
     modifier: Modifier = Modifier,
     viewmodel: BookShopViewModel = hiltViewModel()
 ) {
-    val bookState by viewmodel.books.collectAsStateWithLifecycle()
+    val bookState by viewmodel.booksUiState.collectAsStateWithLifecycle()
 
     BookShopScreen(
         onBookClick = onBookClick,

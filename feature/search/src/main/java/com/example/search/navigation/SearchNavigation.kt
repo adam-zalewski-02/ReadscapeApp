@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.example.search.SearchRoute
 
 const val searchRoute = "search_route"
 fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
@@ -11,9 +12,12 @@ fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.searchScreen(
+    onBackClick: () -> Unit,
 
 ) {
     composable(route = searchRoute) {
-
+        SearchRoute(
+            onBackClick = onBackClick
+        )
     }
 }

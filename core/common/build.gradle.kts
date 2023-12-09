@@ -2,10 +2,12 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.example.settings"
+    namespace = "com.example.common"
     compileSdk = 34
 
     defaultConfig {
@@ -41,4 +43,11 @@ dependencies {
     testImplementation(libs.junit4)
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("javax.inject:javax.inject:1")
+    implementation("com.google.dagger:dagger:2.48.1")
+    ksp("com.google.dagger:dagger-compiler:2.48.1")
+    implementation("com.google.dagger:hilt-core:2.48.1")
+    implementation("com.google.dagger:hilt-android:2.48.1")
+    ksp(libs.hilt.compiler)
+    ksp(libs.hilt.ext.compiler)
 }
