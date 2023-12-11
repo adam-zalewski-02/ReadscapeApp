@@ -9,7 +9,10 @@ import com.example.domain.GetRecentSearchQueriesUseCase
 import com.example.model.book.Volume
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,7 +21,7 @@ class SearchViewModel @Inject constructor(
     private val bookRepository: DefaultBookRepository,
     private val savedStateHandle: SavedStateHandle,
     private val recentSearchRepository: RecentSearchRepository,
-    getRecentSearchQueriesUseCase: GetRecentSearchQueriesUseCase
+    recentSearchQueriesUseCase: GetRecentSearchQueriesUseCase
 ): ViewModel(){
     private val _books = MutableStateFlow<SearchResultUiState>(SearchResultUiState.Loading)
     val books: StateFlow<SearchResultUiState>
@@ -38,6 +41,21 @@ class SearchViewModel @Inject constructor(
 
     fun onSearchQueryChanged(query: String) {
         savedStateHandle[SEARCH_QUERY] = query
+    }
+
+    val recentSearchQueriesUiState: StateFlow<RecentSearchQueriesUiState> =
+        recentSearchQueriesUseCase()
+            .map(RecentSearchQueriesUiState::Success)
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = RecentSearchQueriesUiState.Loading
+            )
+
+    fun clearRecentSearches() {
+        viewModelScope.launch {
+            recentSearchRepository.clearRecentSearches()
+        }
     }
 }
 private const val SEARCH_QUERY = "searchQuery"

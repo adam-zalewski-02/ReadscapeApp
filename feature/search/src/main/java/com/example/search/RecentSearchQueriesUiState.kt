@@ -1,6 +1,6 @@
 package com.example.search
 
-import com.example.model.RecentSearchQuery
+import com.example.data.model.RecentSearchQuery
 
 sealed interface RecentSearchQueriesUiState {
     data object Loading : RecentSearchQueriesUiState

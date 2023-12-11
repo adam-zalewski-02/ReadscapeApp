@@ -14,6 +14,7 @@ import com.example.bookshop.navigation.bookShopScreen
 import com.example.bookshop.navigation.navigateToBookShopScreen
 import com.example.catalog.navigation.catalogScreen
 import com.example.readscape.ui.ReadscapeAppState
+import com.example.search.navigation.searchScreen
 
 @Composable
 fun ReadscapeNavHost(
@@ -35,6 +36,10 @@ fun ReadscapeNavHost(
         bookShopScreen(onBookClick = navController::navigateToBookDetailScreen)
         catalogScreen(onBookClick = navController::navigateToBookDetailScreen)
         bookDetailScreen(onBack = navController::navigateToBookShopScreen)
+        searchScreen(
+            onBackClick = navController::popBackStack,
+            onBookClick = navController::navigateToBookDetailScreen,
+        )
 
     }
 }

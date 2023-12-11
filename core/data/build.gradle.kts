@@ -38,14 +38,17 @@ android {
 dependencies {
     implementation(projects.core.network)
     implementation(projects.core.common)
+    implementation(projects.core.model)
+    implementation(projects.core.database)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(projects.core.model)
     testImplementation(libs.junit4)
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("javax.inject:javax.inject:1")
+    implementation(libs.kotlinx.datetime)
 
     implementation("com.google.dagger:dagger:2.48.1")
     ksp("com.google.dagger:dagger-compiler:2.48.1")

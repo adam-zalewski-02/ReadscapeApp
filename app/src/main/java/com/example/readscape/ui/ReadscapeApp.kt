@@ -88,7 +88,7 @@ fun ReadscapeApp(
                             containerColor = Color.Transparent,
                         ),
                         onActionClick = {showSettingsDialog = true},
-                        onNavigationClick = {}
+                        onNavigationClick = {appState.navigateToSearch()}
                     )
                 }
                 ReadscapeNavHost(appState = appState)

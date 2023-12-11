@@ -1,6 +1,6 @@
 package com.example.domain
 import com.example.data.repository.RecentSearchRepository
-import com.example.model.RecentSearchQuery
+import com.example.data.model.RecentSearchQuery
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

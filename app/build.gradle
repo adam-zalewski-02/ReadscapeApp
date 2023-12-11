@@ -56,6 +56,7 @@ dependencies {
     implementation(projects.feature.catalog)
     implementation(projects.feature.bookdetail)
     implementation(projects.feature.settings)
+    implementation(projects.feature.search)
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
     implementation(projects.core.data)
