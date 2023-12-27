@@ -34,7 +34,7 @@ class SearchViewModel @Inject constructor(
                 val bookList = bookRepository.getVolumesByTitle(query)
                 _books.value = SearchResultUiState.Success(bookList)
             } catch (e: Exception) {
-                _books.value = SearchResultUiState.Error
+                println(e.message)
             }
         }
     }
@@ -59,13 +59,12 @@ class SearchViewModel @Inject constructor(
     }
 }
 private const val SEARCH_QUERY = "searchQuery"
-sealed class SearchResultUiState {
-    data object  Loading : SearchResultUiState()
-    data object EmptyQuery : SearchResultUiState()
-    data object  LoadFailed : SearchResultUiState()
-    data class Success(val volumes: List<Volume> = emptyList()) : SearchResultUiState() {
+sealed interface SearchResultUiState {
+    data object  Loading : SearchResultUiState
+    data object EmptyQuery : SearchResultUiState
+    data object  LoadFailed : SearchResultUiState
+    data class Success(val volumes: List<Volume> = emptyList()) : SearchResultUiState {
         fun isEmpty(): Boolean = volumes.isEmpty()
     }
-    data object SearchNotReady : SearchResultUiState()
-    data object Error : SearchResultUiState()
+    data object SearchNotReady : SearchResultUiState
 }

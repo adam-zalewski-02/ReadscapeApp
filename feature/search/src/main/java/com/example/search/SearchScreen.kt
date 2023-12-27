@@ -80,7 +80,9 @@ internal fun SearchRoute(
         onClearRecentSearches = searchViewModel::clearRecentSearches,
         onSearchQueryChanged = searchViewModel::onSearchQueryChanged,
         onSearchTriggered = searchViewModel::searchBooks,
-        searchQuery = searchQuery
+        searchQuery = searchQuery,
+        searchResultUiState = searchResultUiState,
+        recentSearchesUiState = recentSearchQueriesUiState
     )
 }
 
@@ -146,8 +148,6 @@ internal fun SearchScreen(
                     )
                 }
             }
-
-            else -> {}
         }
         Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
     }
