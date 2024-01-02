@@ -6,6 +6,7 @@ import com.example.network.CmsNetworkDatasource
 import okhttp3.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,7 +16,8 @@ private interface RetrofitCmsNetworkApi {
     @GET(value = "/booklistings")
     suspend fun getBookListings(
         @Query("_start") start: Int,
-        @Query("_limit") limit: Int
+        @Query("_limit") limit: Int,
+        @QueryMap filters: Map<String, String>
     ): List<BookListing>
 }
 
@@ -32,7 +34,7 @@ class RetrofitCmsNetwork @Inject constructor(
 
     private val cmsNetworkApi = genericRetrofitNetwork.networkApi
 
-    override suspend fun getBookListings(start: Int, limit: Int): List<BookListing> {
-        return cmsNetworkApi.getBookListings(start, limit)
+    override suspend fun getBookListings(start: Int, limit: Int, filters: Map<String, String>): List<BookListing> {
+        return cmsNetworkApi.getBookListings(start, limit, filters)
     }
 }
