@@ -45,18 +45,13 @@ class RetrofitReadscapeNetwork @Inject constructor(
     okhttpCallFactory: Call.Factory,
 ): ReadscapeNetworkDataSource {
 
-    private val moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
-
-    private val networkApi = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .callFactory(okhttpCallFactory)
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .build()
-        .create(RetrofitReadscapeNetworkApi::class.java)
+    private val genericRetrofitNetwork = GenericRetrofitNetwork(
+        okhttpCallFactory,
+        BASE_URL,
+        RetrofitReadscapeNetworkApi::class.java
+    )
     override suspend fun getUsers(): List<NetworkUser> {
-        return networkApi.getUsers()
+        return genericRetrofitNetwork.networkApi.getUsers()
     }
 
     override suspend fun getUser(email: String, password: String): AuthResponse {
@@ -64,7 +59,7 @@ class RetrofitReadscapeNetwork @Inject constructor(
             email = email,
             password = password
         )
-        return networkApi.login(loginRequest)
+        return genericRetrofitNetwork.networkApi.login(loginRequest)
     }
 
     override suspend fun insertUser(email: String, password: String): AuthResponse {
@@ -72,22 +67,22 @@ class RetrofitReadscapeNetwork @Inject constructor(
             email = email,
             password = password
         )
-        return networkApi.register(registerRequest)
+        return genericRetrofitNetwork.networkApi.register(registerRequest)
     }
 
     override suspend fun deleteUser(user: NetworkUser) {
-        networkApi.deleteUser(1)
+        genericRetrofitNetwork.networkApi.deleteUser(1)
     }
 
     override suspend fun getCollection(userId: String): CatalogResponse {
-        return networkApi.getCollection(userId)
+        return genericRetrofitNetwork.networkApi.getCollection(userId)
     }
 
     override suspend fun addToCollection(userId: String, bookId: String): CatalogPostResponse {
         val postRequest = CatalogRequest(
             bookId = bookId
         )
-        return networkApi.insertIntoCollection(userId, postRequest)
+        return genericRetrofitNetwork.networkApi.insertIntoCollection(userId, postRequest)
     }
 
 }
