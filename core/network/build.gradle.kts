@@ -13,6 +13,7 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "BACKEND_URL", "\"http://192.168.0.189:3000\"") //192.168.0.189 - sam //192.168.0.152 - adam
+            buildConfigField("String", "CMS_URL", "\"http://192.168.0.189:1337\"") //192.168.0.189 - sam //192.168.0.152 - adam
         }
     }
     namespace = "com.example.network"
