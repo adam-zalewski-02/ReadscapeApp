@@ -35,6 +35,7 @@ import com.example.designsystem.component.ReadscapeNavigationBar
 import com.example.designsystem.component.ReadscapeNavigationBarItem
 import com.example.designsystem.component.ReadscapeTopAppBar
 import com.example.designsystem.icon.ReadscapeIcons
+import com.example.settings.SettingsDialog
 import com.example.settings.R as settingsR
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
@@ -49,6 +50,10 @@ fun ReadscapeApp(
         mutableStateOf(false)
     }
 
+    if (showSettingsDialog) {
+        SettingsDialog(onDismiss = { showSettingsDialog = false })
+    }
+    
     Scaffold(
         containerColor = Color.Transparent,
         contentColor = MaterialTheme.colorScheme.onBackground,
