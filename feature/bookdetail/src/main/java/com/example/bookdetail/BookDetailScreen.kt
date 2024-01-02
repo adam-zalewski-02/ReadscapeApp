@@ -1,6 +1,5 @@
 package com.example.bookdetail
 
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.model.book.Volume
-import com.example.ui.Loading
+import com.example.designsystem.component.Loading
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
@@ -70,7 +69,11 @@ fun BookDetailScreen(
         modifier = modifier.fillMaxSize()
     ) {
         when (state) {
-            is BookDetailUiState.Loading -> item { Loading(modifier) }
+            is BookDetailUiState.Loading -> item {
+                Loading(
+                    modifier
+                )
+            }
             is BookDetailUiState.Success -> item {
                 Content(
                     volume = state.volume,

@@ -1,6 +1,10 @@
 package com.example.data.di
 
+import com.example.data.repository.BookRepository
+import com.example.data.repository.DefaultBookRepository
+import com.example.data.repository.DefaultRecentSearchRepository
 import com.example.data.repository.DefaultUserRepository
+import com.example.data.repository.RecentSearchRepository
 import com.example.data.repository.UserRepository
 import dagger.Binds
 import dagger.Module
@@ -15,4 +19,14 @@ interface DataModule {
     fun bindsUserRepository(
         userRepository: DefaultUserRepository,
     ): UserRepository
+
+    @Binds
+    fun bindsBookRepository(
+        bookRepository: DefaultBookRepository,
+    ): BookRepository
+
+    @Binds
+    fun bindsRecentSearchRepository(
+        recentSearchRepository: DefaultRecentSearchRepository,
+    ): RecentSearchRepository
 }

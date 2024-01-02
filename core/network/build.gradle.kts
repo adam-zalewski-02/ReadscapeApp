@@ -12,7 +12,7 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField("String", "BACKEND_URL", "\"http://192.168.0.244:3000\"")
+            buildConfigField("String", "BACKEND_URL", "\"http://192.168.0.152:3000\"")
         }
     }
     namespace = "com.example.network"
@@ -22,16 +22,16 @@ android {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+        //consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
+            /*proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
-            )
+            )*/
         }
     }
     compileOptions {

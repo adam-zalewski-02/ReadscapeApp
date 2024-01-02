@@ -13,17 +13,17 @@ android {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+        //consumerProguardFiles("consumer-rules.pro")
         targetSdk = 34
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
+            /*proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
-            )
+            )*/
         }
     }
     compileOptions {
@@ -40,9 +40,11 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation(project(mapOf("path" to ":core:database")))
     testImplementation(libs.junit4)
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.datetime)
 
 }

@@ -20,6 +20,7 @@ import com.example.bookshop.navigation.navigateToBookShopScreen
 import com.example.catalog.navigation.catalogRoute
 import com.example.catalog.navigation.navigateToCatalogScreen
 import com.example.readscape.navigation.TopLevelDestination
+import com.example.search.navigation.navigateToSearch
 
 
 @Composable
@@ -58,8 +59,14 @@ class ReadscapeAppState(
     val shouldShowBottomBar: Boolean
         @Composable get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact && currentDestination?.route != loginRoute && currentDestination?.route != registerRoute
 
+    val shouldShowTopAppBar: Boolean
+        @Composable get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact && currentDestination?.route == bookShopRoute
     fun navigateToLoginScreen() {
         navController.navigateToLoginScreen()
+    }
+
+    fun navigateToSearch() {
+        navController.navigateToSearch()
     }
 
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()

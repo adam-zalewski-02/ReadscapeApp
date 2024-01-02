@@ -6,37 +6,34 @@ import com.example.data.repository.DefaultBookRepository
 import com.example.model.book.Volume
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class BookShopViewModel @Inject constructor(
-    val bookRepository: DefaultBookRepository
+    bookRepository: DefaultBookRepository
 ) : ViewModel() {
-    private val _books = MutableStateFlow<BookShopUiState>(BookShopUiState.Loading)
-    val books: StateFlow<BookShopUiState>
-        get() = _books
-
-    init {
-        loadBooks()
-    }
-
-    private fun loadBooks() {
-        viewModelScope.launch {
-            try {
-                val bookList = bookRepository.getAllVolumes()
-                _books.value = BookShopUiState.Success(bookList)
-            } catch (e: Exception) {
-                _books.value = BookShopUiState.Error
-            }
-        }
-    }
+    val booksUiState: StateFlow<BookShopUiState> =
+        bookRepository.getAllVolumes()
+            .map<List<Volume>, BookShopUiState>(BookShopUiState::Success)
+            .onStart {emit(BookShopUiState.Loading)}
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = BookShopUiState.Loading
+            )
 }
 
-sealed class BookShopUiState {
-    data class Success(val books: List<Volume>) : BookShopUiState()
-    object Loading : BookShopUiState()
-    object Error : BookShopUiState()
+
+
+sealed interface BookShopUiState {
+    data class Success(val books: List<Volume>) : BookShopUiState
+    data object Loading : BookShopUiState
+    data object Error : BookShopUiState
 
 }

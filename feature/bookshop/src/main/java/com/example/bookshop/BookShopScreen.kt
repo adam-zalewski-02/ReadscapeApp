@@ -13,7 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.model.book.Volume
 import com.example.ui.BookItem
-import com.example.ui.Loading
+import com.example.designsystem.component.Loading
 
 @Composable
 internal fun BookShopRoute(
@@ -21,7 +21,7 @@ internal fun BookShopRoute(
     modifier: Modifier = Modifier,
     viewmodel: BookShopViewModel = hiltViewModel()
 ) {
-    val bookState by viewmodel.books.collectAsStateWithLifecycle()
+    val bookState by viewmodel.booksUiState.collectAsStateWithLifecycle()
 
     BookShopScreen(
         onBookClick = onBookClick,

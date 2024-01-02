@@ -55,11 +55,15 @@ dependencies {
     implementation(projects.feature.bookshop)
     implementation(projects.feature.catalog)
     implementation(projects.feature.bookdetail)
+    implementation(projects.feature.settings)
+    implementation(projects.feature.search)
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
     implementation(projects.core.data)
     implementation(projects.core.model)
     implementation(projects.core.network)
+    implementation(projects.core.domain)
+    implementation(projects.core.common)
     implementation libs.androidx.core.ktx
     implementation platform(libs.kotlin.bom)
     implementation libs.lifecycle.runtime.ktx

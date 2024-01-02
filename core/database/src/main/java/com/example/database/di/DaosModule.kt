@@ -1,6 +1,7 @@
 package com.example.database.di
 
 import com.example.database.BookDatabase
+import com.example.database.dao.RecentSearchQueryDao
 import com.example.database.dao.UserDao
 import dagger.Module
 import dagger.Provides
@@ -14,4 +15,9 @@ object DaosModule {
     fun providesUserDao(
         database: BookDatabase,
     ) : UserDao = database.userDao()
+
+    @Provides
+    fun providesRecentSearchQueryDao(
+        database: BookDatabase,
+    ): RecentSearchQueryDao = database.recentSearchQueryDao()
 }

@@ -13,17 +13,17 @@ android {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+        //consumerProguardFiles("consumer-rules.pro")
         targetSdk = 34
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
+            /*proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
-            )
+            )*/
         }
     }
     compileOptions {
@@ -40,7 +40,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(projects.core.model)
+    //implementation(projects.core.model)
     implementation(libs.androidx.test.core.ktx)
     implementation(libs.androidx.test.ext.junit.ktx)
     testImplementation(platform(libs.junit.bom))
@@ -54,6 +54,7 @@ dependencies {
     testImplementation(libs.room.testing)
     ksp(libs.room.compiler)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.datetime)
     androidTestImplementation(libs.android.test.runner)
     androidTestImplementation(libs.androidx.test.rules)
     implementation("com.google.dagger:dagger:2.48.1")
