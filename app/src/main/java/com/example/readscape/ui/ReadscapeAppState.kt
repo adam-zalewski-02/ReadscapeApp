@@ -21,6 +21,8 @@ import com.example.catalog.navigation.catalogRoute
 import com.example.catalog.navigation.navigateToCatalogScreen
 import com.example.readscape.navigation.TopLevelDestination
 import com.example.search.navigation.navigateToSearch
+import com.example.booklistings.navigation.bookListingsRoute
+import com.example.booklistings.navigation.navigateToBookListingsScreen
 
 
 @Composable
@@ -53,6 +55,7 @@ class ReadscapeAppState(
         @Composable get() = when (currentDestination?.route) {
             bookShopRoute -> TopLevelDestination.BOOKSHOP
             catalogRoute -> TopLevelDestination.CATALOG
+            bookListingsRoute -> TopLevelDestination.BOOKLISTINGS
             else -> null
         }
 
@@ -94,6 +97,13 @@ class ReadscapeAppState(
                         inclusive = true
                     )
                     navController.navigateToCatalogScreen(topLevelNavOptions)
+                }
+                TopLevelDestination.BOOKLISTINGS -> {
+                    navController.popBackStack(
+                        bookListingsRoute,
+                        inclusive = true
+                    )
+                    navController.navigateToBookListingsScreen(topLevelNavOptions)
                 }
             }
         }

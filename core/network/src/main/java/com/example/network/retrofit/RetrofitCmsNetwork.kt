@@ -3,7 +3,12 @@ package com.example.network.retrofit
 import com.example.model.book.BookListing
 import com.example.network.BuildConfig
 import com.example.network.CmsNetworkDatasource
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.Call
+import okhttp3.OkHttpClient
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
@@ -42,5 +47,16 @@ class RetrofitCmsNetwork @Inject constructor(
     // getBookListings(start = 0, limit = 10, filters = filters)
     override suspend fun getBookListings(start: Int, limit: Int, filters: Map<String, String>): List<BookListing> {
         return cmsNetworkApi.getBookListings(start, limit, filters)
+    }
+}
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+    @Provides
+    @Singleton
+    fun provideRetrofitCmsNetwork(
+        callFactory: Call.Factory
+    ): CmsNetworkDatasource {
+        return RetrofitCmsNetwork(callFactory)
     }
 }

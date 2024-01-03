@@ -53,6 +53,7 @@ android {
 dependencies {
     implementation(projects.feature.authentication)
     implementation(projects.feature.bookshop)
+    implementation(projects.feature.booklistings)
     implementation(projects.feature.catalog)
     implementation(projects.feature.bookdetail)
     implementation(projects.feature.settings)
