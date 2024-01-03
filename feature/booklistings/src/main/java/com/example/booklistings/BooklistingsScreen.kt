@@ -5,9 +5,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -51,7 +54,7 @@ fun BookListingsScreen(
 
 @Composable
 fun FilterBar(onFilterApplied: (Map<String, String>) -> Unit) {
-    var selectedFilterType by remember { mutableStateOf("Title") }
+    var selectedFilterType by remember { mutableStateOf("title") }
     var searchText by remember { mutableStateOf("") }
 
     Row(
@@ -61,7 +64,7 @@ fun FilterBar(onFilterApplied: (Map<String, String>) -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         // ComboBox for selecting filter type
-        ComboBox(selectedFilterType, listOf("title", "author", "ISBN"), onValueChange = {
+        ComboBox(selectedFilterType, listOf("title", "author", "isbn", "publisher"), onValueChange = {
         selectedFilterType = it
     })
 
@@ -118,10 +121,18 @@ fun BookListItem(bookListing: BookListing) {
 fun ComboBox(selectedFilterType: String, items: List<String>, onValueChange: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier.wrapContentSize(Alignment.TopStart)) {
-        Text(selectedFilterType, modifier = Modifier
+    Row(
+        modifier = Modifier
+            .wrapContentSize(Alignment.TopStart)
             .clickable(onClick = { expanded = true })
-            .padding(8.dp))
+            .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(selectedFilterType)
+        Icon(
+            imageVector = Icons.Filled.ArrowDropDown,
+            contentDescription = "Dropdown Arrow"
+        )
 
         DropdownMenu(
             expanded = expanded,
