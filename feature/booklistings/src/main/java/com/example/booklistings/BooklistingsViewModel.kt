@@ -35,11 +35,17 @@ class BookListingsViewModel @Inject constructor(
         }
     }
 
-
-    // Placeholder for future filtering functionality
     fun applyFilter(filters: Map<String, String>) {
-        // Implement filtering logic
+        viewModelScope.launch {
+            try {
+                val listings = bookListingRepository.getFilteredBookListings(0, 30, filters).first()
+                _bookListingsState.value = BookListingsState.Success(listings)
+            } catch (e: Exception) {
+                _bookListingsState.value = BookListingsState.Error(e.message ?: "Unknown error")
+            }
+        }
     }
+
 }
 
 sealed class BookListingsState {
