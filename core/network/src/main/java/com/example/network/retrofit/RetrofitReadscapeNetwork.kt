@@ -7,11 +7,7 @@ import com.example.network.model.NetworkUser
 import com.example.network.model.catalog.CatalogPostResponse
 import com.example.network.model.catalog.CatalogRequest
 import com.example.network.model.catalog.CatalogResponse
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Call
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
