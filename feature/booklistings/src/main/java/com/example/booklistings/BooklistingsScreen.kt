@@ -62,12 +62,11 @@ fun FilterBar(onFilterApplied: (Map<String, String>) -> Unit) {
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        ComboBox(selectedFilterType, listOf("title", "author", "isbn", "publisher"), onValueChange = {
+        ComboBox(selectedFilterType, listOf("title", "authors", "isbn", "publisher"), onValueChange = {
         selectedFilterType = it
     })
 
         Spacer(Modifier.width(16.dp))
-
         OutlinedTextField(
             value = searchText,
             onValueChange = { searchText = it },
