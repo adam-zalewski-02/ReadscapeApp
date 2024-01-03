@@ -63,8 +63,8 @@ fun BookListItem(bookListing: BookListing) {
         )
         Spacer(Modifier.width(16.dp))
         Column {
-            Text(text = bookListing.title, style = MaterialTheme.typography.titleMedium)
-            Text(text = "Author: ${bookListing.authors.joinToString()}", style = MaterialTheme.typography.headlineLarge)
+            Text(text = bookListing.title, style = MaterialTheme.typography.titleLarge)
+            Text(text = "Author: ${bookListing.authors.joinToString()}", style = MaterialTheme.typography.bodyLarge)
         }
     }
 }
