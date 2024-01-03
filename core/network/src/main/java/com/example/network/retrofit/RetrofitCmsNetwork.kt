@@ -8,7 +8,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Call
-import okhttp3.OkHttpClient
 import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
