@@ -61,7 +61,7 @@ fun FilterBar(onFilterApplied: (Map<String, String>) -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         // ComboBox for selecting filter type
-        ComboBox(selectedFilterType, listOf("Title", "Author", "ISBN"), onValueChange = {
+        ComboBox(selectedFilterType, listOf("title", "author", "ISBN"), onValueChange = {
         selectedFilterType = it
     })
 
