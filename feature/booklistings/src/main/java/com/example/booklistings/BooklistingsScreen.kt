@@ -152,8 +152,6 @@ fun BookListingDetailScreen(
     }
 }
 
-
-
 @Composable
 fun ComboBox(selectedFilterType: String, items: List<String>, onValueChange: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
