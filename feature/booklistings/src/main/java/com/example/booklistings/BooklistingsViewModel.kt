@@ -76,13 +76,10 @@ class BookListingsViewModel @Inject constructor(
             }
         }
     }
-
-
-
 }
 
 sealed class BookListingsState {
-    object Loading : BookListingsState()
+    data object Loading : BookListingsState()
     data class Success(val bookListings: List<BookListing>) : BookListingsState()
     data class Error(val message: String) : BookListingsState()
 }

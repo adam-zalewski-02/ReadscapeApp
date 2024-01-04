@@ -26,9 +26,9 @@ enum class TopLevelDestination(
         titleTextId = R.string.app_name
     ),
     BOOKLISTINGS(
-    selectedIcon = ReadscapeIcons.Bookmark, // replace with actual icon
-    unselectedIcon = ReadscapeIcons.BookmarkBorder, // replace with actual icon
-    iconTextId = booklistingsR.string.booklistings, // replace with actual string resource ID
-    titleTextId = R.string.app_name // or another appropriate title
+        selectedIcon = ReadscapeIcons.ShoppingBag,
+        unselectedIcon = ReadscapeIcons.ShoppingBagBorder,
+        iconTextId = booklistingsR.string.booklistings,
+        titleTextId = R.string.app_name
     ),
 }

@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -114,7 +115,6 @@ fun BookListItem(bookListing: BookListing, onSelectBook: (BookListing) -> Unit) 
         Column {
             Text(text = bookListing.title, style = MaterialTheme.typography.titleLarge)
             Text(text = "Author: ${bookListing.authors.joinToString()}", style = MaterialTheme.typography.bodyLarge)
-            // Add more details as needed
         }
     }
 }
@@ -134,9 +134,24 @@ fun BookListingDetailScreen(
         }
         Spacer(Modifier.height(16.dp))
         Text(text = bookListing.title, style = MaterialTheme.typography.headlineMedium)
-        Text(text = "Author: ${bookListing.authors.joinToString()}", style = MaterialTheme.typography.bodyLarge)
+        Text(text = "Author(s): ${bookListing.authors.joinToString()}", style = MaterialTheme.typography.bodyLarge)
         Text(text = "Description: ${bookListing.description}", style = MaterialTheme.typography.bodyMedium)
+        Text(text = "Page Count: ${bookListing.pageCount}", style = MaterialTheme.typography.bodySmall)
+        Text(text = "Language: ${bookListing.language}", style = MaterialTheme.typography.bodySmall)
+        Text(text = "Publisher: ${bookListing.publisher}", style = MaterialTheme.typography.bodySmall)
+        Text(text = "Published Date: ${bookListing.publishedDate}", style = MaterialTheme.typography.bodySmall)
+        Text(text = "ISBN: ${bookListing.isbn}", style = MaterialTheme.typography.bodySmall)
+        Text(text = "Maturity Rating: ${bookListing.maturityRating}", style = MaterialTheme.typography.bodySmall)
+        Text(text = "Extra Info: ${bookListing.extraInfoFromOwner}", style = MaterialTheme.typography.bodySmall)
+        Text(text = "Keywords: ${bookListing.keywords.joinToString()}", style = MaterialTheme.typography.bodySmall)
+        Text(text = "Categories: ${bookListing.categories.joinToString()}", style = MaterialTheme.typography.bodySmall)
 
+        if (bookListing.canBeBorrowed) {
+            Text(text = "Available for Borrowing", color = Color.Green, style = MaterialTheme.typography.bodyLarge)
+        }
+        if (bookListing.canBeSold) {
+            Text(text = "Available for Sale", color = Color.Blue, style = MaterialTheme.typography.bodyLarge)
+        }
 
         if (similarBookListings.isNotEmpty()) {
             Text("Similar Books", style = MaterialTheme.typography.headlineMedium)
