@@ -29,20 +29,24 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.model.book.BookListing
 
 @Composable
-fun BookListingsScreen(
-    viewModel: BookListingsViewModel = hiltViewModel()
-) {
+fun BookListingsScreen(viewModel: BookListingsViewModel = hiltViewModel()) {
     val state by viewModel.bookListingsState.collectAsState()
+    val selectedBookListing by viewModel.selectedBookListing.collectAsState()
 
-    Column {
-        FilterBar(viewModel::applyFilter)
+    if (selectedBookListing != null) {
+        BookListingDetailScreen(bookListing = selectedBookListing!!, onBack = viewModel::clearSelectedBookListing)
+    } else {
         when (state) {
             is BookListingsState.Loading -> {
                 // Display loading UI
             }
             is BookListingsState.Success -> {
                 val bookListings = (state as BookListingsState.Success).bookListings
-                BookListingsList(bookListings)
+                Column {
+                    FilterBar(onFilterApplied = viewModel::applyFilter)
+                    Spacer(Modifier.height(16.dp))
+                    BookListingsList(bookListings, viewModel::selectBookListing)
+                }
             }
             is BookListingsState.Error -> {
                 // Display error UI
@@ -83,20 +87,21 @@ fun FilterBar(onFilterApplied: (Map<String, String>) -> Unit) {
 }
 
 @Composable
-fun BookListingsList(bookListings: List<BookListing>) {
+fun BookListingsList(bookListings: List<BookListing>, onSelectBook: (BookListing) -> Unit) {
     LazyColumn {
         items(bookListings) { bookListing ->
-            BookListItem(bookListing)
+            BookListItem(bookListing, onSelectBook)
         }
     }
 }
 
 @Composable
-fun BookListItem(bookListing: BookListing) {
+fun BookListItem(bookListing: BookListing, onSelectBook: (BookListing) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .clickable { onSelectBook(bookListing) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
@@ -109,9 +114,30 @@ fun BookListItem(bookListing: BookListing) {
         Column {
             Text(text = bookListing.title, style = MaterialTheme.typography.titleLarge)
             Text(text = "Author: ${bookListing.authors.joinToString()}", style = MaterialTheme.typography.bodyLarge)
+            // Add more details as needed
         }
     }
 }
+
+
+@Composable
+fun BookListingDetailScreen(bookListing: BookListing, onBack: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Button(onClick = onBack) {
+            Text("Back")
+        }
+        Spacer(Modifier.height(16.dp))
+        Text(text = bookListing.title, style = MaterialTheme.typography.headlineMedium)
+        Text(text = "Author: ${bookListing.authors.joinToString()}", style = MaterialTheme.typography.bodyLarge)
+        Text(text = "Description: ${bookListing.description}", style = MaterialTheme.typography.bodyMedium)
+        // Add more details as required
+    }
+}
+
 
 @Composable
 fun ComboBox(selectedFilterType: String, items: List<String>, onValueChange: (String) -> Unit) {
