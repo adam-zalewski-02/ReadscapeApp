@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.data.repository.BookListingRepository
 import com.example.model.book.BookListing
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,6 +24,10 @@ class BookListingsViewModel @Inject constructor(
     private val _selectedBookListing = MutableStateFlow<BookListing?>(null)
     val selectedBookListing: StateFlow<BookListing?> = _selectedBookListing
 
+    init {
+        loadBookListings()
+    }
+
     fun selectBookListing(bookListing: BookListing) {
         _selectedBookListing.value = bookListing
     }
@@ -31,8 +36,9 @@ class BookListingsViewModel @Inject constructor(
         _selectedBookListing.value = null
     }
 
-    init {
-        loadBookListings()
+    fun getBookListingsByIds(ids: List<String>): Flow<List<BookListing>> {
+        // Implement logic to fetch BookListing objects based on IDs
+        // This might involve a network request or database query
     }
 
     private fun loadBookListings() {

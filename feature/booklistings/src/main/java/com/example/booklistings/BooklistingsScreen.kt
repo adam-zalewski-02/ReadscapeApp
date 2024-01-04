@@ -121,12 +121,14 @@ fun BookListItem(bookListing: BookListing, onSelectBook: (BookListing) -> Unit) 
 
 
 @Composable
-fun BookListingDetailScreen(bookListing: BookListing, onBack: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
+fun BookListingDetailScreen(
+    bookListing: BookListing,
+    onBack: () -> Unit,
+    viewModel: BookListingsViewModel = hiltViewModel()
+) {
+    val similarBookListings by viewModel.getBookListingsByIds(bookListing.similarBooks).collectAsState(initial = emptyList())
+
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Button(onClick = onBack) {
             Text("Back")
         }
@@ -134,9 +136,22 @@ fun BookListingDetailScreen(bookListing: BookListing, onBack: () -> Unit) {
         Text(text = bookListing.title, style = MaterialTheme.typography.headlineMedium)
         Text(text = "Author: ${bookListing.authors.joinToString()}", style = MaterialTheme.typography.bodyLarge)
         Text(text = "Description: ${bookListing.description}", style = MaterialTheme.typography.bodyMedium)
-        // Add more details as required
+
+
+        if (similarBookListings.isNotEmpty()) {
+            Text("Similar Books", style = MaterialTheme.typography.headlineMedium)
+            LazyColumn {
+                items(similarBookListings) { similarBookListing ->
+                    BookListItem(
+                        bookListing = similarBookListing,
+                        onSelectBook = { selectedBook -> viewModel.selectBookListing(selectedBook) }
+                    )
+                }
+            }
+        }
     }
 }
+
 
 
 @Composable
