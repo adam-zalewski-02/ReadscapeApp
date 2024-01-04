@@ -5,11 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.data.repository.BookListingRepository
 import com.example.model.book.BookListing
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,9 +40,13 @@ class BookListingsViewModel @Inject constructor(
         _selectedBookListing.value = null
     }
 
-    fun getBookListingsByIds(ids: List<String>): Flow<List<BookListing>> {
-        // Implement logic to fetch BookListing objects based on IDs
-        // This might involve a network request or database query
+    fun getBookListingsByIds(ids: List<String>): Flow<List<BookListing>> = flow {
+        coroutineScope {
+            val bookListings = ids.map { id ->
+                async { bookListingRepository.getSingleBookListing(id) }
+            }.awaitAll()
+            emit(bookListings)
+        }
     }
 
     private fun loadBookListings() {
