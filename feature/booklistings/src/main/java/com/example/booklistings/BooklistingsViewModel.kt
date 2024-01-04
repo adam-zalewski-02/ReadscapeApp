@@ -5,10 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.data.repository.BookListingRepository
 import com.example.model.book.BookListing
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,8 +25,34 @@ class BookListingsViewModel @Inject constructor(
     private val _bookListingsState = MutableStateFlow<BookListingsState>(BookListingsState.Loading)
     val bookListingsState: StateFlow<BookListingsState> = _bookListingsState.asStateFlow()
 
+    private val _selectedBookListing = MutableStateFlow<BookListing?>(null)
+    val selectedBookListing: StateFlow<BookListing?> = _selectedBookListing
+
     init {
         loadBookListings()
+    }
+
+    fun selectBookListing(bookListing: BookListing) {
+        _selectedBookListing.value = bookListing
+    }
+
+    fun clearSelectedBookListing() {
+        _selectedBookListing.value = null
+    }
+
+    fun getBookListingsByIds(ids: List<String>): Flow<List<BookListing>> = flow {
+        coroutineScope {
+            val bookListings = ids.map { id ->
+                async {
+                    try {
+                        bookListingRepository.getSingleBookListing(id)
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+            }.awaitAll().filterNotNull()
+            emit(bookListings)
+        }
     }
 
     private fun loadBookListings() {
@@ -45,11 +76,10 @@ class BookListingsViewModel @Inject constructor(
             }
         }
     }
-
 }
 
 sealed class BookListingsState {
-    object Loading : BookListingsState()
+    data object Loading : BookListingsState()
     data class Success(val bookListings: List<BookListing>) : BookListingsState()
     data class Error(val message: String) : BookListingsState()
 }

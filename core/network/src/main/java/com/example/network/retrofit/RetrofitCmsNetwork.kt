@@ -9,6 +9,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
 import javax.inject.Inject
@@ -23,6 +24,9 @@ private interface RetrofitCmsNetworkApi {
         @Query("_limit") limit: Int,
         @QueryMap(encoded = true) filters: Map<String, String>
     ): List<BookListing>
+
+    @GET(value = "/booklistings/{id}")
+    suspend fun getSingleBookListing(@Path("id") listingId: String): BookListing?
 }
 
 @Singleton
@@ -47,6 +51,11 @@ class RetrofitCmsNetwork @Inject constructor(
         val modifiedFilters = filters.mapKeys { (key, _) -> "${key}_contains" }
         return cmsNetworkApi.getBookListings(start, limit, modifiedFilters)
     }
+
+    override suspend fun getSingleBookListing(listingId: String): BookListing? {
+        return cmsNetworkApi.getSingleBookListing(listingId)
+    }
+
 }
 @Module
 @InstallIn(SingletonComponent::class)

@@ -3,6 +3,7 @@ package com.example.designsystem.icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Bookmarks
+import androidx.compose.material.icons.outlined.ShoppingBag
 import androidx.compose.material.icons.outlined.Upcoming
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowBack
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.rounded.Grid3x3
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.ShoppingBag
 import androidx.compose.material.icons.rounded.ShortText
 import androidx.compose.material.icons.rounded.Upcoming
 import androidx.compose.material.icons.rounded.ViewDay
@@ -37,4 +39,6 @@ object ReadscapeIcons {
     val Upcoming = Icons.Rounded.Upcoming
     val UpcomingBorder = Icons.Outlined.Upcoming
     val ViewDay = Icons.Rounded.ViewDay
+    val ShoppingBag = Icons.Rounded.ShoppingBag
+    val ShoppingBagBorder = Icons.Outlined.ShoppingBag
 }
