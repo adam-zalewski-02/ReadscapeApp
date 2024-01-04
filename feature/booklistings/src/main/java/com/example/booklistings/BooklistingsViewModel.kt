@@ -43,8 +43,14 @@ class BookListingsViewModel @Inject constructor(
     fun getBookListingsByIds(ids: List<String>): Flow<List<BookListing>> = flow {
         coroutineScope {
             val bookListings = ids.map { id ->
-                async { bookListingRepository.getSingleBookListing(id) }
-            }.awaitAll()
+                async {
+                    try {
+                        bookListingRepository.getSingleBookListing(id)
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+            }.awaitAll().filterNotNull()
             emit(bookListings)
         }
     }

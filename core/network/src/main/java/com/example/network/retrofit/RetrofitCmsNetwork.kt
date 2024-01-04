@@ -28,7 +28,6 @@ private interface RetrofitCmsNetworkApi {
     @GET(value = "/booklistings/{id}")
     suspend fun getSingleBookListing(@Path("id") listingId: String): BookListing?
 }
-}
 
 @Singleton
 class RetrofitCmsNetwork @Inject constructor(
