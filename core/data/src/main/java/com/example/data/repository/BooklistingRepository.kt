@@ -1,5 +1,6 @@
 package com.example.data.repository
 
+import android.util.Log
 import com.example.model.book.BookListing
 import com.example.network.CmsNetworkDatasource
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,7 +17,7 @@ import dagger.hilt.components.SingletonComponent
 
 interface BookListingRepository {
     fun getFilteredBookListings(start: Int, limit: Int, filters: Map<String, String>): Flow<List<BookListing>>
-    suspend fun getSingleBookListing(listingId: String): BookListing
+    suspend fun getSingleBookListing(listingId: String): BookListing?
 }
 
 class BookListingRepositoryImpl @Inject constructor(
@@ -28,10 +29,13 @@ class BookListingRepositoryImpl @Inject constructor(
         emit(cmsNetworkDatasource.getBookListings(start, limit, filters))
     }.flowOn(ioDispatcher)
 
-    override suspend fun getSingleBookListing(listingId: String): BookListing {
-        // Implement the logic to fetch details of a specific book listing based on the listingId.
-        // This method will require a network call or database query to fetch a single book listing.
-        TODO("Implement the method to get a specific book listing by ID")
+    override suspend fun getSingleBookListing(listingId: String): BookListing? {
+        return try {
+            cmsNetworkDatasource.getSingleBookListing(listingId)
+        } catch (e: Exception) {
+            Log.d("BookListingRepositoryImpl", "No booklisting found with id $listingId")
+            null
+        }
     }
 }
 
