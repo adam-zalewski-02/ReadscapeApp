@@ -20,6 +20,17 @@ class BookListingsViewModel @Inject constructor(
     private val _bookListingsState = MutableStateFlow<BookListingsState>(BookListingsState.Loading)
     val bookListingsState: StateFlow<BookListingsState> = _bookListingsState.asStateFlow()
 
+    private val _selectedBookListing = MutableStateFlow<BookListing?>(null)
+    val selectedBookListing: StateFlow<BookListing?> = _selectedBookListing
+
+    fun selectBookListing(bookListing: BookListing) {
+        _selectedBookListing.value = bookListing
+    }
+
+    fun clearSelectedBookListing() {
+        _selectedBookListing.value = null
+    }
+
     init {
         loadBookListings()
     }
@@ -45,6 +56,8 @@ class BookListingsViewModel @Inject constructor(
             }
         }
     }
+
+
 
 }
 
