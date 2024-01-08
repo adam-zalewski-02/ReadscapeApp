@@ -79,7 +79,13 @@ class BookListingRepositoryImpl @Inject constructor(
             googleVolumeInfo?.let {
                 bookListing.pageCount = it.pageCount ?: bookListing.pageCount
                 bookListing.thumbnailLink = it.imageLinks?.thumbnail ?: bookListing.thumbnailLink
-                // Add other fields you want to merge
+                bookListing.authors = it.authors ?: bookListing.authors
+                bookListing.language = it.language ?: bookListing.language
+                bookListing.publisher = it.publisher ?: bookListing.publisher
+                bookListing.categories = it.categories ?: bookListing.categories
+                bookListing.publishedDate = it.publishedDate ?: bookListing.publishedDate
+                bookListing.description = it.description ?: bookListing.description
+                bookListing.title = it.title
             }
 
             // Add the book listing

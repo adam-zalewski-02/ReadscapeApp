@@ -21,5 +21,8 @@ data class VolumeInfo(
     val language: String?,
     val previewLink: String?,
     val infoLink: String?,
-    val canonicalVolumeLink: String?
+    val canonicalVolumeLink: String?,
+    //added:
+    val publisher: String?,
+    val categories: List<String>?
 )
