@@ -88,6 +88,7 @@ class BookListingRepositoryImpl @Inject constructor(
                 bookListing.categories = it.categories ?: bookListing.categories
                 bookListing.publishedDate = it.publishedDate ?: bookListing.publishedDate
                 bookListing.description = it.description ?: bookListing.description
+                bookListing.maturityRating = it.maturityRating ?: bookListing.maturityRating
                 bookListing.title = it.title
                 bookListing.id = it.id ?: bookListing.id
             }
@@ -124,7 +125,7 @@ class BookListingRepositoryImpl @Inject constructor(
             createdAt = "",
             updatedAt = "",
             __v = 0,
-            published_at = null,
+            published_at = "",
             id = ""
         )
 

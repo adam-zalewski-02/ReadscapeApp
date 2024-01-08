@@ -9,7 +9,7 @@ data class BookListing(
     var authors: List<String>,
     val keywords: List<String>,
     val extraInfoFromOwner: String,
-    val maturityRating: String,
+    var maturityRating: String,
     val ownerId: String,
     val isbn: String,
     var title: String,
