@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import com.example.common.network.Dispatcher
 import com.example.common.network.ReadscapeDispatchers.IO
+import com.example.network.GoogleNetworkDataSource
 import com.example.network.ReadscapeNetworkDataSource
 import com.example.network.model.EmailResponse
 import dagger.Module
@@ -21,10 +22,14 @@ interface BookListingRepository {
     fun getFilteredBookListings(start: Int, limit: Int, filters: Map<String, String>): Flow<List<BookListing>>
     suspend fun getSingleBookListing(listingId: String): BookListing?
     suspend fun getOwnerEmailById(ownerId: String): Result<String>
+    suspend fun addBookListing(bookListing: BookListing): Result<BookListing>
+    suspend fun addBookListingWithGoogleData(bookListing: BookListing): Result<BookListing>
+    suspend fun updateBookListingByIsbn(isbn: String, updatedBookListing: BookListing): Result<BookListing>
 }
 
 class BookListingRepositoryImpl @Inject constructor(
     private val cmsNetworkDatasource: CmsNetworkDatasource,
+    private val googleNetworkDataSource: GoogleNetworkDataSource,
     @Dispatcher(IO) private val ioDispatcher: CoroutineDispatcher,
     private val userRepository: UserRepository
 ) : BookListingRepository {
@@ -55,7 +60,44 @@ class BookListingRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun addBookListing(bookListing: BookListing): Result<BookListing> {
+        return try {
+            val result = cmsNetworkDatasource.addBookListing(bookListing)
+            Result.success(result)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
+    override suspend fun addBookListingWithGoogleData(bookListing: BookListing): Result<BookListing> {
+        return try {
+            // Fetch details from Google Books API
+            val volumes = googleNetworkDataSource.getVolumesByTitle(bookListing.title)
+            val googleVolumeInfo = volumes.firstOrNull()?.volumeInfo
+
+            // Merge Google Books data with the bookListing object
+            googleVolumeInfo?.let {
+                bookListing.pageCount = it.pageCount ?: bookListing.pageCount
+                bookListing.thumbnailLink = it.imageLinks?.thumbnail ?: bookListing.thumbnailLink
+                // Add other fields you want to merge
+            }
+
+            // Add the book listing
+            val result = cmsNetworkDatasource.addBookListing(bookListing)
+            Result.success(result)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun updateBookListingByIsbn(isbn: String, updatedBookListing: BookListing): Result<BookListing> {
+        return try {
+            val result = cmsNetworkDatasource.updateBookListingByIsbn(isbn, updatedBookListing)
+            result?.let { Result.success(it) } ?: Result.failure(Exception("Book listing not found"))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
 
 @Module
@@ -65,9 +107,10 @@ object RepositoryModule {
     @Provides
     fun provideBookListingRepository(
         cmsNetworkDatasource: CmsNetworkDatasource,
+        googleNetworkDataSource: GoogleNetworkDataSource,
         readscapeNetworkDataSource: ReadscapeNetworkDataSource,
         @Dispatcher(IO) ioDispatcher: CoroutineDispatcher
     ): BookListingRepository {
-        return BookListingRepositoryImpl(cmsNetworkDatasource, ioDispatcher, DefaultUserRepository(readscapeNetworkDataSource))
+        return BookListingRepositoryImpl(cmsNetworkDatasource, googleNetworkDataSource, ioDispatcher, DefaultUserRepository(readscapeNetworkDataSource))
     }
 }

@@ -2,8 +2,8 @@ package com.example.model.book
 
 data class BookListing(
     val _id: String,
-    val pageCount: Int,
-    val thumbnailLink: String,
+    var pageCount: Int,
+    var thumbnailLink: String,
     val canBeBorrowed: Boolean,
     val canBeSold: Boolean,
     val authors: List<String>,
