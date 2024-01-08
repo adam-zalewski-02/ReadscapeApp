@@ -1,7 +1,7 @@
 package com.example.model.book
 
 data class BookListing(
-    val _id: String,
+    val _id: String? = null,
     var pageCount: Int,
     var thumbnailLink: String,
     val canBeBorrowed: Boolean,
@@ -19,9 +19,9 @@ data class BookListing(
     var publishedDate: String,
     var description: String,
     val similarBooks: List<String>,
-    val published_at: String,
+    val published_at: String?,
     val createdAt: String,
     val updatedAt: String,
     val __v: Int,
-    val id: String
+    var id: String
 )

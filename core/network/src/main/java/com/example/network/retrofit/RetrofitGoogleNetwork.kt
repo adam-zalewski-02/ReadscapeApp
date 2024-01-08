@@ -6,6 +6,7 @@ import com.example.network.model.book.BookApiResponse
 import okhttp3.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,8 +18,8 @@ private interface RetrofitGoogleNetworkApi {
 
     @GET(value = "volumes/{id}")
     suspend fun getVolumeById(@Path("id") id: String) : Volume
-    @GET(value = "volumes?={title}")
-    suspend fun getVolumesByTitle(@Path("title") title: String) : BookApiResponse
+    @GET("volumes")
+    suspend fun getVolumesByTitle(@Query("q") title: String): BookApiResponse
 }
 @Singleton
 class RetrofitGoogleNetwork @Inject constructor(

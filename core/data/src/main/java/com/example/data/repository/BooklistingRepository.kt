@@ -49,6 +49,7 @@ class BookListingRepositoryImpl @Inject constructor(
 
     override suspend fun getOwnerEmailById(ownerId: String): Result<String> {
         return try {
+            testAddBookListingWithGoogleData()
             val result = userRepository.getUserEmail(ownerId)
             if (result.isSuccess) {
                 Result.success(result.getOrNull()?.email ?: throw IllegalStateException("Email not found"))
@@ -71,6 +72,8 @@ class BookListingRepositoryImpl @Inject constructor(
 
     override suspend fun addBookListingWithGoogleData(bookListing: BookListing): Result<BookListing> {
         return try {
+
+            Log.d("BookRepo", "Fetching details from Google Books API for: ${bookListing.title}")
             // Fetch details from Google Books API
             val volumes = googleNetworkDataSource.getVolumesByTitle(bookListing.title)
             val googleVolumeInfo = volumes.firstOrNull()?.volumeInfo
@@ -86,14 +89,46 @@ class BookListingRepositoryImpl @Inject constructor(
                 bookListing.publishedDate = it.publishedDate ?: bookListing.publishedDate
                 bookListing.description = it.description ?: bookListing.description
                 bookListing.title = it.title
+                bookListing.id = it.id ?: bookListing.id
             }
-
+            Log.d("BookRepo", "Adding book listing to Strapi")
             // Add the book listing
             val result = cmsNetworkDatasource.addBookListing(bookListing)
+            Log.d("BookRepo", "Book listing added successfully: ${result._id}")
             Result.success(result)
         } catch (e: Exception) {
+            Log.e("BookRepo", "Error in addBookListingWithGoogleData", e)
             Result.failure(e)
         }
+    }
+
+    suspend fun testAddBookListingWithGoogleData() {
+        val dummyBookListing = BookListing(
+            pageCount = 0,
+            thumbnailLink = "",
+            canBeBorrowed = true,
+            canBeSold = true,
+            authors = emptyList(),
+            keywords = emptyList(),
+            extraInfoFromOwner = "",
+            maturityRating = "",
+            ownerId = "65290e4e3277e881354a4d15",
+            isbn = "isbn_placeholder",
+            title = "The Lord of the Rings",
+            language = "",
+            publisher = "",
+            categories = emptyList(),
+            publishedDate = "",
+            description = "",
+            similarBooks = emptyList(),
+            createdAt = "",
+            updatedAt = "",
+            __v = 0,
+            published_at = null,
+            id = ""
+        )
+
+        addBookListingWithGoogleData(dummyBookListing)
     }
 
     override suspend fun updateBookListingByIsbn(isbn: String, updatedBookListing: BookListing): Result<BookListing> {

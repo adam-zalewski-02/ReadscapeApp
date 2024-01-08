@@ -84,7 +84,7 @@ class RetrofitCmsNetwork @Inject constructor(
 
         val listingToUpdate = existingListings?.firstOrNull()
         listingToUpdate?.let {
-            return cmsNetworkApi.updateBookListing(it._id, updatedBookListing)
+            return it._id?.let { it1 -> cmsNetworkApi.updateBookListing(it1, updatedBookListing) }
         }
         return null
     }
