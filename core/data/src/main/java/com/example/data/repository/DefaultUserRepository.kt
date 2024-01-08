@@ -18,6 +18,12 @@ class DefaultUserRepository @Inject constructor(
         return dataSource.getUser(email, password)
     }
 
+    override suspend fun getUserEmail(userId: String): Result<String> {
+        return dataSource.getUserEmail(userId)
+    }
+
+
+
     override suspend fun addUser(email:String, password: String): AuthResponse {
         return dataSource.insertUser(email, password)
     }

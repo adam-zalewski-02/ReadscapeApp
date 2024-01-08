@@ -8,6 +8,7 @@ import com.example.network.model.catalog.CatalogResponse
 interface ReadscapeNetworkDataSource {
     suspend fun getUsers() : List<NetworkUser>
     suspend fun getUser(email: String, password: String) : AuthResponse
+    suspend fun getUserEmail(userId: String): Result<String>
     suspend fun insertUser(email: String, password: String) : AuthResponse
     suspend fun deleteUser(user: NetworkUser)
 
