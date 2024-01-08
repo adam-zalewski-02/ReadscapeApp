@@ -28,6 +28,10 @@ class BookListingsViewModel @Inject constructor(
     private val _selectedBookListing = MutableStateFlow<BookListing?>(null)
     val selectedBookListing: StateFlow<BookListing?> = _selectedBookListing
 
+    private val _ownerEmail = MutableStateFlow<Result<String>>(Result.success(""))
+    val ownerEmail: StateFlow<Result<String>> = _ownerEmail.asStateFlow()
+
+
     init {
         loadBookListings()
     }
@@ -76,6 +80,15 @@ class BookListingsViewModel @Inject constructor(
             }
         }
     }
+
+    fun fetchOwnerEmail(ownerId: String) {
+        viewModelScope.launch {
+            val emailResult = bookListingRepository.getOwnerEmailById(ownerId)
+            _ownerEmail.value = emailResult
+        }
+    }
+
+
 }
 
 sealed class BookListingsState {
