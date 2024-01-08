@@ -1,5 +1,6 @@
 package com.example.network.retrofit
 
+import com.example.model.CurrentUserManager
 import com.example.model.book.BookListing
 import com.example.network.BuildConfig
 import com.example.network.CmsNetworkDatasource
@@ -8,7 +9,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
@@ -27,6 +31,19 @@ private interface RetrofitCmsNetworkApi {
 
     @GET(value = "/booklistings/{id}")
     suspend fun getSingleBookListing(@Path("id") listingId: String): BookListing?
+
+    @POST("/booklistings")
+    suspend fun addBookListing(@Body bookListing: BookListing): BookListing
+
+    @PUT("/booklistings/{id}")
+    suspend fun updateBookListing(@Path("id") listingId: String, @Body bookListing: BookListing): BookListing
+
+    @GET("/booklistings")
+    suspend fun getBookListingByISBNAndOwner(
+        @Query("isbn") isbn: String,
+        @Query("ownerId") ownerId: String
+    ): List<BookListing>
+
 }
 
 @Singleton
@@ -54,6 +71,22 @@ class RetrofitCmsNetwork @Inject constructor(
 
     override suspend fun getSingleBookListing(listingId: String): BookListing? {
         return cmsNetworkApi.getSingleBookListing(listingId)
+    }
+
+    override suspend fun addBookListing(bookListing: BookListing): BookListing {
+        return cmsNetworkApi.addBookListing(bookListing)
+    }
+
+    override suspend fun updateBookListingByIsbn(isbn: String, updatedBookListing: BookListing): BookListing? {
+        val currentUser = CurrentUserManager.getCurrentUser()
+        val existingListings =
+            currentUser?.let { cmsNetworkApi.getBookListingByISBNAndOwner(isbn, it.userId) }
+
+        val listingToUpdate = existingListings?.firstOrNull()
+        listingToUpdate?.let {
+            return cmsNetworkApi.updateBookListing(it._id, updatedBookListing)
+        }
+        return null
     }
 
 }

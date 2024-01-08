@@ -31,8 +31,6 @@ class BookListingsViewModel @Inject constructor(
     private val _ownerEmail = MutableStateFlow<String>("")
     val ownerEmail: StateFlow<String> = _ownerEmail.asStateFlow()
 
-
-
     init {
         loadBookListings()
     }
