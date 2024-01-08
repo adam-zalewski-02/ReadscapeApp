@@ -12,7 +12,6 @@ import com.example.common.network.Dispatcher
 import com.example.common.network.ReadscapeDispatchers.IO
 import com.example.network.GoogleNetworkDataSource
 import com.example.network.ReadscapeNetworkDataSource
-import com.example.network.model.EmailResponse
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,7 +48,7 @@ class BookListingRepositoryImpl @Inject constructor(
 
     override suspend fun getOwnerEmailById(ownerId: String): Result<String> {
         return try {
-            testAddBookListingWithGoogleData()
+            //testAddBookListingWithGoogleData()
             val result = userRepository.getUserEmail(ownerId)
             if (result.isSuccess) {
                 Result.success(result.getOrNull()?.email ?: throw IllegalStateException("Email not found"))
@@ -74,11 +73,9 @@ class BookListingRepositoryImpl @Inject constructor(
         return try {
 
             Log.d("BookRepo", "Fetching details from Google Books API for: ${bookListing.title}")
-            // Fetch details from Google Books API
             val volumes = googleNetworkDataSource.getVolumesByIsbn(bookListing.isbn)
             val googleVolumeInfo = volumes.firstOrNull()?.volumeInfo
 
-            // Merge Google Books data with the bookListing object
             googleVolumeInfo?.let {
                 bookListing.pageCount = it.pageCount ?: bookListing.pageCount
                 bookListing.thumbnailLink = it.imageLinks?.thumbnail ?: bookListing.thumbnailLink
@@ -93,7 +90,6 @@ class BookListingRepositoryImpl @Inject constructor(
                 bookListing.id = it.id ?: bookListing.id
             }
             Log.d("BookRepo", "Adding book listing to Strapi")
-            // Add the book listing
             val result = cmsNetworkDatasource.addBookListing(bookListing)
             Log.d("BookRepo", "Book listing added successfully: ${result._id}")
             Result.success(result)
@@ -103,7 +99,7 @@ class BookListingRepositoryImpl @Inject constructor(
         }
     }
 
-    suspend fun testAddBookListingWithGoogleData() {
+    private suspend fun testAddBookListingWithGoogleData() {
         val dummyBookListing = BookListing(
             pageCount = 0,
             thumbnailLink = "",
@@ -114,7 +110,7 @@ class BookListingRepositoryImpl @Inject constructor(
             extraInfoFromOwner = "",
             maturityRating = "",
             ownerId = "65290e4e3277e881354a4d15",
-            isbn = "9789026610585",
+            isbn = "9789026610585", //Narnia
             title = "",
             language = "",
             publisher = "",
