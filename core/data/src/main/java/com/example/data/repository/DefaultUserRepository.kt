@@ -2,6 +2,7 @@ package com.example.data.repository
 
 import com.example.network.ReadscapeNetworkDataSource
 import com.example.network.model.AuthResponse
+import com.example.network.model.EmailResponse
 import com.example.network.model.NetworkUser
 import com.example.network.model.catalog.CatalogPostResponse
 import com.example.network.model.catalog.CatalogResponse
@@ -18,11 +19,9 @@ class DefaultUserRepository @Inject constructor(
         return dataSource.getUser(email, password)
     }
 
-    override suspend fun getUserEmail(userId: String): Result<String> {
+    override suspend fun getUserEmail(userId: String): Result<EmailResponse> {
         return dataSource.getUserEmail(userId)
     }
-
-
 
     override suspend fun addUser(email:String, password: String): AuthResponse {
         return dataSource.insertUser(email, password)

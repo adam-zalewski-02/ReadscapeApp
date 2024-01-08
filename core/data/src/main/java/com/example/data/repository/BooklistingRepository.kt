@@ -11,6 +11,7 @@ import javax.inject.Inject
 import com.example.common.network.Dispatcher
 import com.example.common.network.ReadscapeDispatchers.IO
 import com.example.network.ReadscapeNetworkDataSource
+import com.example.network.model.EmailResponse
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,8 +43,19 @@ class BookListingRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getOwnerEmailById(ownerId: String): Result<String> {
-        return userRepository.getUserEmail(ownerId)
+        return try {
+            val result = userRepository.getUserEmail(ownerId)
+            if (result.isSuccess) {
+                Result.success(result.getOrNull()?.email ?: throw IllegalStateException("Email not found"))
+            } else {
+                result as Result<String>
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
+
+
 }
 
 @Module

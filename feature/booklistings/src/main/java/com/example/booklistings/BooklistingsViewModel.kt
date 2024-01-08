@@ -28,8 +28,9 @@ class BookListingsViewModel @Inject constructor(
     private val _selectedBookListing = MutableStateFlow<BookListing?>(null)
     val selectedBookListing: StateFlow<BookListing?> = _selectedBookListing
 
-    private val _ownerEmail = MutableStateFlow<Result<String>>(Result.success(""))
-    val ownerEmail: StateFlow<Result<String>> = _ownerEmail.asStateFlow()
+    private val _ownerEmail = MutableStateFlow<String>("")
+    val ownerEmail: StateFlow<String> = _ownerEmail.asStateFlow()
+
 
 
     init {
@@ -84,11 +85,12 @@ class BookListingsViewModel @Inject constructor(
     fun fetchOwnerEmail(ownerId: String) {
         viewModelScope.launch {
             val emailResult = bookListingRepository.getOwnerEmailById(ownerId)
-            _ownerEmail.value = emailResult
+            _ownerEmail.value = when {
+                emailResult.isSuccess -> emailResult.getOrNull() ?: "No email found"
+                else -> "Error fetching email: ${emailResult.exceptionOrNull()?.message}"
+            }
         }
     }
-
-
 }
 
 sealed class BookListingsState {

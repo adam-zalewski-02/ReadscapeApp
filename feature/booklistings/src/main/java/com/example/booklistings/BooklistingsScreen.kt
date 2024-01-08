@@ -143,7 +143,6 @@ fun BookListingDetailScreen(
         Text(text = bookListing.title, style = MaterialTheme.typography.headlineMedium)
         Text(text = "Author(s): ${bookListing.authors.joinToString()}", style = MaterialTheme.typography.bodyLarge)
         Text(text = "Description: ${bookListing.description}", style = MaterialTheme.typography.bodyMedium)
-        Text(text = "Owner's Email: $ownerEmail", style = MaterialTheme.typography.bodyMedium)
         Text(text = "Page Count: ${bookListing.pageCount}", style = MaterialTheme.typography.bodySmall)
         Text(text = "Language: ${bookListing.language}", style = MaterialTheme.typography.bodySmall)
         Text(text = "Publisher: ${bookListing.publisher}", style = MaterialTheme.typography.bodySmall)
@@ -160,6 +159,7 @@ fun BookListingDetailScreen(
         if (bookListing.canBeSold) {
             Text(text = "Available for Sale", color = Color.Blue, style = MaterialTheme.typography.bodyLarge)
         }
+        Text(text = "Owner's Email: $ownerEmail", style = MaterialTheme.typography.bodyMedium)
 
         if (similarBookListings.isNotEmpty()) {
             Text("Similar Books", style = MaterialTheme.typography.headlineMedium)
