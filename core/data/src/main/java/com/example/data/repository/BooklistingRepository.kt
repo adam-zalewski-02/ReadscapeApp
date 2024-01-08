@@ -75,7 +75,7 @@ class BookListingRepositoryImpl @Inject constructor(
 
             Log.d("BookRepo", "Fetching details from Google Books API for: ${bookListing.title}")
             // Fetch details from Google Books API
-            val volumes = googleNetworkDataSource.getVolumesByTitle(bookListing.title)
+            val volumes = googleNetworkDataSource.getVolumesByIsbn(bookListing.isbn)
             val googleVolumeInfo = volumes.firstOrNull()?.volumeInfo
 
             // Merge Google Books data with the bookListing object
@@ -114,8 +114,8 @@ class BookListingRepositoryImpl @Inject constructor(
             extraInfoFromOwner = "",
             maturityRating = "",
             ownerId = "65290e4e3277e881354a4d15",
-            isbn = "isbn_placeholder",
-            title = "The Lord of the Rings",
+            isbn = "9789026610585",
+            title = "",
             language = "",
             publisher = "",
             categories = emptyList(),
