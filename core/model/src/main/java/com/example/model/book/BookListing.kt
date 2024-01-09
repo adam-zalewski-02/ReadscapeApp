@@ -16,7 +16,7 @@ data class BookListing(
     var language: String,
     var publisher: String,
     var categories: List<String>,
-    var publishedDate: String,
+    var publishedDate: String? = null,
     var description: String,
     val similarBooks: List<String>,
     val published_at: String?,

@@ -20,10 +20,12 @@ import dagger.hilt.components.SingletonComponent
 interface BookListingRepository {
     fun getFilteredBookListings(start: Int, limit: Int, filters: Map<String, String>): Flow<List<BookListing>>
     suspend fun getSingleBookListing(listingId: String): BookListing?
+    suspend fun getSingleBookListingByIsbnForCurrentUser(isbn: String): BookListing?
     suspend fun getOwnerEmailById(ownerId: String): Result<String>
     suspend fun addBookListing(bookListing: BookListing): Result<BookListing>
     suspend fun addBookListingWithGoogleData(bookListing: BookListing): Result<BookListing>
     suspend fun updateBookListingByIsbn(isbn: String, updatedBookListing: BookListing): Result<BookListing>
+    suspend fun deleteBookListingByIsbnAndOwner(isbn: String): Result<Unit>
 }
 
 class BookListingRepositoryImpl @Inject constructor(
@@ -46,9 +48,20 @@ class BookListingRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getSingleBookListingByIsbnForCurrentUser(isbn: String): BookListing? {
+        return try {
+            cmsNetworkDatasource.getSingleBookListingByIsbnForCurrentUser(isbn)
+        } catch (e: Exception) {
+            Log.d("BookListingRepositoryImpl", "No booklisting found with isbn $isbn")
+            null
+        }
+    }
+
     override suspend fun getOwnerEmailById(ownerId: String): Result<String> {
         return try {
             //testAddBookListingWithGoogleData()
+            //testUpdateBookListingWithIsbn()
+            //testDeleteBookListingByIsbnAndOwner()
             val result = userRepository.getUserEmail(ownerId)
             if (result.isSuccess) {
                 Result.success(result.getOrNull()?.email ?: throw IllegalStateException("Email not found"))
@@ -134,6 +147,63 @@ class BookListingRepositoryImpl @Inject constructor(
             result?.let { Result.success(it) } ?: Result.failure(Exception("Book listing not found"))
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    private suspend fun testUpdateBookListingWithIsbn() {
+        val isbnToUpdate = "9789026610585" // ISBN of the book to update, has to be one that the logged in user owns
+
+        // Dummy data for update
+        val updatedBookListing = BookListing(
+            pageCount = 0,
+            thumbnailLink = "",
+            canBeBorrowed = false,
+            canBeSold = false,
+            authors = emptyList(),
+            keywords = emptyList(),
+            extraInfoFromOwner = "",
+            maturityRating = "",
+            ownerId = "65290e4e3277e881354a4d15",
+            isbn = "9789026610585", //Narnia
+            title = "",
+            language = "",
+            publisher = "",
+            categories = emptyList(),
+            description = "",
+            similarBooks = emptyList(),
+            createdAt = "",
+            updatedAt = "",
+            __v = 0,
+            published_at = "",
+            id = ""
+        )
+
+        val updateResult = updateBookListingByIsbn(isbnToUpdate, updatedBookListing)
+        if (updateResult.isSuccess) {
+            Log.d("BookRepo", "Book listing updated successfully: ${updateResult.getOrNull()?._id}")
+        } else {
+            Log.e("BookRepo", "Error in updating book listing", updateResult.exceptionOrNull())
+        }
+    }
+
+    override suspend fun deleteBookListingByIsbnAndOwner(isbn: String): Result<Unit> {
+        return try {
+            cmsNetworkDatasource.deleteBookListingByIsbnAndOwner(isbn)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e("BookListingRepositoryImpl", "Error in deleting book listing with ISBN: $isbn and logged in owner", e)
+            Result.failure(e)
+        }
+    }
+
+    private suspend fun testDeleteBookListingByIsbnAndOwner() {
+        val isbnToDelete = "9789026610585"
+
+        val deleteResult = deleteBookListingByIsbnAndOwner(isbnToDelete)
+        if (deleteResult.isSuccess) {
+            Log.d("BookRepo", "Book listing deleted successfully")
+        } else {
+            Log.e("BookRepo", "Error in deleting book listing", deleteResult.exceptionOrNull())
         }
     }
 }
