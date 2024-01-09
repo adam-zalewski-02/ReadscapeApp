@@ -20,8 +20,8 @@ enum class TopLevelDestination(
         titleTextId = R.string.app_name
     ),
     CATALOG(
-        selectedIcon = ReadscapeIcons.Bookmark,
-        unselectedIcon = ReadscapeIcons.BookmarkBorder,
+        selectedIcon = ReadscapeIcons.Bookmarks,
+        unselectedIcon = ReadscapeIcons.BookmarksBorder,
         iconTextId = catalogR.string.catalog,
         titleTextId = R.string.app_name
     ),

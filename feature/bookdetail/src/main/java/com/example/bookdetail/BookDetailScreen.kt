@@ -35,6 +35,7 @@ import coil.request.ImageRequest
 import com.example.model.book.Volume
 import com.example.designsystem.component.Loading
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.designsystem.icon.ReadscapeIcons
 
 @Composable
 internal fun BookDetailRoute(
@@ -168,9 +169,9 @@ internal fun Content(
                     .fillMaxWidth(0.8f)
                     .height(48.dp)
             ) {
-                Icon(imageVector = Icons.Default.Favorite, contentDescription = null)
+                Icon(imageVector = ReadscapeIcons.BookmarkBorder, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Add to Favorites")
+                Text(text = "Add to collection")
             }
         }
     }

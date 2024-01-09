@@ -90,14 +90,3 @@ class RetrofitCmsNetwork @Inject constructor(
     }
 
 }
-@Module
-@InstallIn(SingletonComponent::class)
-object NetworkModule {
-    @Provides
-    @Singleton
-    fun provideRetrofitCmsNetwork(
-        callFactory: Call.Factory
-    ): CmsNetworkDatasource {
-        return RetrofitCmsNetwork(callFactory)
-    }
-}
