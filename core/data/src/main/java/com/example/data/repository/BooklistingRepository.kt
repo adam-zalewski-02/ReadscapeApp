@@ -24,6 +24,7 @@ interface BookListingRepository {
     suspend fun addBookListing(bookListing: BookListing): Result<BookListing>
     suspend fun addBookListingWithGoogleData(bookListing: BookListing): Result<BookListing>
     suspend fun updateBookListingByIsbn(isbn: String, updatedBookListing: BookListing): Result<BookListing>
+    suspend fun deleteBookListingByIsbnAndOwner(isbn: String, ownerId: String): Result<Unit>
 }
 
 class BookListingRepositoryImpl @Inject constructor(
@@ -133,6 +134,16 @@ class BookListingRepositoryImpl @Inject constructor(
             val result = cmsNetworkDatasource.updateBookListingByIsbn(isbn, updatedBookListing)
             result?.let { Result.success(it) } ?: Result.failure(Exception("Book listing not found"))
         } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun deleteBookListingByIsbnAndOwner(isbn: String, ownerId: String): Result<Unit> {
+        return try {
+            cmsNetworkDatasource.deleteBookListingByIsbnAndOwner(isbn, ownerId)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Log.e("BookListingRepositoryImpl", "Error in deleting book listing with ISBN: $isbn and ownerId: $ownerId", e)
             Result.failure(e)
         }
     }
