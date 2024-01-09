@@ -20,6 +20,7 @@ import dagger.hilt.components.SingletonComponent
 interface BookListingRepository {
     fun getFilteredBookListings(start: Int, limit: Int, filters: Map<String, String>): Flow<List<BookListing>>
     suspend fun getSingleBookListing(listingId: String): BookListing?
+    suspend fun getSingleBookListingByIsbnForCurrentUser(isbn: String): BookListing?
     suspend fun getOwnerEmailById(ownerId: String): Result<String>
     suspend fun addBookListing(bookListing: BookListing): Result<BookListing>
     suspend fun addBookListingWithGoogleData(bookListing: BookListing): Result<BookListing>
@@ -43,6 +44,15 @@ class BookListingRepositoryImpl @Inject constructor(
             cmsNetworkDatasource.getSingleBookListing(listingId)
         } catch (e: Exception) {
             Log.d("BookListingRepositoryImpl", "No booklisting found with id $listingId")
+            null
+        }
+    }
+
+    override suspend fun getSingleBookListingByIsbnForCurrentUser(isbn: String): BookListing? {
+        return try {
+            cmsNetworkDatasource.getSingleBookListingByIsbnForCurrentUser(isbn)
+        } catch (e: Exception) {
+            Log.d("BookListingRepositoryImpl", "No booklisting found with isbn $isbn")
             null
         }
     }

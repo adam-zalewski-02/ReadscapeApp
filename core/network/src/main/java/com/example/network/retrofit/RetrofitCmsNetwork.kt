@@ -77,6 +77,12 @@ class RetrofitCmsNetwork @Inject constructor(
         return cmsNetworkApi.getSingleBookListing(listingId)
     }
 
+    override suspend fun getSingleBookListingByIsbnForCurrentUser(isbn: String): BookListing? {
+        val currentUser = CurrentUserManager.getCurrentUser()
+        val bookListings = currentUser?.let { cmsNetworkApi.getBookListingByISBNAndOwner(isbn, it.userId) }
+        return bookListings?.firstOrNull()
+    }
+
     override suspend fun addBookListing(bookListing: BookListing): BookListing {
         return cmsNetworkApi.addBookListing(bookListing)
     }
