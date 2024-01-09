@@ -23,6 +23,7 @@ import com.example.readscape.navigation.TopLevelDestination
 import com.example.search.navigation.navigateToSearch
 import com.example.booklistings.navigation.bookListingsRoute
 import com.example.booklistings.navigation.navigateToBookListingsScreen
+import com.example.model.CurrentUserManager
 
 
 @Composable
@@ -60,7 +61,7 @@ class ReadscapeAppState(
         }
 
     val shouldShowBottomBar: Boolean
-        @Composable get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact && currentDestination?.route != loginRoute && currentDestination?.route != registerRoute
+        @Composable get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
     val shouldShowTopAppBar: Boolean
         @Composable get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact && currentDestination?.route == bookShopRoute || currentDestination?.route == catalogRoute
@@ -90,13 +91,18 @@ class ReadscapeAppState(
                         catalogRoute,
                         inclusive = true
                     )
-                    navController.navigateToBookShopScreen(topLevelNavOptions)}
+                    navController.navigateToBookShopScreen(topLevelNavOptions)
+                }
                 TopLevelDestination.CATALOG -> {
                     navController.popBackStack(
                         catalogRoute,
                         inclusive = true
                     )
-                    navController.navigateToCatalogScreen(topLevelNavOptions)
+                    if (CurrentUserManager.getCurrentUser() != null) {
+                        navController.navigateToCatalogScreen(topLevelNavOptions)
+                    } else {
+                        navController.navigateToLoginScreen(topLevelNavOptions)
+                    }
                 }
                 TopLevelDestination.BOOKLISTINGS -> {
                     navController.popBackStack(

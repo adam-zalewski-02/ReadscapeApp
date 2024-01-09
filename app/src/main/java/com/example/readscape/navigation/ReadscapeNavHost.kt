@@ -11,9 +11,11 @@ import com.example.authentication.navigation.registerScreen
 import com.example.bookdetail.navigation.bookDetailScreen
 import com.example.bookdetail.navigation.navigateToBookDetailScreen
 import com.example.booklistings.navigation.bookListingsScreen
+import com.example.bookshop.navigation.bookShopRoute
 import com.example.bookshop.navigation.bookShopScreen
 import com.example.bookshop.navigation.navigateToBookShopScreen
 import com.example.catalog.navigation.catalogScreen
+import com.example.catalog.navigation.navigateToCatalogScreen
 import com.example.readscape.ui.ReadscapeAppState
 import com.example.search.navigation.searchScreen
 
@@ -21,7 +23,7 @@ import com.example.search.navigation.searchScreen
 fun ReadscapeNavHost(
     appState: ReadscapeAppState,
     modifier: Modifier = Modifier,
-    startDestination: String = loginRoute
+    startDestination: String = bookShopRoute
 ) {
     val navController = appState.navController
     NavHost(
@@ -31,7 +33,7 @@ fun ReadscapeNavHost(
     ) {
         loginScreen(
             onRegisterClick = navController::navigateToRegisterScreen,
-            onLoginClick = navController::navigateToBookShopScreen,
+            onLoginClick = navController::navigateToCatalogScreen,
         )
         registerScreen(onBackClick = navController::navigateToLoginScreen)
         bookShopScreen(onBookClick = navController::navigateToBookDetailScreen)
