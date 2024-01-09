@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -126,6 +127,12 @@ fun BookListingDetailScreen(
     onBack: () -> Unit,
     viewModel: BookListingsViewModel = hiltViewModel()
 ) {
+    val ownerId = bookListing.ownerId // Replace with the actual ID field
+    val ownerEmail by viewModel.ownerEmail.collectAsState()
+
+    LaunchedEffect(ownerId) {
+        viewModel.fetchOwnerEmail(ownerId)
+    }
     val similarBookListings by viewModel.getBookListingsByIds(bookListing.similarBooks).collectAsState(initial = emptyList())
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
@@ -152,6 +159,7 @@ fun BookListingDetailScreen(
         if (bookListing.canBeSold) {
             Text(text = "Available for Sale", color = Color.Blue, style = MaterialTheme.typography.bodyLarge)
         }
+        Text(text = "Owner's Email: $ownerEmail", style = MaterialTheme.typography.bodyMedium)
 
         if (similarBookListings.isNotEmpty()) {
             Text("Similar Books", style = MaterialTheme.typography.headlineMedium)

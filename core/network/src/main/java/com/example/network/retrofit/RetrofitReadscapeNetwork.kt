@@ -3,11 +3,13 @@ import com.example.network.BuildConfig
 import com.example.network.ReadscapeNetworkDataSource
 import com.example.network.model.AuthRequest
 import com.example.network.model.AuthResponse
+import com.example.network.model.EmailResponse
 import com.example.network.model.NetworkUser
 import com.example.network.model.catalog.CatalogPostResponse
 import com.example.network.model.catalog.CatalogRequest
 import com.example.network.model.catalog.CatalogResponse
 import okhttp3.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -17,11 +19,16 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val BASE_URL = BuildConfig.BACKEND_URL
+
 private interface RetrofitReadscapeNetworkApi {
     @GET(value = "/users")
     suspend fun getUsers(): List<NetworkUser>
     @GET(value = "/users/{id}")
     suspend fun getUser(@Path("id") id: Int): NetworkUser
+
+    @GET("/users/{id}/email")
+    suspend fun getUserEmail(@Path("id") id: String): Response<EmailResponse> // Wrap with Response for error handling
+
     @GET(value = "/collections/{userId}")
     suspend fun getCollection(@Path("userId") userId: String) : CatalogResponse
 
@@ -57,6 +64,20 @@ class RetrofitReadscapeNetwork @Inject constructor(
         )
         return genericRetrofitNetwork.networkApi.login(loginRequest)
     }
+
+    override suspend fun getUserEmail(userId: String): Result<EmailResponse> {
+        return try {
+            val response = genericRetrofitNetwork.networkApi.getUserEmail(userId)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(RuntimeException("Failed to fetch email: ${response.errorBody()?.string()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 
     override suspend fun insertUser(email: String, password: String): AuthResponse {
         val registerRequest = AuthRequest(
