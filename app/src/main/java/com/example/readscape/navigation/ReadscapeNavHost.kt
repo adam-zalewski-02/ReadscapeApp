@@ -35,7 +35,7 @@ fun ReadscapeNavHost(
             onRegisterClick = navController::navigateToRegisterScreen,
             onLoginClick = navController::navigateToCatalogScreen,
         )
-        registerScreen(onBackClick = navController::navigateToLoginScreen)
+        registerScreen(onBackClick = navController::navigateToLoginScreen, onRegisterClicked = navController::navigateToLoginScreen)
         bookShopScreen(onBookClick = navController::navigateToBookDetailScreen)
         bookListingsScreen()
         catalogScreen(onBookClick = navController::navigateToBookDetailScreen)

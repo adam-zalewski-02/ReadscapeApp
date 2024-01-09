@@ -31,18 +31,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 internal fun RegisterRoute(
     onBackClick: () -> Unit,
+    onRegisterClicked: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     RegisterScreen(
         onBackClick = onBackClick,
         onRegisterClick = viewModel::registerUser,
+        onRegisterClicked = onRegisterClicked
     )
 }
 
 @Composable
 fun RegisterScreen(
     onBackClick: () -> Unit,
-    onRegisterClick: (String, String, String) -> Unit
+    onRegisterClick: (String, String, String) -> Unit,
+    onRegisterClicked: () -> Unit,
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -104,6 +107,7 @@ fun RegisterScreen(
 
         Button(onClick = {
             onRegisterClick(email, password, repeatedPassword)
+            onRegisterClicked()
         },
             modifier = Modifier
                 .fillMaxWidth()

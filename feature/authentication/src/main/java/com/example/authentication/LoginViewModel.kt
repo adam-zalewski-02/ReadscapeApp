@@ -35,9 +35,15 @@ class LoginViewModel @Inject constructor(
 
     fun registerUser(email: String, password: String, repeatedPassword: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (repeatedPassword == password) {
-                val response = userRepository.addUser(email, password)
-                println(response)
+            try {
+                if (repeatedPassword == password) {
+                    val response = userRepository.addUser(email, password)
+                    _loginState.value = AuthenticationUiState.Success(response.success)
+                } else {
+                    _loginState.value = AuthenticationUiState.Error
+                }
+            } catch (e: Exception) {
+                _loginState.value = AuthenticationUiState.Error
             }
         }
     }

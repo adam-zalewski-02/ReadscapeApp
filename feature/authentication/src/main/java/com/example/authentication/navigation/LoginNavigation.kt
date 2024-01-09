@@ -25,11 +25,11 @@ fun NavGraphBuilder.loginScreen(onRegisterClick: () -> Unit, onLoginClick: () ->
     }
 }
 
-fun NavGraphBuilder.registerScreen(onBackClick: () -> Unit) {
+fun NavGraphBuilder.registerScreen(onBackClick: () -> Unit, onRegisterClicked: () -> Unit) {
     composable(
         route = registerRoute,
     ) {
-        RegisterRoute(onBackClick)
+        RegisterRoute(onBackClick, onRegisterClicked)
     }
 }
 

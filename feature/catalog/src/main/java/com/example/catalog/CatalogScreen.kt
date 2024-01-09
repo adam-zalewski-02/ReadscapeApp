@@ -38,7 +38,7 @@ internal fun CatalogScreen(
     when(state) {
         is CatalogUiState.Loading -> Loading(modifier)
         is CatalogUiState.Success -> Content(onBookClick,books = state.books, modifier)
-        is CatalogUiState.Error -> Text("Error")
+        is CatalogUiState.Error -> Text("No books added")
     }
 }
 
