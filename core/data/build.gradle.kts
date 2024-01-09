@@ -41,6 +41,8 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.database)
 
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.kotlin.serialization)
     implementation(libs.androidx.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)

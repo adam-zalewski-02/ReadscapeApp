@@ -48,7 +48,6 @@ private interface RetrofitCmsNetworkApi {
         @Query("isbn") isbn: String,
         @Query("ownerId") ownerId: String
     ): List<BookListing>
-
 }
 
 @Singleton
@@ -94,17 +93,15 @@ class RetrofitCmsNetwork @Inject constructor(
         return null
     }
 
-    override suspend fun deleteBookListingByIsbnAndOwner(isbn: String, ownerId: String): Response<Unit> {
-        val bookListings = cmsNetworkApi.getBookListingByISBNAndOwner(isbn, ownerId)
+    override suspend fun deleteBookListingByIsbnAndOwner(isbn: String): Response<Unit> {
+        val currentUser = CurrentUserManager.getCurrentUser()
+        val bookListings = currentUser?.let { cmsNetworkApi.getBookListingByISBNAndOwner(isbn, it.userId) }
 
-        val bookListingToDelete = bookListings.firstOrNull()
+        val bookListingToDelete = bookListings?.firstOrNull()
         return bookListingToDelete?._id?.let { listingId ->
             cmsNetworkApi.deleteBookListingById(listingId)
-        } ?: throw NoSuchElementException("No book listing found with ISBN: $isbn and ownerId: $ownerId")
+        } ?: throw NoSuchElementException("No book listing found with ISBN: $isbn and owner: ${currentUser.toString()}")
     }
-
-
-
 }
 @Module
 @InstallIn(SingletonComponent::class)

@@ -8,5 +8,5 @@ interface CmsNetworkDatasource {
     suspend fun getSingleBookListing(listingId: String): BookListing?
     suspend fun addBookListing(bookListing: BookListing): BookListing
     suspend fun updateBookListingByIsbn(isbn: String, updatedBookListing: BookListing): BookListing?
-    suspend fun deleteBookListingByIsbnAndOwner(isbn: String, ownerId: String): Response<Unit>
+    suspend fun deleteBookListingByIsbnAndOwner(isbn: String): Response<Unit>
 }
