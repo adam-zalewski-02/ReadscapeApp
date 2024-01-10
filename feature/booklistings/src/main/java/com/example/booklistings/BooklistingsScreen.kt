@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -25,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
@@ -142,14 +144,13 @@ fun BookListingDetailScreen(
         Spacer(Modifier.height(16.dp))
         Text(text = bookListing.title, style = MaterialTheme.typography.headlineMedium)
         Text(text = "Author(s): ${bookListing.authors.joinToString()}", style = MaterialTheme.typography.bodyLarge)
-        Text(text = "Description: ${bookListing.description}", style = MaterialTheme.typography.bodyMedium)
+        Text(text = "Description From The Owner: ${bookListing.extraInfoFromOwner}", style = MaterialTheme.typography.bodySmall)
         Text(text = "Page Count: ${bookListing.pageCount}", style = MaterialTheme.typography.bodySmall)
         Text(text = "Language: ${bookListing.language}", style = MaterialTheme.typography.bodySmall)
         Text(text = "Publisher: ${bookListing.publisher}", style = MaterialTheme.typography.bodySmall)
         Text(text = "Published Date: ${bookListing.publishedDate}", style = MaterialTheme.typography.bodySmall)
         Text(text = "ISBN: ${bookListing.isbn}", style = MaterialTheme.typography.bodySmall)
         Text(text = "Maturity Rating: ${bookListing.maturityRating}", style = MaterialTheme.typography.bodySmall)
-        Text(text = "Extra Info: ${bookListing.extraInfoFromOwner}", style = MaterialTheme.typography.bodySmall)
         Text(text = "Keywords: ${bookListing.keywords.joinToString()}", style = MaterialTheme.typography.bodySmall)
         Text(text = "Categories: ${bookListing.categories.joinToString()}", style = MaterialTheme.typography.bodySmall)
 
@@ -163,15 +164,35 @@ fun BookListingDetailScreen(
 
         if (similarBookListings.isNotEmpty()) {
             Text("Similar Books", style = MaterialTheme.typography.headlineMedium)
-            LazyColumn {
+            LazyRow {
                 items(similarBookListings) { similarBookListing ->
-                    BookListItem(
+                    HorizontalBookListItem(
                         bookListing = similarBookListing,
                         onSelectBook = { selectedBook -> viewModel.selectBookListing(selectedBook) }
                     )
                 }
             }
         }
+    }
+}
+
+@Composable
+fun HorizontalBookListItem(bookListing: BookListing, onSelectBook: (BookListing) -> Unit) {
+    Column(
+        modifier = Modifier
+            .width(120.dp)
+            .padding(8.dp)
+            .clickable { onSelectBook(bookListing) },
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = rememberAsyncImagePainter(bookListing.thumbnailLink),
+            contentDescription = "Book Thumbnail",
+            modifier = Modifier.size(80.dp, 120.dp),
+            contentScale = ContentScale.Crop
+        )
+        Text(text = bookListing.title, style = MaterialTheme.typography.bodyMedium, maxLines = 3, overflow = TextOverflow.Ellipsis)
+        // Other details as necessary
     }
 }
 
