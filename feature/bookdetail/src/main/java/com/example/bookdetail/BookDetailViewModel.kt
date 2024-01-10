@@ -26,6 +26,15 @@ class BookDetailViewModel @Inject constructor(
     private val _bookListingDetails = MutableStateFlow<BookListing?>(null)
     val bookListingDetails: StateFlow<BookListing?> = _bookListingDetails
 
+    private val _bookListingExists = MutableStateFlow<Boolean>(false)
+    val bookListingExists: StateFlow<Boolean> = _bookListingExists
+
+    fun checkIfBookListingExists(isbn: String) {
+        viewModelScope.launch {
+            _bookListingExists.value = bookListingRepository.getSingleBookListingByIsbnForCurrentUser(isbn) != null
+        }
+    }
+
     fun getBookDetails(bookId: String) {
         viewModelScope.launch {
             try {

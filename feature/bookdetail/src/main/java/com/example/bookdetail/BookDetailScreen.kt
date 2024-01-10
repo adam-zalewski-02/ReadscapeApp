@@ -45,9 +45,12 @@ internal fun BookDetailRoute(
     onBack: () -> Unit,
 ) {
     val bookDetailsState by viewModel.bookDetails.collectAsStateWithLifecycle()
+    val bookListingExists by viewModel.bookListingExists.collectAsStateWithLifecycle()
+
 
     LaunchedEffect(volumeId) {
         viewModel.getBookDetails(volumeId)
+        viewModel.checkIfBookListingExists(/* Extract ISBN from Volume object here */)
     }
 
     BookDetailScreen(
@@ -63,7 +66,8 @@ internal fun BookDetailRoute(
         },
         onViewBookListingClick = { bookListing ->
             viewModel.viewBookListing(bookListing)
-        }
+        },
+        bookListingExists = bookListingExists,
     )
 }
 
@@ -75,6 +79,7 @@ fun BookDetailScreen(
     onAddToFavoritesClick: (String) -> Unit,
     onBack: () -> Unit,
     onPublishBookListingClick: (String) -> Unit,
+    bookListingExists: Boolean,
     onEditBookListingClick: (String) -> Unit,
     onViewBookListingClick: (String) -> Unit
 ) {
@@ -91,7 +96,8 @@ fun BookDetailScreen(
                     modifier = modifier,
                     onAddToFavoritesClick = onAddToFavoritesClick,
                     onBack = onBack,
-                    onPublishBookListingClick = onPublishBookListingClick
+                    onPublishBookListingClick = onPublishBookListingClick,
+                    bookListingExists = bookListingExists,
                 )
             }
             is BookDetailUiState.Error -> item { Text("Error") }
@@ -152,7 +158,8 @@ internal fun Content(
     modifier: Modifier = Modifier,
     onAddToFavoritesClick: (String) -> Unit,
     onBack: () -> Unit,
-    onPublishBookListingClick: (String) -> Unit
+    onPublishBookListingClick: (String) -> Unit,
+    bookListingExists: Boolean,
 ) {
     Column(
         modifier = modifier
@@ -233,13 +240,26 @@ internal fun Content(
                 Text(text = "Add to collection")
             }
         }
-        Button(
-            onClick = { onPublishBookListingClick(volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: "") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        ) {
-            Text("Publish Booklisting")
+        if (bookListingExists) {
+            // "View Booklisting" button
+            Button(
+                onClick = { onViewBookListingClick(volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: "") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            ) {
+                Text("View Booklisting")
+            }
+        } else {
+            // "Publish Booklisting" button
+            Button(
+                onClick = { onPublishBookListingClick(volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: "") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            ) {
+                Text("Publish Booklisting")
+            }
         }
     }
 }
