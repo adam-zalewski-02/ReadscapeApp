@@ -31,7 +31,8 @@ class BookDetailViewModel @Inject constructor(
 
     fun checkIfBookListingExists(isbn: String) {
         viewModelScope.launch {
-            _bookListingExists.value = bookListingRepository.getSingleBookListingByIsbnForCurrentUser(isbn) != null
+            val exists = bookListingRepository.getSingleBookListingByIsbnForCurrentUser(isbn) != null
+            _bookListingExists.value = exists
         }
     }
 

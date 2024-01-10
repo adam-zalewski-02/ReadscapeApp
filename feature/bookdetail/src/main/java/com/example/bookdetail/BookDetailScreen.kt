@@ -50,13 +50,14 @@ internal fun BookDetailRoute(
     val bookDetailsState by viewModel.bookDetails.collectAsStateWithLifecycle()
     val bookListingExists by viewModel.bookListingExists.collectAsStateWithLifecycle()
 
+    LaunchedEffect(volumeId) {
+        viewModel.getBookDetails(volumeId)
+    }
 
     LaunchedEffect(bookDetailsState) {
-        viewModel.getBookDetails(volumeId)
         if (bookDetailsState is BookDetailUiState.Success) {
-            viewModel.checkIfBookListingExists(
-                (bookDetailsState as BookDetailUiState.Success).volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: ""
-            )
+            val isbn = (bookDetailsState as BookDetailUiState.Success).volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier
+            isbn?.let { viewModel.checkIfBookListingExists(it) }
         }
     }
 
@@ -274,7 +275,6 @@ internal fun Content(
             }
         }
         if (bookListingExists) {
-            // "View Booklisting" button
             Button(
                 onClick = { onViewBookListingClick(volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: "") },
                 modifier = Modifier
