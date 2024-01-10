@@ -1,5 +1,6 @@
 package com.example.bookdetail
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,8 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -137,19 +140,57 @@ fun BookDetailScreen(
 @Composable
 fun EditBookListingScreen(
     bookListing: BookListing,
-    onSaveClicked: () -> Unit,
+    onSaveClicked: (BookListing) -> Unit,
     onBackClicked: () -> Unit
 ) {
-    // Implement the UI for editing a book listing here
-    // This is just a placeholder, replace with your actual UI
-    Column {
-        Text("Edit Book Listing for ${bookListing.title}")
-        // Add form fields for editing the book listing here
-        Button(onClick = onSaveClicked) {
+    var title by remember { mutableStateOf(bookListing.title) }
+    var pageCount by remember { mutableStateOf(bookListing.pageCount.toString()) }
+    var canBeBorrowed by remember { mutableStateOf(bookListing.canBeBorrowed) }
+    var canBeSold by remember { mutableStateOf(bookListing.canBeSold) }
+    // Add other mutable states for editable fields
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text("Edit Book Listing", fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // TextFields for each editable field
+        OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text("Title") })
+        OutlinedTextField(value = pageCount, onValueChange = { pageCount = it }, label = { Text("Page Count") })
+        // Add TextFields for other editable fields
+
+        // Toggles for canBeBorrowed and canBeSold
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("Can be Borrowed")
+            Switch(checked = canBeBorrowed, onCheckedChange = { canBeBorrowed = it })
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("Can be Sold")
+            Switch(checked = canBeSold, onCheckedChange = { canBeSold = it })
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Save Button
+        Button(onClick = {
+            val updatedBookListing = bookListing.copy(
+                title = title,
+                pageCount = pageCount.toIntOrNull() ?: bookListing.pageCount,
+                canBeBorrowed = canBeBorrowed,
+                canBeSold = canBeSold
+            )
+            Log.d("EditBookScreen", "Book listing to be saved: $updatedBookListing")
+            onSaveClicked(updatedBookListing)
+        }) {
             Text("Save")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = onBackClicked) {
+            Text("Back")
         }
     }
 }
+
 
 @Composable
 fun ViewBookListingScreen(
@@ -160,11 +201,10 @@ fun ViewBookListingScreen(
     var isEditing by remember { mutableStateOf(false) }
 
     if (isEditing) {
-        // Editing interface
         EditBookListingScreen(
             bookListing = bookListing,
-            onSaveClicked = {
-                onEditListing(bookListing)
+            onSaveClicked = { updatedBookListing ->
+                onEditListing(updatedBookListing) // Pass the updated book listing
                 isEditing = false
             },
             onBackClicked = {

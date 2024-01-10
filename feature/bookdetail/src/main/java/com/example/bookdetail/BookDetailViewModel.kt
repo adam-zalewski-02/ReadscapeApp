@@ -1,5 +1,6 @@
 package com.example.bookdetail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.repository.BookListingRepository
@@ -58,10 +59,10 @@ class BookDetailViewModel @Inject constructor(
 
     fun updateBookListing(updatedBookListing: BookListing) {
         viewModelScope.launch {
+            Log.d("EditBookScreen", "Book listing to be passed in the viewmodel: $updatedBookListing")
             val result = bookListingRepository.updateBookListingByIsbn(updatedBookListing.isbn, updatedBookListing)
-            // Handle the result of the update operation
             result.onSuccess {
-                // Update UI state or show confirmation message
+                getBookListingDetails(updatedBookListing.isbn)
             }
             result.onFailure {
                 // Handle error
@@ -72,6 +73,7 @@ class BookDetailViewModel @Inject constructor(
     fun getBookListingDetails(isbn: String) {
         viewModelScope.launch {
             _bookListingDetails.value = bookListingRepository.getSingleBookListingByIsbnForCurrentUser(isbn)
+            previousStates.add(_bookDetails.value)
         }
     }
 
