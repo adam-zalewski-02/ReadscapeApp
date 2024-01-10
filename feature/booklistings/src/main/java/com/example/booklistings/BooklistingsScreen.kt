@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -16,6 +17,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -145,43 +147,45 @@ fun BookListingDetailScreen(
     val similarBookListings by viewModel.getBookListingsByIds(bookListing.similarBooks)
         .collectAsState(initial = emptyList())
 
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        item {
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)) {
-                Button(onClick = onBack) {
-                    Text("Back")
-                }
-                Spacer(Modifier.height(16.dp))
-                BookDetail(label = "Title", content = bookListing.title)
-                BookDetail(label = "Author(s)", content = bookListing.authors.joinToString())
-                BookDetail(label = "Description From The Owner", content = bookListing.extraInfoFromOwner, isDescription = true)
-                BookDetail(label = "Page Count", content = bookListing.pageCount.toString())
-                BookDetail(label = "Language", content = bookListing.language)
-                BookDetail(label = "Publisher", content = bookListing.publisher)
-                bookListing.publishedDate?.let { BookDetail(label = "Published Date", content = it) }
-                BookDetail(label = "ISBN", content = bookListing.isbn)
-                BookDetail(label = "Maturity Rating", content = bookListing.maturityRating)
-                BookDetail(label = "Keywords", content = bookListing.keywords.joinToString())
-                BookDetail(label = "Categories", content = bookListing.categories.joinToString())
-                BookDetail(label = "Owner's Email", content = ownerEmail)
-                BorrowLendStatus(bookListing)
-            }
+    Column {
+        IconButton(onClick = onBack) {
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
         }
-        item {
-            if (similarBookListings.isNotEmpty()) {
-                Text("Similar Books", style = MaterialTheme.typography.headlineMedium)
-                LazyRow {
-                    items(similarBookListings) { similarBookListing ->
-                        HorizontalBookListItem(
-                            bookListing = similarBookListing,
-                            onSelectBook = { selectedBook ->
-                                viewModel.selectBookListing(
-                                    selectedBook
-                                )
-                            }
-                        )
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            item {
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)) {
+                    Spacer(Modifier.height(16.dp))
+                    BookDetail(label = "Title", content = bookListing.title)
+                    BookDetail(label = "Author(s)", content = bookListing.authors.joinToString())
+                    BookDetail(label = "Description From The Owner", content = bookListing.extraInfoFromOwner, isDescription = true)
+                    BookDetail(label = "Page Count", content = bookListing.pageCount.toString())
+                    BookDetail(label = "Language", content = bookListing.language)
+                    BookDetail(label = "Publisher", content = bookListing.publisher)
+                    bookListing.publishedDate?.let { BookDetail(label = "Published Date", content = it) }
+                    BookDetail(label = "ISBN", content = bookListing.isbn)
+                    BookDetail(label = "Maturity Rating", content = bookListing.maturityRating)
+                    BookDetail(label = "Keywords", content = bookListing.keywords.joinToString())
+                    BookDetail(label = "Categories", content = bookListing.categories.joinToString())
+                    BookDetail(label = "Owner's Email", content = ownerEmail)
+                    BorrowLendStatus(bookListing)
+                }
+            }
+            item {
+                if (similarBookListings.isNotEmpty()) {
+                    Text("Similar Books", style = MaterialTheme.typography.headlineMedium)
+                    LazyRow {
+                        items(similarBookListings) { similarBookListing ->
+                            HorizontalBookListItem(
+                                bookListing = similarBookListing,
+                                onSelectBook = { selectedBook ->
+                                    viewModel.selectBookListing(
+                                        selectedBook
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }

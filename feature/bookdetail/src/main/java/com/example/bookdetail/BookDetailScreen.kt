@@ -154,7 +154,6 @@ fun EditBookListingScreen(
     var categories by remember { mutableStateOf(bookListing.categories.joinToString()) }
     var keywords by remember { mutableStateOf(bookListing.keywords.joinToString()) }
 
-
     Column(modifier = Modifier.padding(16.dp)) {
         Text("Edit Book Listing", fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
@@ -177,10 +176,12 @@ fun EditBookListingScreen(
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Can be Borrowed")
+            Spacer(modifier = Modifier.width(8.dp))
             Switch(checked = canBeBorrowed, onCheckedChange = { canBeBorrowed = it })
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Can be Sold")
+            Spacer(modifier = Modifier.width(8.dp))
             Switch(checked = canBeSold, onCheckedChange = { canBeSold = it })
         }
 
@@ -215,7 +216,6 @@ fun ViewBookListingScreen(
     onDeleteClicked: (String) -> Unit,
 ) {
     var isEditing by remember { mutableStateOf(false) }
-
 
     if (isEditing) {
         EditBookListingScreen(
@@ -252,9 +252,9 @@ fun ViewBookListingScreen(
             BookDetail("Categories", bookListing.categories.joinToString())
             BookDetail("Keywords", bookListing.keywords.joinToString())
             BookDetail("Maturity Rating", bookListing.maturityRating)
-            BorrowLendStatus(bookListing)
             BookDetail("Your Description", bookListing.extraInfoFromOwner)
-
+            BorrowLendStatus(bookListing)
+            Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = { onDeleteClicked(bookListing.isbn) },
                         colors = ButtonDefaults.buttonColors(
