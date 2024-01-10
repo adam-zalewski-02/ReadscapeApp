@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.AttachMoney
@@ -28,6 +29,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +48,7 @@ import com.example.designsystem.component.Loading
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.icon.ReadscapeIcons
 import com.example.model.book.BookListing
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun BookDetailRoute(
@@ -86,7 +89,6 @@ internal fun BookDetailRoute(
     )
 }
 
-
 @Composable
 fun BookDetailScreen(
     modifier: Modifier = Modifier,
@@ -120,7 +122,7 @@ fun BookDetailScreen(
             is BookDetailUiState.EditBookListing -> item {
                 EditBookListingScreen(
                     bookListing = state.bookListing,
-                    onSaveClicked = { /* Your save logic here */ },
+                    onSaveClicked = onEditListing,
                     onBackClicked = onBack
                 )
             }
@@ -137,7 +139,6 @@ fun BookDetailScreen(
     }
 }
 
-
 @Composable
 fun EditBookListingScreen(
     bookListing: BookListing,
@@ -146,24 +147,27 @@ fun EditBookListingScreen(
 ) {
     var canBeBorrowed by remember { mutableStateOf(bookListing.canBeBorrowed) }
     var canBeSold by remember { mutableStateOf(bookListing.canBeSold) }
-    var description by remember { mutableStateOf(bookListing.description) }
     var extraInfoFromOwner by remember { mutableStateOf(bookListing.extraInfoFromOwner) }
     var categories by remember { mutableStateOf(bookListing.categories.joinToString()) }
     var keywords by remember { mutableStateOf(bookListing.keywords.joinToString()) }
 
-    // Add other mutable states for editable fields
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text("Edit Book Listing", fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Add TextFields for other editable fields
-        OutlinedTextField(value = bookListing.description, onValueChange = {}, label = { Text("Description") })
-        OutlinedTextField(value = bookListing.extraInfoFromOwner, onValueChange = {}, label = { Text("Extra Info from Owner") })
-        OutlinedTextField(value = bookListing.categories.joinToString(), onValueChange = {}, label = { Text("Categories") })
-        OutlinedTextField(value = bookListing.keywords.joinToString(), onValueChange = {}, label = { Text("Keywords") })
+        OutlinedTextField(value = bookListing.extraInfoFromOwner, onValueChange = {}, label = { Text("Your description") })
+        OutlinedTextField(
+            value = categories,
+            onValueChange = { categories = it },
+            label = { Text("Categories (comma separated)") }
+        )
+        OutlinedTextField(
+            value = keywords,
+            onValueChange = { keywords = it },
+            label = { Text("Keywords (comma separated)") }
+        )
 
-        // Toggles for canBeBorrowed and canBeSold
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Can be Borrowed")
             Switch(checked = canBeBorrowed, onCheckedChange = { canBeBorrowed = it })
@@ -175,13 +179,11 @@ fun EditBookListingScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Save Button
         Button(onClick = {
             val updatedBookListing = bookListing.copy(
-                description = description,
                 extraInfoFromOwner = extraInfoFromOwner,
-                categories = categories.split(","),
-                keywords = keywords.split(","),
+                categories = categories.split(",").map { it.trim() },
+                keywords = keywords.split(",").map { it.trim() },
                 canBeBorrowed = canBeBorrowed,
                 canBeSold = canBeSold
             )
@@ -198,7 +200,6 @@ fun EditBookListingScreen(
     }
 }
 
-
 @Composable
 fun ViewBookListingScreen(
     bookListing: BookListing,
@@ -206,6 +207,7 @@ fun ViewBookListingScreen(
     onEditListing: (BookListing) -> Unit
 ) {
     var isEditing by remember { mutableStateOf(false) }
+
 
     if (isEditing) {
         EditBookListingScreen(
@@ -219,7 +221,6 @@ fun ViewBookListingScreen(
             }
         )
     } else {
-        // Viewing interface
         Column(modifier = Modifier.padding(16.dp)) {
             Row {
                 Button(onClick = { onBackClicked() }) {
@@ -233,7 +234,6 @@ fun ViewBookListingScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Book Details
             BookDetail("Title", bookListing.title)
             BookDetail("Author(s)", bookListing.authors.joinToString())
             BookDetail("ISBN", bookListing.isbn)
@@ -245,8 +245,7 @@ fun ViewBookListingScreen(
             BookDetail("Keywords", bookListing.keywords.joinToString())
             BookDetail("Maturity Rating", bookListing.maturityRating)
             BorrowLendStatus(bookListing)
-            BookDetail("Extra Info from Owner", bookListing.extraInfoFromOwner)
-            BookDetail("Description", bookListing.description, isDescription = true)
+            BookDetail("Your Description", bookListing.extraInfoFromOwner)
         }
     }
 }
@@ -282,9 +281,6 @@ fun BorrowLendStatus(bookListing: BookListing) {
     }
     Spacer(modifier = Modifier.height(8.dp))
 }
-
-
-
 
 @Composable
 internal fun Content(
