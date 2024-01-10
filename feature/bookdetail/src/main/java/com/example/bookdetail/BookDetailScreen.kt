@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,54 +35,113 @@ import com.example.model.book.Volume
 import com.example.designsystem.component.Loading
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.icon.ReadscapeIcons
+import com.example.model.book.BookListing
 
 @Composable
 internal fun BookDetailRoute(
     modifier: Modifier = Modifier,
-    viewmodel: BookDetailViewModel = hiltViewModel(),
+    viewModel: BookDetailViewModel = hiltViewModel(),
     volumeId: String,
     onBack: () -> Unit,
 ) {
-    val bookDetailsState by viewmodel.bookDetails.collectAsStateWithLifecycle()
+    val bookDetailsState by viewModel.bookDetails.collectAsStateWithLifecycle()
 
     LaunchedEffect(volumeId) {
-        viewmodel.getBookDetails(volumeId)
+        viewModel.getBookDetails(volumeId)
     }
 
     BookDetailScreen(
         modifier = modifier,
         state = bookDetailsState,
-        onAddToFavoritesClick = viewmodel::addBookToFavorites,
-        onBack = onBack
+        onAddToFavoritesClick = viewModel::addBookToFavorites,
+        onBack = onBack,
+        onPublishBookListingClick = { isbn ->
+            viewModel.publishBookListing(isbn) // This function needs to be implemented in the ViewModel
+        },
+        onEditBookListingClick = { bookListing ->
+            viewModel.editBookListing(bookListing)
+        },
+        onViewBookListingClick = { bookListing ->
+            viewModel.viewBookListing(bookListing)
+        }
     )
 }
+
 
 @Composable
 fun BookDetailScreen(
     modifier: Modifier = Modifier,
     state: BookDetailUiState,
     onAddToFavoritesClick: (String) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onPublishBookListingClick: (String) -> Unit,
+    onEditBookListingClick: (String) -> Unit,
+    onViewBookListingClick: (String) -> Unit
 ) {
-
     LazyColumn(
         modifier = modifier.fillMaxSize()
     ) {
         when (state) {
             is BookDetailUiState.Loading -> item {
-                Loading(
-                    modifier
-                )
+                Loading(modifier)
             }
             is BookDetailUiState.Success -> item {
                 Content(
                     volume = state.volume,
                     modifier = modifier,
                     onAddToFavoritesClick = onAddToFavoritesClick,
-                    onBack = onBack
+                    onBack = onBack,
+                    onPublishBookListingClick = onPublishBookListingClick
                 )
             }
             is BookDetailUiState.Error -> item { Text("Error") }
+            is BookDetailUiState.EditBookListing -> item {
+                EditBookListingScreen(
+                    bookListing = state.bookListing,
+                    onSaveClicked = { /* Your save logic here */ },
+                    onBackClicked = onBack
+                )
+            }
+            is BookDetailUiState.ViewBookListing -> item {
+                ViewBookListingScreen(
+                    bookListing = state.bookListing,
+                    onBackClicked = onBack
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+fun EditBookListingScreen(
+    bookListing: BookListing,
+    onSaveClicked: () -> Unit,
+    onBackClicked: () -> Unit
+) {
+    // Implement the UI for editing a book listing here
+    // This is just a placeholder, replace with your actual UI
+    Column {
+        Text("Edit Book Listing for ${bookListing.title}")
+        // Add form fields for editing the book listing here
+        Button(onClick = onSaveClicked) {
+            Text("Save")
+        }
+    }
+}
+
+@Composable
+fun ViewBookListingScreen(
+    bookListing: BookListing,
+    onBackClicked: () -> Unit
+) {
+    // Implement the UI for viewing a book listing here
+    // This is just a placeholder, replace with your actual UI
+    Column {
+        Text("Viewing Book Listing for ${bookListing.title}")
+        // Display the details of the book listing here
+        Button(onClick = onBackClicked) {
+            Text("Back")
         }
     }
 }
@@ -93,7 +151,8 @@ internal fun Content(
     volume: Volume,
     modifier: Modifier = Modifier,
     onAddToFavoritesClick: (String) -> Unit,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onPublishBookListingClick: (String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -173,6 +232,14 @@ internal fun Content(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Add to collection")
             }
+        }
+        Button(
+            onClick = { onPublishBookListingClick(volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: "") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ) {
+            Text("Publish Booklisting")
         }
     }
 }
