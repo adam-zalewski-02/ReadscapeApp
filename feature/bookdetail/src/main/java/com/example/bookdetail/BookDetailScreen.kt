@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.AttachMoney
@@ -29,7 +28,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +46,7 @@ import com.example.designsystem.component.Loading
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.icon.ReadscapeIcons
 import com.example.model.book.BookListing
-import kotlinx.coroutines.launch
+import androidx.compose.material3.ButtonDefaults
 
 @Composable
 internal fun BookDetailRoute(
@@ -86,6 +84,9 @@ internal fun BookDetailRoute(
             viewModel.viewBookListing(isbn)
         },
         bookListingExists = bookListingExists,
+        onDeleteClicked = { isbn ->
+            viewModel.deleteBookListing(isbn)
+        }
     )
 }
 
@@ -98,6 +99,7 @@ fun BookDetailScreen(
     onPublishBookListingClick: (String) -> Unit,
     bookListingExists: Boolean,
     onEditListing: (BookListing) -> Unit,
+    onDeleteClicked: (String) -> Unit,
     onViewBookListingClick: (String) -> Unit
 ) {
     LazyColumn(
@@ -130,12 +132,11 @@ fun BookDetailScreen(
                 ViewBookListingScreen(
                     bookListing = state.bookListing,
                     onBackClicked = onBack,
-                    onEditListing = onEditListing
+                    onEditListing = onEditListing,
+                    onDeleteClicked = onDeleteClicked
                 )
             }
         }
-
-
     }
 }
 
@@ -156,7 +157,11 @@ fun EditBookListingScreen(
         Text("Edit Book Listing", fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
 
-        OutlinedTextField(value = bookListing.extraInfoFromOwner, onValueChange = {}, label = { Text("Your description") })
+        OutlinedTextField(
+            value = extraInfoFromOwner,
+            onValueChange = { extraInfoFromOwner = it },
+            label = { Text("Your description for the book") }
+        )
         OutlinedTextField(
             value = categories,
             onValueChange = { categories = it },
@@ -204,7 +209,8 @@ fun EditBookListingScreen(
 fun ViewBookListingScreen(
     bookListing: BookListing,
     onBackClicked: () -> Unit,
-    onEditListing: (BookListing) -> Unit
+    onEditListing: (BookListing) -> Unit,
+    onDeleteClicked: (String) -> Unit,
 ) {
     var isEditing by remember { mutableStateOf(false) }
 
@@ -246,6 +252,16 @@ fun ViewBookListingScreen(
             BookDetail("Maturity Rating", bookListing.maturityRating)
             BorrowLendStatus(bookListing)
             BookDetail("Your Description", bookListing.extraInfoFromOwner)
+
+            Button(
+                onClick = { onDeleteClicked(bookListing.isbn) },
+                        colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error, // Red color for delete button
+                contentColor = MaterialTheme.colorScheme.onError // Ensures text color is visible on red background
+            )
+            ) {
+                Text("Delete Listing")
+            }
         }
     }
 }
@@ -317,7 +333,7 @@ internal fun Content(
         ) {
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
         }
-        // Book Details
+
         Text(
             text = volume.volumeInfo.title,
             style = MaterialTheme.typography.headlineLarge,

@@ -108,11 +108,9 @@ class BookDetailViewModel @Inject constructor(
                 val result = bookListingRepository.addBookListingWithGoogleData(newBookListing)
                 result.fold(
                     onSuccess = {
-                        // Handle success, such as updating UI state to show the new listing
                         _bookDetails.value = BookDetailUiState.ViewBookListing(it)
                     },
                     onFailure = {
-                        // Handle failure, such as showing an error message
                         _bookDetails.value = BookDetailUiState.Error
                     }
                 )
@@ -120,9 +118,6 @@ class BookDetailViewModel @Inject constructor(
         }
     }
 
-
-
-    // Function to switch to edit book listing screen
     fun editBookListing(isbn: String) {
         viewModelScope.launch {
             val bookListing = bookListingRepository.getSingleBookListingByIsbnForCurrentUser(isbn)
@@ -132,7 +127,6 @@ class BookDetailViewModel @Inject constructor(
         }
     }
 
-    // Function to switch to view book listing screen
     fun viewBookListing(isbn: String) {
         viewModelScope.launch {
             val bookListing = bookListingRepository.getSingleBookListingByIsbnForCurrentUser(isbn)
@@ -154,9 +148,18 @@ class BookDetailViewModel @Inject constructor(
         }
     }
 
-
+    fun deleteBookListing(isbn: String) {
+        viewModelScope.launch {
+            val result = bookListingRepository.deleteBookListingByIsbnAndOwner(isbn)
+            result.onSuccess {
+                returnToBookDetailScreen() // Return to detail screen after deletion
+            }
+            result.onFailure {
+                // Handle deletion error
+            }
+        }
+    }
 }
-
 
 sealed interface BookDetailUiState {
     data class Success(val volume: Volume) : BookDetailUiState
@@ -164,6 +167,5 @@ sealed interface BookDetailUiState {
     object Loading : BookDetailUiState
     data class EditBookListing(val bookListing: BookListing) : BookDetailUiState
     data class ViewBookListing(val bookListing: BookListing) : BookDetailUiState
-
 }
 
