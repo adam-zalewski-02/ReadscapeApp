@@ -13,7 +13,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,9 +30,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -65,9 +70,9 @@ internal fun BookDetailRoute(
         modifier = modifier,
         state = bookDetailsState,
         onAddToFavoritesClick = viewModel::addBookToFavorites,
-        onBack = onBack,
+        onBack = viewModel::onBackPressed,
         onPublishBookListingClick = { isbn ->
-            viewModel.publishBookListing(isbn) // This function needs to be implemented in the ViewModel
+            viewModel.publishBookListing(isbn)
         },
         onEditListing = { updatedBookListing ->
             viewModel.updateBookListing(updatedBookListing)
@@ -155,34 +160,83 @@ fun ViewBookListingScreen(
     var isEditing by remember { mutableStateOf(false) }
 
     if (isEditing) {
-        // Render the editing interface
+        // Editing interface
         EditBookListingScreen(
             bookListing = bookListing,
             onSaveClicked = {
-                // Save the edited book listing
                 onEditListing(bookListing)
-                isEditing = false // Switch back to view mode after saving
+                isEditing = false
             },
             onBackClicked = {
-                isEditing = false // Switch back to view mode without saving
+                isEditing = false
             }
         )
     } else {
-        // Render the viewing interface
-        Column {
-            Text("Viewing Book Listing for ${bookListing.title}")
-            // Display the details of the book listing here
+        // Viewing interface
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row {
+                Button(onClick = { onBackClicked() }) {
+                    Text("Back")
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(onClick = { isEditing = true }) {
+                    Text("Edit Listing")
+                }
+            }
+
             Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { onBackClicked() }) {
-                Text("Back")
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { isEditing = true }) {
-                Text("Edit Listing")
-            }
+
+            // Book Details
+            BookDetail("Title", bookListing.title)
+            BookDetail("Author(s)", bookListing.authors.joinToString())
+            BookDetail("ISBN", bookListing.isbn)
+            BookDetail("Language", bookListing.language)
+            BookDetail("Publisher", bookListing.publisher)
+            BookDetail("Published Date", bookListing.publishedDate ?: "Not Available")
+            BookDetail("Page Count", bookListing.pageCount.toString())
+            BookDetail("Categories", bookListing.categories.joinToString())
+            BookDetail("Keywords", bookListing.keywords.joinToString())
+            BookDetail("Maturity Rating", bookListing.maturityRating)
+            BorrowLendStatus(bookListing)
+            BookDetail("Extra Info from Owner", bookListing.extraInfoFromOwner)
+            BookDetail("Description", bookListing.description, isDescription = true)
         }
     }
 }
+
+@Composable
+fun BookDetail(label: String, content: String, isDescription: Boolean = false) {
+    Text(text = label, fontWeight = FontWeight.Bold)
+    if (isDescription) {
+        Text(text = content, maxLines = 20, overflow = TextOverflow.Ellipsis)
+    } else {
+        Text(text = content)
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+}
+
+@Composable
+fun BorrowLendStatus(bookListing: BookListing) {
+    Column {
+        if (bookListing.canBeBorrowed) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.Book, contentDescription = "Borrowable", tint = Color.Green)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Available to Borrow", fontWeight = FontWeight.Bold)
+            }
+        }
+        if (bookListing.canBeSold) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.AttachMoney, contentDescription = "For Sale", tint = Color.Blue)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("Available to Sell", fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+}
+
+
 
 
 @Composable

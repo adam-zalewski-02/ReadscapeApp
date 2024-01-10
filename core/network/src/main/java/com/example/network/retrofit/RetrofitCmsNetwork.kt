@@ -100,12 +100,10 @@ class RetrofitCmsNetwork @Inject constructor(
         }
     }
 
-
     override suspend fun deleteBookListingByIsbnAndOwner(isbn: String): Response<Unit> {
         val bookListingToDelete = getSingleBookListingByIsbnForCurrentUser(isbn)
         return bookListingToDelete?._id?.let { listingId ->
             cmsNetworkApi.deleteBookListingById(listingId)
         } ?: throw NoSuchElementException("No book listing found with ISBN: $isbn for current user.")
     }
-
 }

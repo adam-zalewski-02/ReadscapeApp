@@ -29,6 +29,14 @@ class BookDetailViewModel @Inject constructor(
     private val _bookListingExists = MutableStateFlow<Boolean>(false)
     val bookListingExists: StateFlow<Boolean> = _bookListingExists
 
+    private val previousStates = mutableListOf<BookDetailUiState>()
+
+    fun onBackPressed() {
+        if (previousStates.isNotEmpty()) {
+            _bookDetails.value = previousStates.removeLast()
+        }
+    }
+
     fun checkIfBookListingExists(isbn: String) {
         viewModelScope.launch {
             val exists = bookListingRepository.getSingleBookListingByIsbnForCurrentUser(isbn) != null
@@ -41,6 +49,7 @@ class BookDetailViewModel @Inject constructor(
             try {
                 val book = bookRepository.getVolumeById(bookId)
                 _bookDetails.value = BookDetailUiState.Success(book)
+                previousStates.add(_bookDetails.value)
             } catch (e: Exception) {
                 //_bookDetails.value = BookDetailUiState.Error(e.localizedMessage ?: "Unkown error")
             }
@@ -157,3 +166,4 @@ sealed interface BookDetailUiState {
     data class ViewBookListing(val bookListing: BookListing) : BookDetailUiState
 
 }
+
