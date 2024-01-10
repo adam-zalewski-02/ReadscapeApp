@@ -47,6 +47,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.icon.ReadscapeIcons
 import com.example.model.book.BookListing
 import androidx.compose.material3.ButtonDefaults
+import com.example.ui.BookDetail
+import com.example.ui.BorrowLendStatus
 
 @Composable
 internal fun BookDetailRoute(
@@ -264,38 +266,6 @@ fun ViewBookListingScreen(
             }
         }
     }
-}
-
-@Composable
-fun BookDetail(label: String, content: String, isDescription: Boolean = false) {
-    Text(text = label, fontWeight = FontWeight.Bold)
-    if (isDescription) {
-        Text(text = content, maxLines = 20, overflow = TextOverflow.Ellipsis)
-    } else {
-        Text(text = content)
-    }
-    Spacer(modifier = Modifier.height(8.dp))
-}
-
-@Composable
-fun BorrowLendStatus(bookListing: BookListing) {
-    Column {
-        if (bookListing.canBeBorrowed) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.Book, contentDescription = "Borrowable", tint = Color.Green)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Available to Borrow", fontWeight = FontWeight.Bold)
-            }
-        }
-        if (bookListing.canBeSold) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.AttachMoney, contentDescription = "For Sale", tint = Color.Blue)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Available to Sell", fontWeight = FontWeight.Bold)
-            }
-        }
-    }
-    Spacer(modifier = Modifier.height(8.dp))
 }
 
 @Composable
