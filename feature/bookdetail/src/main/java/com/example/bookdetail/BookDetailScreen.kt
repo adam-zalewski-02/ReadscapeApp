@@ -51,9 +51,12 @@ internal fun BookDetailRoute(
     val bookListingExists by viewModel.bookListingExists.collectAsStateWithLifecycle()
 
 
-    LaunchedEffect(volumeId) {
-        viewModel.getBookDetails(volumeId)
-        viewModel.checkIfBookListingExists(/* Extract ISBN from Volume object here */)
+    LaunchedEffect(bookDetailsState) {
+        if (bookDetailsState is BookDetailUiState.Success) {
+            viewModel.checkIfBookListingExists(
+                (bookDetailsState as BookDetailUiState.Success).volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: ""
+            )
+        }
     }
 
     BookDetailScreen(
@@ -67,8 +70,8 @@ internal fun BookDetailRoute(
         onEditListing = { updatedBookListing ->
             viewModel.updateBookListing(updatedBookListing)
         },
-        onViewBookListingClick = { bookListing ->
-            viewModel.viewBookListing(bookListing)
+        onViewBookListingClick = { isbn ->
+            viewModel.viewBookListing(isbn)
         },
         bookListingExists = bookListingExists,
     )
@@ -101,6 +104,7 @@ fun BookDetailScreen(
                     onBack = onBack,
                     onPublishBookListingClick = onPublishBookListingClick,
                     bookListingExists = bookListingExists,
+                    onViewBookListingClick = onViewBookListingClick
                 )
             }
             is BookDetailUiState.Error -> item { Text("Error") }
@@ -187,6 +191,7 @@ internal fun Content(
     onBack: () -> Unit,
     onPublishBookListingClick: (String) -> Unit,
     bookListingExists: Boolean,
+    onViewBookListingClick: (String) -> Unit
 ) {
     Column(
         modifier = modifier
