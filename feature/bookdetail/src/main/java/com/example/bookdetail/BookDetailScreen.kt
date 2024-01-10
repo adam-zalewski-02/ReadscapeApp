@@ -12,10 +12,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.Book
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,11 +31,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -104,44 +101,34 @@ fun BookDetailScreen(
     onDeleteClicked: (String) -> Unit,
     onViewBookListingClick: (String) -> Unit
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize()
-    ) {
-        when (state) {
-            is BookDetailUiState.Loading -> item {
-                Loading(modifier)
-            }
-            is BookDetailUiState.Success -> item {
-                Content(
-                    volume = state.volume,
-                    modifier = modifier,
-                    onAddToFavoritesClick = onAddToFavoritesClick,
-                    onBack = onBack,
-                    onPublishBookListingClick = onPublishBookListingClick,
-                    bookListingExists = bookListingExists,
-                    onViewBookListingClick = onViewBookListingClick
-                )
-            }
-            is BookDetailUiState.Error -> item { Text("Error") }
-            is BookDetailUiState.EditBookListing -> item {
-                EditBookListingScreen(
-                    bookListing = state.bookListing,
-                    onSaveClicked = onEditListing,
-                    onBackClicked = onBack
-                )
-            }
-            is BookDetailUiState.ViewBookListing -> item {
-                ViewBookListingScreen(
-                    bookListing = state.bookListing,
-                    onBackClicked = onBack,
-                    onEditListing = onEditListing,
-                    onDeleteClicked = onDeleteClicked
-                )
-            }
-        }
+
+    when (state) {
+        is BookDetailUiState.Loading -> Loading(modifier)
+        is BookDetailUiState.Success -> Content(
+            volume = state.volume,
+            modifier = modifier,
+            onAddToFavoritesClick = onAddToFavoritesClick,
+            onBack = onBack,
+            onPublishBookListingClick = onPublishBookListingClick,
+            bookListingExists = bookListingExists,
+            onViewBookListingClick = onViewBookListingClick
+        )
+        is BookDetailUiState.Error -> Text("Error")
+        is BookDetailUiState.EditBookListing -> EditBookListingScreen(
+            bookListing = state.bookListing,
+            onSaveClicked = onEditListing,
+            onBackClicked = onBack
+        )
+        is BookDetailUiState.ViewBookListing -> ViewBookListingScreen(
+            bookListing = state.bookListing,
+            onBackClicked = onBack,
+            onEditListing = onEditListing,
+            onDeleteClicked = onDeleteClicked
+        )
     }
 }
 
+// path/filename: ui/screens/EditBookListingScreen.kt
 @Composable
 fun EditBookListingScreen(
     bookListing: BookListing,
@@ -154,59 +141,77 @@ fun EditBookListingScreen(
     var categories by remember { mutableStateOf(bookListing.categories.joinToString()) }
     var keywords by remember { mutableStateOf(bookListing.keywords.joinToString()) }
 
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text("Edit Book Listing", fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = extraInfoFromOwner,
-            onValueChange = { extraInfoFromOwner = it },
-            label = { Text("Your description for the book") }
-        )
-        OutlinedTextField(
-            value = categories,
-            onValueChange = { categories = it },
-            label = { Text("Categories (comma separated)") }
-        )
-        OutlinedTextField(
-            value = keywords,
-            onValueChange = { keywords = it },
-            label = { Text("Keywords (comma separated)") }
-        )
-
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Can be Borrowed")
-            Spacer(modifier = Modifier.width(8.dp))
-            Switch(checked = canBeBorrowed, onCheckedChange = { canBeBorrowed = it })
+    LazyColumn(modifier = Modifier.padding(16.dp)) {
+        item {
+            Text("Edit Book Listing", fontWeight = FontWeight.Bold)
         }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Can be Sold")
-            Spacer(modifier = Modifier.width(8.dp))
-            Switch(checked = canBeSold, onCheckedChange = { canBeSold = it })
-        }
+        item { Spacer(modifier = Modifier.height(8.dp)) }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = {
-            val updatedBookListing = bookListing.copy(
-                extraInfoFromOwner = extraInfoFromOwner,
-                categories = categories.split(",").map { it.trim() },
-                keywords = keywords.split(",").map { it.trim() },
-                canBeBorrowed = canBeBorrowed,
-                canBeSold = canBeSold
+        item {
+            OutlinedTextField(
+                value = extraInfoFromOwner,
+                onValueChange = { extraInfoFromOwner = it },
+                label = { Text("Your description for the book") }
             )
-            Log.d("EditBookScreen", "Book listing to be saved: $updatedBookListing")
-            onSaveClicked(updatedBookListing)
-        }) {
-            Text("Save")
+        }
+        item {
+            OutlinedTextField(
+                value = categories,
+                onValueChange = { categories = it },
+                label = { Text("Categories (comma separated)") }
+            )
+        }
+        item {
+            OutlinedTextField(
+                value = keywords,
+                onValueChange = { keywords = it },
+                label = { Text("Keywords (comma separated)") }
+            )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = onBackClicked) {
-            Text("Back")
+        item {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("Can be Borrowed")
+                Spacer(modifier = Modifier.width(8.dp))
+                Switch(checked = canBeBorrowed, onCheckedChange = { canBeBorrowed = it })
+            }
+        }
+        item {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("Can be Sold")
+                Spacer(modifier = Modifier.width(8.dp))
+                Switch(checked = canBeSold, onCheckedChange = { canBeSold = it })
+            }
+        }
+
+        item { Spacer(modifier = Modifier.height(16.dp)) }
+
+        item {
+            Button(onClick = {
+                val updatedBookListing = bookListing.copy(
+                    extraInfoFromOwner = extraInfoFromOwner,
+                    categories = categories.split(",").map { it.trim() },
+                    keywords = keywords.split(",").map { it.trim() },
+                    canBeBorrowed = canBeBorrowed,
+                    canBeSold = canBeSold
+                )
+                Log.d("EditBookScreen", "Book listing to be saved: $updatedBookListing")
+                onSaveClicked(updatedBookListing)
+            }) {
+                Text("Save")
+            }
+        }
+
+        item { Spacer(modifier = Modifier.height(8.dp)) }
+
+        item {
+            Button(onClick = onBackClicked) {
+                Text("Back")
+            }
         }
     }
 }
+
 
 @Composable
 fun ViewBookListingScreen(
@@ -229,40 +234,52 @@ fun ViewBookListingScreen(
             }
         )
     } else {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column {
             Row {
-                Button(onClick = { onBackClicked() }) {
-                    Text("Back")
+                IconButton(onClick = onBackClicked) {
+                    Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
                 }
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(20.dp))
                 Button(onClick = { isEditing = true }) {
                     Text("Edit Listing")
                 }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            BookDetail("Title", bookListing.title)
-            BookDetail("Author(s)", bookListing.authors.joinToString())
-            BookDetail("ISBN", bookListing.isbn)
-            BookDetail("Language", bookListing.language)
-            BookDetail("Publisher", bookListing.publisher)
-            BookDetail("Published Date", bookListing.publishedDate ?: "Not Available")
-            BookDetail("Page Count", bookListing.pageCount.toString())
-            BookDetail("Categories", bookListing.categories.joinToString())
-            BookDetail("Keywords", bookListing.keywords.joinToString())
-            BookDetail("Maturity Rating", bookListing.maturityRating)
-            BookDetail("Your Description", bookListing.extraInfoFromOwner)
-            BorrowLendStatus(bookListing)
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = { onDeleteClicked(bookListing.isbn) },
+            Spacer(modifier = Modifier.height(5.dp))
+            LazyColumn(modifier = Modifier.padding(16.dp)) {
+                items(
+                    listOf(
+                        "Title" to bookListing.title,
+                        "Author(s)" to bookListing.authors.joinToString(),
+                        "ISBN" to bookListing.isbn,
+                        "Publisher" to bookListing.publisher,
+                        "Published Date" to bookListing.publishedDate,
+                        "Language" to bookListing.language,
+                        "Categories" to bookListing.categories.joinToString(),
+                        "Keywords" to bookListing.keywords.joinToString(),
+                        "Page Count" to bookListing.pageCount.toString(),
+                        "Maturity Rating" to bookListing.maturityRating,
+                        "Extra Info From Owner" to bookListing.extraInfoFromOwner
+                    )
+                ) { detail ->
+                    detail.second?.let { BookDetail(detail.first, it) }
+                }
+                item {
+                    BorrowLendStatus(bookListing)
+                }
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+                item {
+                    Button(
+                        onClick = { onDeleteClicked(bookListing.isbn) },
                         colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error, // Red color for delete button
-                contentColor = MaterialTheme.colorScheme.onError // Ensures text color is visible on red background
-            )
-            ) {
-                Text("Delete Listing")
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError
+                        )
+                    ) {
+                        Text("Delete Listing")
+                    }
+                }
             }
         }
     }
@@ -278,103 +295,113 @@ internal fun Content(
     bookListingExists: Boolean,
     onViewBookListingClick: (String) -> Unit
 ) {
-    Column(
+    LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
     ) {
-        // Book Image
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(volume.volumeInfo.imageLinks?.thumbnail)
-                .build(),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .clip(MaterialTheme.shapes.medium),
-            contentScale = ContentScale.Crop
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        IconButton(
-            onClick = { onBack() }
-        ) {
-            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
-        }
-
-        Text(
-            text = volume.volumeInfo.title,
-            style = MaterialTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        volume.volumeInfo.authors?.let {
-            Text(
-                text = it.joinToString(", "),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-
-        volume.volumeInfo.publishedDate?.let {
-            Text(
-                text = "Published Date: $it",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-
-        volume.volumeInfo.description?.let {
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-
-        // Add to Favorites Button
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = { onAddToFavoritesClick(volume.id) },
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .height(48.dp)
-            ) {
-                Icon(imageVector = ReadscapeIcons.BookmarkBorder, contentDescription = null)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "Add to collection")
-            }
-        }
-        if (bookListingExists) {
-            Button(
-                onClick = { onViewBookListingClick(volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: "") },
+        item {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(volume.volumeInfo.imageLinks?.thumbnail)
+                    .build(),
+                contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            ) {
-                Text("View Booklisting")
+                    .height(200.dp)
+                    .clip(MaterialTheme.shapes.medium),
+                contentScale = ContentScale.Crop
+            )
+        }
+
+        item { Spacer(modifier = Modifier.height(16.dp)) }
+
+        item {
+            IconButton(onClick = { onBack() }) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
             }
-        } else {
-            // "Publish Booklisting" button
-            Button(
-                onClick = { onPublishBookListingClick(volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: "") },
+        }
+
+        item {
+            Text(
+                text = volume.volumeInfo.title,
+                style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        volume.volumeInfo.authors?.let { authors ->
+            item {
+                Text(
+                    text = authors.joinToString(", "),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+            }
+        }
+
+        volume.volumeInfo.publishedDate?.let { publishedDate ->
+            item {
+                Text(
+                    text = "Published Date: $publishedDate",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+            }
+        }
+
+        volume.volumeInfo.description?.let { description ->
+            item {
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+            }
+        }
+
+        item {
+            // Add to Favorites Button
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+                    .height(56.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                Text("Publish Booklisting")
+                Button(
+                    onClick = { onAddToFavoritesClick(volume.id) },
+                    modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(48.dp)
+                ) {
+                    Icon(imageVector = ReadscapeIcons.BookmarkBorder, contentDescription = null)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = "Add to collection")
+                }
+            }
+        }
+
+        item {
+            if (bookListingExists) {
+                Button(
+                    onClick = { onViewBookListingClick(volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: "") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ) {
+                    Text("View Booklisting")
+                }
+            } else {
+                Button(
+                    onClick = { onPublishBookListingClick(volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: "") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ) {
+                    Text("Publish Booklisting")
+                }
             }
         }
     }
