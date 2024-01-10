@@ -46,6 +46,19 @@ class BookDetailViewModel @Inject constructor(
         }
     }
 
+    fun updateBookListing(updatedBookListing: BookListing) {
+        viewModelScope.launch {
+            val result = bookListingRepository.updateBookListingByIsbn(updatedBookListing.isbn, updatedBookListing)
+            // Handle the result of the update operation
+            result.onSuccess {
+                // Update UI state or show confirmation message
+            }
+            result.onFailure {
+                // Handle error
+            }
+        }
+    }
+
     fun getBookListingDetails(isbn: String) {
         viewModelScope.launch {
             _bookListingDetails.value = bookListingRepository.getSingleBookListingByIsbnForCurrentUser(isbn)

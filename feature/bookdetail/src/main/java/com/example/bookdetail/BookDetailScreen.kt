@@ -21,6 +21,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,8 +64,8 @@ internal fun BookDetailRoute(
         onPublishBookListingClick = { isbn ->
             viewModel.publishBookListing(isbn) // This function needs to be implemented in the ViewModel
         },
-        onEditBookListingClick = { bookListing ->
-            viewModel.editBookListing(bookListing)
+        onEditListing = { updatedBookListing ->
+            viewModel.updateBookListing(updatedBookListing)
         },
         onViewBookListingClick = { bookListing ->
             viewModel.viewBookListing(bookListing)
@@ -80,7 +83,7 @@ fun BookDetailScreen(
     onBack: () -> Unit,
     onPublishBookListingClick: (String) -> Unit,
     bookListingExists: Boolean,
-    onEditBookListingClick: (String) -> Unit,
+    onEditListing: (BookListing) -> Unit,
     onViewBookListingClick: (String) -> Unit
 ) {
     LazyColumn(
@@ -111,7 +114,8 @@ fun BookDetailScreen(
             is BookDetailUiState.ViewBookListing -> item {
                 ViewBookListingScreen(
                     bookListing = state.bookListing,
-                    onBackClicked = onBack
+                    onBackClicked = onBack,
+                    onEditListing = onEditListing
                 )
             }
         }
@@ -139,18 +143,41 @@ fun EditBookListingScreen(
 @Composable
 fun ViewBookListingScreen(
     bookListing: BookListing,
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
+    onEditListing: (BookListing) -> Unit // Callback to handle edit action
 ) {
-    // Implement the UI for viewing a book listing here
-    // This is just a placeholder, replace with your actual UI
-    Column {
-        Text("Viewing Book Listing for ${bookListing.title}")
-        // Display the details of the book listing here
-        Button(onClick = onBackClicked) {
-            Text("Back")
+    var isEditing by remember { mutableStateOf(false) }
+
+    if (isEditing) {
+        // Render the editing interface
+        EditBookListingScreen(
+            bookListing = bookListing,
+            onSaveClicked = {
+                // Save the edited book listing
+                onEditListing(bookListing)
+                isEditing = false // Switch back to view mode after saving
+            },
+            onBackClicked = {
+                isEditing = false // Switch back to view mode without saving
+            }
+        )
+    } else {
+        // Render the viewing interface
+        Column {
+            Text("Viewing Book Listing for ${bookListing.title}")
+            // Display the details of the book listing here
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = { onBackClicked() }) {
+                Text("Back")
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(onClick = { isEditing = true }) {
+                Text("Edit Listing")
+            }
         }
     }
 }
+
 
 @Composable
 internal fun Content(
