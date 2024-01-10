@@ -24,14 +24,11 @@ class BookDetailViewModel @Inject constructor(
     private val _bookDetails = MutableStateFlow<BookDetailUiState>(BookDetailUiState.Loading)
     val bookDetails: StateFlow<BookDetailUiState> = _bookDetails
 
-    private val _bookListingDetails = MutableStateFlow<BookListing?>(null)
-    val bookListingDetails: StateFlow<BookListing?> = _bookListingDetails
-
-    private val _bookListingExists = MutableStateFlow<Boolean>(false)
+    private val _bookListingExists = MutableStateFlow(false)
     val bookListingExists: StateFlow<Boolean> = _bookListingExists
 
     private val _volume = MutableStateFlow<Volume?>(null)
-    val volume: MutableStateFlow<Volume?> = _volume
+    private val volume: MutableStateFlow<Volume?> = _volume
 
     fun returnToBookDetailScreen() {
         _bookDetails.value = BookDetailUiState.Success(volume.value!!)
@@ -50,8 +47,7 @@ class BookDetailViewModel @Inject constructor(
                 val book = bookRepository.getVolumeById(bookId)
                 _volume.value = book
                 _bookDetails.value = BookDetailUiState.Success(book)
-            } catch (e: Exception) {
-                //_bookDetails.value = BookDetailUiState.Error(e.localizedMessage ?: "Unkown error")
+            } catch (_: Exception) {
             }
         }
     }
@@ -64,14 +60,7 @@ class BookDetailViewModel @Inject constructor(
                 returnToBookDetailScreen()
             }
             result.onFailure {
-                // Handle error
             }
-        }
-    }
-
-    fun getBookListingDetails(isbn: String) {
-        viewModelScope.launch {
-            _bookListingDetails.value = bookListingRepository.getSingleBookListingByIsbnForCurrentUser(isbn)
         }
     }
 
@@ -118,15 +107,6 @@ class BookDetailViewModel @Inject constructor(
         }
     }
 
-    fun editBookListing(isbn: String) {
-        viewModelScope.launch {
-            val bookListing = bookListingRepository.getSingleBookListingByIsbnForCurrentUser(isbn)
-            bookListing?.let {
-                _bookDetails.value = BookDetailUiState.EditBookListing(it)
-            }
-        }
-    }
-
     fun viewBookListing(isbn: String) {
         viewModelScope.launch {
             val bookListing = bookListingRepository.getSingleBookListingByIsbnForCurrentUser(isbn)
@@ -152,10 +132,9 @@ class BookDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val result = bookListingRepository.deleteBookListingByIsbnAndOwner(isbn)
             result.onSuccess {
-                returnToBookDetailScreen() // Return to detail screen after deletion
+                returnToBookDetailScreen()
             }
             result.onFailure {
-                // Handle deletion error
             }
         }
     }
@@ -163,8 +142,8 @@ class BookDetailViewModel @Inject constructor(
 
 sealed interface BookDetailUiState {
     data class Success(val volume: Volume) : BookDetailUiState
-    object Error : BookDetailUiState
-    object Loading : BookDetailUiState
+    data object Error : BookDetailUiState
+    data object Loading : BookDetailUiState
     data class EditBookListing(val bookListing: BookListing) : BookDetailUiState
     data class ViewBookListing(val bookListing: BookListing) : BookDetailUiState
 }

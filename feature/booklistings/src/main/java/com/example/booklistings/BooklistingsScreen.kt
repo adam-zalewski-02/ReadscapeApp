@@ -1,7 +1,6 @@
 package com.example.booklistings
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,8 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
@@ -30,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -51,7 +47,7 @@ fun BookListingsScreen(viewModel: BookListingsViewModel = hiltViewModel()) {
     } else {
         when (state) {
             is BookListingsState.Loading -> {
-                // Display loading UI
+                Text(text = "Loading...")
             }
             is BookListingsState.Success -> {
                 val bookListings = (state as BookListingsState.Success).bookListings
@@ -62,7 +58,8 @@ fun BookListingsScreen(viewModel: BookListingsViewModel = hiltViewModel()) {
                 }
             }
             is BookListingsState.Error -> {
-                // Display error UI
+                val errorMessage = (state as BookListingsState.Error).message
+                Text(text = errorMessage)
             }
         }
     }
@@ -131,14 +128,13 @@ fun BookListItem(bookListing: BookListing, onSelectBook: (BookListing) -> Unit) 
     }
 }
 
-
 @Composable
 fun BookListingDetailScreen(
     bookListing: BookListing,
     onBack: () -> Unit,
     viewModel: BookListingsViewModel = hiltViewModel()
 ) {
-    val ownerId = bookListing.ownerId // Replace with the actual ID field
+    val ownerId = bookListing.ownerId
     val ownerEmail by viewModel.ownerEmail.collectAsState()
 
     LaunchedEffect(ownerId) {
@@ -224,7 +220,6 @@ fun HorizontalBookListItem(bookListing: BookListing, onSelectBook: (BookListing)
         }
     }
 }
-
 
 @Composable
 fun ComboBox(selectedFilterType: String, items: List<String>, onValueChange: (String) -> Unit) {

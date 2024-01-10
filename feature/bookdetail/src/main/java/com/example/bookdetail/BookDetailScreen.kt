@@ -128,7 +128,6 @@ fun BookDetailScreen(
     }
 }
 
-// path/filename: ui/screens/EditBookListingScreen.kt
 @Composable
 fun EditBookListingScreen(
     bookListing: BookListing,
@@ -168,7 +167,6 @@ fun EditBookListingScreen(
                 label = { Text("Keywords (comma separated)") }
             )
         }
-
         item {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text("Can be Borrowed")
@@ -183,30 +181,32 @@ fun EditBookListingScreen(
                 Switch(checked = canBeSold, onCheckedChange = { canBeSold = it })
             }
         }
-
         item { Spacer(modifier = Modifier.height(16.dp)) }
-
         item {
-            Button(onClick = {
-                val updatedBookListing = bookListing.copy(
-                    extraInfoFromOwner = extraInfoFromOwner,
-                    categories = categories.split(",").map { it.trim() },
-                    keywords = keywords.split(",").map { it.trim() },
-                    canBeBorrowed = canBeBorrowed,
-                    canBeSold = canBeSold
-                )
-                Log.d("EditBookScreen", "Book listing to be saved: $updatedBookListing")
-                onSaveClicked(updatedBookListing)
-            }) {
-                Text("Save")
-            }
-        }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(onClick = onBackClicked) {
+                    Text("Cancel")
+                }
 
-        item { Spacer(modifier = Modifier.height(8.dp)) }
+                Spacer(modifier = Modifier.weight(1f))
 
-        item {
-            Button(onClick = onBackClicked) {
-                Text("Back")
+                Button(onClick = {
+                    val updatedBookListing = bookListing.copy(
+                        extraInfoFromOwner = extraInfoFromOwner,
+                        categories = categories.split(",").map { it.trim() },
+                        keywords = keywords.split(",").map { it.trim() },
+                        canBeBorrowed = canBeBorrowed,
+                        canBeSold = canBeSold
+                    )
+                    Log.d("EditBookScreen", "Book listing to be saved: $updatedBookListing")
+                    onSaveClicked(updatedBookListing)
+                }) {
+                    Text("Save")
+                }
+
             }
         }
     }
@@ -235,17 +235,25 @@ fun ViewBookListingScreen(
         )
     } else {
         Column {
-            Row {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 5.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 IconButton(onClick = onBackClicked) {
                     Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
                 }
-                Spacer(modifier = Modifier.width(20.dp))
+                Spacer(modifier = Modifier.weight(1f))
                 Button(onClick = { isEditing = true }) {
                     Text("Edit Listing")
                 }
             }
             Spacer(modifier = Modifier.height(5.dp))
-            LazyColumn(modifier = Modifier.padding(16.dp)) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+                    .padding(16.dp)
+            ) {
                 items(
                     listOf(
                         "Title" to bookListing.title,
