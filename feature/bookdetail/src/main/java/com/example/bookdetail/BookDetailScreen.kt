@@ -52,6 +52,7 @@ internal fun BookDetailRoute(
 
 
     LaunchedEffect(bookDetailsState) {
+        viewModel.getBookDetails(volumeId)
         if (bookDetailsState is BookDetailUiState.Success) {
             viewModel.checkIfBookListingExists(
                 (bookDetailsState as BookDetailUiState.Success).volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: ""
