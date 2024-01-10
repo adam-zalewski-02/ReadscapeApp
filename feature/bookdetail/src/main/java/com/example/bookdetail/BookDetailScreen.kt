@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -73,7 +72,7 @@ internal fun BookDetailRoute(
         modifier = modifier,
         state = bookDetailsState,
         onAddToFavoritesClick = viewModel::addBookToFavorites,
-        onBack = viewModel::onBackPressed,
+        onBack = viewModel::returnToBookDetailScreen,
         onPublishBookListingClick = { isbn ->
             viewModel.publishBookListing(isbn)
         },
@@ -133,6 +132,8 @@ fun BookDetailScreen(
                 )
             }
         }
+
+
     }
 }
 
@@ -143,20 +144,24 @@ fun EditBookListingScreen(
     onSaveClicked: (BookListing) -> Unit,
     onBackClicked: () -> Unit
 ) {
-    var title by remember { mutableStateOf(bookListing.title) }
-    var pageCount by remember { mutableStateOf(bookListing.pageCount.toString()) }
     var canBeBorrowed by remember { mutableStateOf(bookListing.canBeBorrowed) }
     var canBeSold by remember { mutableStateOf(bookListing.canBeSold) }
+    var description by remember { mutableStateOf(bookListing.description) }
+    var extraInfoFromOwner by remember { mutableStateOf(bookListing.extraInfoFromOwner) }
+    var categories by remember { mutableStateOf(bookListing.categories.joinToString()) }
+    var keywords by remember { mutableStateOf(bookListing.keywords.joinToString()) }
+
     // Add other mutable states for editable fields
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text("Edit Book Listing", fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
 
-        // TextFields for each editable field
-        OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text("Title") })
-        OutlinedTextField(value = pageCount, onValueChange = { pageCount = it }, label = { Text("Page Count") })
         // Add TextFields for other editable fields
+        OutlinedTextField(value = bookListing.description, onValueChange = {}, label = { Text("Description") })
+        OutlinedTextField(value = bookListing.extraInfoFromOwner, onValueChange = {}, label = { Text("Extra Info from Owner") })
+        OutlinedTextField(value = bookListing.categories.joinToString(), onValueChange = {}, label = { Text("Categories") })
+        OutlinedTextField(value = bookListing.keywords.joinToString(), onValueChange = {}, label = { Text("Keywords") })
 
         // Toggles for canBeBorrowed and canBeSold
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -173,8 +178,10 @@ fun EditBookListingScreen(
         // Save Button
         Button(onClick = {
             val updatedBookListing = bookListing.copy(
-                title = title,
-                pageCount = pageCount.toIntOrNull() ?: bookListing.pageCount,
+                description = description,
+                extraInfoFromOwner = extraInfoFromOwner,
+                categories = categories.split(","),
+                keywords = keywords.split(","),
                 canBeBorrowed = canBeBorrowed,
                 canBeSold = canBeSold
             )
@@ -196,7 +203,7 @@ fun EditBookListingScreen(
 fun ViewBookListingScreen(
     bookListing: BookListing,
     onBackClicked: () -> Unit,
-    onEditListing: (BookListing) -> Unit // Callback to handle edit action
+    onEditListing: (BookListing) -> Unit
 ) {
     var isEditing by remember { mutableStateOf(false) }
 
@@ -204,7 +211,7 @@ fun ViewBookListingScreen(
         EditBookListingScreen(
             bookListing = bookListing,
             onSaveClicked = { updatedBookListing ->
-                onEditListing(updatedBookListing) // Pass the updated book listing
+                onEditListing(updatedBookListing)
                 isEditing = false
             },
             onBackClicked = {
