@@ -54,18 +54,21 @@ internal fun Content(
     modifier: Modifier = Modifier,
     nfcHandler: NfcHandler
 ) {
-
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
         item {
-            Button(onClick = {
-
-        }) {
-            Text("Send via NFC")
-        } }
+            Button(onClick = { nfcHandler.sendNfcData("Your String Here") }) {
+                Text("Send via NFC")
+            }
+        }
+        item {
+            Button(onClick = { nfcHandler.receiveNfcData() }) {
+                Text("Receive via NFC")
+            }
+        }
         items(books) { book ->
             BookItem(
                 book = book,
