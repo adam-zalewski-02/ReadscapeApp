@@ -4,13 +4,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -23,12 +27,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.model.book.BookListing
+import com.example.ui.BookDetail
+import com.example.ui.BorrowLendStatus
 
 @Composable
 fun BookListingsScreen(viewModel: BookListingsViewModel = hiltViewModel()) {
@@ -40,7 +47,7 @@ fun BookListingsScreen(viewModel: BookListingsViewModel = hiltViewModel()) {
     } else {
         when (state) {
             is BookListingsState.Loading -> {
-                // Display loading UI
+                Text(text = "Loading...")
             }
             is BookListingsState.Success -> {
                 val bookListings = (state as BookListingsState.Success).bookListings
@@ -51,7 +58,8 @@ fun BookListingsScreen(viewModel: BookListingsViewModel = hiltViewModel()) {
                 }
             }
             is BookListingsState.Error -> {
-                // Display error UI
+                val errorMessage = (state as BookListingsState.Error).message
+                Text(text = errorMessage)
             }
         }
     }
@@ -120,57 +128,95 @@ fun BookListItem(bookListing: BookListing, onSelectBook: (BookListing) -> Unit) 
     }
 }
 
-
 @Composable
 fun BookListingDetailScreen(
     bookListing: BookListing,
     onBack: () -> Unit,
     viewModel: BookListingsViewModel = hiltViewModel()
 ) {
-    val ownerId = bookListing.ownerId // Replace with the actual ID field
+    val ownerId = bookListing.ownerId
     val ownerEmail by viewModel.ownerEmail.collectAsState()
 
     LaunchedEffect(ownerId) {
         viewModel.fetchOwnerEmail(ownerId)
     }
-    val similarBookListings by viewModel.getBookListingsByIds(bookListing.similarBooks).collectAsState(initial = emptyList())
+    val similarBookListings by viewModel.getBookListingsByIds(bookListing.similarBooks)
+        .collectAsState(initial = emptyList())
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Button(onClick = onBack) {
-            Text("Back")
+    Column {
+        IconButton(onClick = onBack) {
+            Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
         }
-        Spacer(Modifier.height(16.dp))
-        Text(text = bookListing.title, style = MaterialTheme.typography.headlineMedium)
-        Text(text = "Author(s): ${bookListing.authors.joinToString()}", style = MaterialTheme.typography.bodyLarge)
-        Text(text = "Description: ${bookListing.description}", style = MaterialTheme.typography.bodyMedium)
-        Text(text = "Page Count: ${bookListing.pageCount}", style = MaterialTheme.typography.bodySmall)
-        Text(text = "Language: ${bookListing.language}", style = MaterialTheme.typography.bodySmall)
-        Text(text = "Publisher: ${bookListing.publisher}", style = MaterialTheme.typography.bodySmall)
-        Text(text = "Published Date: ${bookListing.publishedDate}", style = MaterialTheme.typography.bodySmall)
-        Text(text = "ISBN: ${bookListing.isbn}", style = MaterialTheme.typography.bodySmall)
-        Text(text = "Maturity Rating: ${bookListing.maturityRating}", style = MaterialTheme.typography.bodySmall)
-        Text(text = "Extra Info: ${bookListing.extraInfoFromOwner}", style = MaterialTheme.typography.bodySmall)
-        Text(text = "Keywords: ${bookListing.keywords.joinToString()}", style = MaterialTheme.typography.bodySmall)
-        Text(text = "Categories: ${bookListing.categories.joinToString()}", style = MaterialTheme.typography.bodySmall)
-
-        if (bookListing.canBeBorrowed) {
-            Text(text = "Available for Borrowing", color = Color.Green, style = MaterialTheme.typography.bodyLarge)
-        }
-        if (bookListing.canBeSold) {
-            Text(text = "Available for Sale", color = Color.Blue, style = MaterialTheme.typography.bodyLarge)
-        }
-        Text(text = "Owner's Email: $ownerEmail", style = MaterialTheme.typography.bodyMedium)
-
-        if (similarBookListings.isNotEmpty()) {
-            Text("Similar Books", style = MaterialTheme.typography.headlineMedium)
-            LazyColumn {
-                items(similarBookListings) { similarBookListing ->
-                    BookListItem(
-                        bookListing = similarBookListing,
-                        onSelectBook = { selectedBook -> viewModel.selectBookListing(selectedBook) }
-                    )
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            item {
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)) {
+                    Spacer(Modifier.height(16.dp))
+                    BookDetail(label = "Title", content = bookListing.title)
+                    BookDetail(label = "Author(s)", content = bookListing.authors.joinToString())
+                    BookDetail(label = "Description From The Owner", content = bookListing.extraInfoFromOwner, isDescription = true)
+                    BookDetail(label = "Page Count", content = bookListing.pageCount.toString())
+                    BookDetail(label = "Language", content = bookListing.language)
+                    BookDetail(label = "Publisher", content = bookListing.publisher)
+                    bookListing.publishedDate?.let { BookDetail(label = "Published Date", content = it) }
+                    BookDetail(label = "ISBN", content = bookListing.isbn)
+                    BookDetail(label = "Maturity Rating", content = bookListing.maturityRating)
+                    BookDetail(label = "Keywords", content = bookListing.keywords.joinToString())
+                    BookDetail(label = "Categories", content = bookListing.categories.joinToString())
+                    BookDetail(label = "Owner's Email", content = ownerEmail)
+                    BorrowLendStatus(bookListing)
                 }
             }
+            item {
+                if (similarBookListings.isNotEmpty()) {
+                    Text("Similar Books", style = MaterialTheme.typography.headlineMedium)
+                    LazyRow {
+                        items(similarBookListings) { similarBookListing ->
+                            HorizontalBookListItem(
+                                bookListing = similarBookListing,
+                                onSelectBook = { selectedBook ->
+                                    viewModel.selectBookListing(
+                                        selectedBook
+                                    )
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun HorizontalBookListItem(bookListing: BookListing, onSelectBook: (BookListing) -> Unit) {
+    ElevatedCard(
+        modifier = Modifier
+            .width(120.dp)
+            .padding(8.dp)
+            .clickable { onSelectBook(bookListing) }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = rememberAsyncImagePainter(bookListing.thumbnailLink),
+                contentDescription = "Book Thumbnail",
+                modifier = Modifier
+                    .size(80.dp, 120.dp)
+                    .padding(bottom = 4.dp),
+                contentScale = ContentScale.Crop
+            )
+            Text(
+                text = bookListing.title,
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 3,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }

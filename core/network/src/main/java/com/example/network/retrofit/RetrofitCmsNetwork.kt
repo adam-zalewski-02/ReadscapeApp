@@ -46,7 +46,8 @@ private interface RetrofitCmsNetworkApi {
     @GET("/booklistings")
     suspend fun getBookListingByISBNAndOwner(
         @Query("isbn") isbn: String,
-        @Query("ownerId") ownerId: String
+        @Query("ownerId") ownerId: String,
+        @Query("_publicationState") publicationState: String
     ): List<BookListing>
 }
 
@@ -79,8 +80,13 @@ class RetrofitCmsNetwork @Inject constructor(
 
     override suspend fun getSingleBookListingByIsbnForCurrentUser(isbn: String): BookListing? {
         val currentUser = CurrentUserManager.getCurrentUser()
-        val bookListings = currentUser?.let { cmsNetworkApi.getBookListingByISBNAndOwner(isbn, it.userId) }
-        return bookListings?.firstOrNull()
+        val ownerId = currentUser?.userId ?: return null
+
+        val liveListings = cmsNetworkApi.getBookListingByISBNAndOwner(isbn, ownerId, "live")
+
+        val draftListings = cmsNetworkApi.getBookListingByISBNAndOwner(isbn, ownerId, "preview")
+
+        return (liveListings + draftListings).firstOrNull()
     }
 
     override suspend fun addBookListing(bookListing: BookListing): BookListing {
@@ -88,24 +94,16 @@ class RetrofitCmsNetwork @Inject constructor(
     }
 
     override suspend fun updateBookListingByIsbn(isbn: String, updatedBookListing: BookListing): BookListing? {
-        val currentUser = CurrentUserManager.getCurrentUser()
-        val existingListings =
-            currentUser?.let { cmsNetworkApi.getBookListingByISBNAndOwner(isbn, it.userId) }
-
-        val listingToUpdate = existingListings?.firstOrNull()
-        listingToUpdate?.let {
-            return it._id?.let { it1 -> cmsNetworkApi.updateBookListing(it1, updatedBookListing) }
+        val bookListingToUpdate = getSingleBookListingByIsbnForCurrentUser(isbn)
+        return bookListingToUpdate?.let {
+            cmsNetworkApi.updateBookListing(it._id ?: return null, updatedBookListing)
         }
-        return null
     }
 
     override suspend fun deleteBookListingByIsbnAndOwner(isbn: String): Response<Unit> {
-        val currentUser = CurrentUserManager.getCurrentUser()
-        val bookListings = currentUser?.let { cmsNetworkApi.getBookListingByISBNAndOwner(isbn, it.userId) }
-
-        val bookListingToDelete = bookListings?.firstOrNull()
+        val bookListingToDelete = getSingleBookListingByIsbnForCurrentUser(isbn)
         return bookListingToDelete?._id?.let { listingId ->
             cmsNetworkApi.deleteBookListingById(listingId)
-        } ?: throw NoSuchElementException("No book listing found with ISBN: $isbn and owner: ${currentUser.toString()}")
+        } ?: throw NoSuchElementException("No book listing found with ISBN: $isbn for current user.")
     }
 }
