@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -22,10 +24,12 @@ internal fun CatalogRoute(
     viewmodel: CatalogViewModel = hiltViewModel()
 ) {
     val catalogState by viewmodel.books.collectAsStateWithLifecycle()
+    val nfcHandler = NfcHandler(LocalContext.current)
     CatalogScreen(
         onBookClick = onBookClick,
         modifier = modifier,
-        catalogState
+        catalogState,
+        nfcHandler
     )
 }
 
@@ -33,11 +37,12 @@ internal fun CatalogRoute(
 internal fun CatalogScreen(
     onBookClick: (String) -> Unit,
     modifier: Modifier = Modifier,
-    state: CatalogUiState
+    state: CatalogUiState,
+    nfcHandler: NfcHandler
 ) {
     when(state) {
         is CatalogUiState.Loading -> Loading(modifier)
-        is CatalogUiState.Success -> Content(onBookClick,books = state.books, modifier)
+        is CatalogUiState.Success -> Content(onBookClick,books = state.books, modifier, nfcHandler)
         is CatalogUiState.Error -> Text("No books added")
     }
 }
@@ -46,13 +51,21 @@ internal fun CatalogScreen(
 internal fun Content(
     onBookClick: (String) -> Unit,
     books: List<Volume>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    nfcHandler: NfcHandler
 ) {
+
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        item {
+            Button(onClick = {
+
+        }) {
+            Text("Send via NFC")
+        } }
         items(books) { book ->
             BookItem(
                 book = book,
@@ -61,3 +74,4 @@ internal fun Content(
         }
     }
 }
+

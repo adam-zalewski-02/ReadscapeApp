@@ -11,6 +11,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import android.nfc.NfcAdapter
+import android.nfc.NdefMessage
+import android.nfc.NdefRecord
+import android.content.Context
+import java.nio.charset.Charset
 
 @HiltViewModel
 class CatalogViewModel @Inject constructor(
