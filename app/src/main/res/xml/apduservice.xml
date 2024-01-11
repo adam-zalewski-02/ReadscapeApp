@@ -2,7 +2,7 @@
     android:description="@string/servicedesc"
     android:requireDeviceUnlock="false">
     <aid-group android:category="other">
-        <aid-filter android:name="F0010203040506"/>
+        <aid-filter android:name="D2760000850101"/>
         <!-- Define other AIDs your service should respond to -->
     </aid-group>
 </host-apdu-service>

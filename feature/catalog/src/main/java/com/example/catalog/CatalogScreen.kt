@@ -59,16 +59,24 @@ internal fun Content(
             .fillMaxSize()
             .padding(16.dp)
     ) {
+
         item {
-            Button(onClick = { nfcHandler.sendNfcData("Your String Here") }) {
-                Text("Send via NFC")
+            // Button for preparing data to be sent via HCE
+            Button(onClick = {
+                nfcHandler.setHceData("Your Custom String")
+                // This will set the data in your HCE service to be sent when an NFC reader queries
+            }) {
+                Text("Prepare Data for NFC")
             }
         }
         item {
-            Button(onClick = { nfcHandler.receiveNfcData() }) {
+            // Button for starting the NFC reader mode
+            Button(onClick = {
+                nfcHandler.startNfcReaderMode()
+                // This will start the NFC reader mode to read data from an NFC tag or HCE device
+            }) {
                 Text("Receive via NFC")
-            }
-        }
+            }}
         items(books) { book ->
             BookItem(
                 book = book,
