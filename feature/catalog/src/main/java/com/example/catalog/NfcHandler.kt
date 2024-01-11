@@ -48,8 +48,7 @@ class NfcHandler(private val context: Context) {
     }
 
     private fun createCommandApdu(): ByteArray {
-        // This is an example SELECT APDU command that matches the one in MyHostApduService
+        // This is an example SELECT APDU command that matches the one in app/src/main/java/com/example/readscape/MyHostApduService.kt and app/src/main/res/xml/apduservice.xml
         return byteArrayOf(0x00.toByte(), 0xA4.toByte(), 0x04.toByte(), 0x00.toByte(), 0x07.toByte(), 0xD2.toByte(), 0x76.toByte(), 0x00.toByte(), 0x00.toByte(), 0x85.toByte(), 0x01.toByte(), 0x01.toByte(), 0x00.toByte())
     }
-
 }
