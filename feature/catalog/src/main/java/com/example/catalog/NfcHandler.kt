@@ -7,13 +7,17 @@ import android.nfc.Tag
 import android.nfc.tech.IsoDep
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 class NfcHandler(private val context: Context) {
     private var nfcAdapter: NfcAdapter? = NfcAdapter.getDefaultAdapter(context)
-
+    var receivedNfcData by mutableStateOf("")
     fun setHceData(data: String) {
         HceDataHolder.hceDataToSend = data
     }
+
     fun startNfcReaderMode() {
         if (context is Activity) {
             nfcAdapter?.enableReaderMode(context, { tag: Tag? ->
@@ -29,6 +33,7 @@ class NfcHandler(private val context: Context) {
                 val response = isoDep.transceive(createCommandApdu())
                 val receivedString = String(response, Charsets.UTF_8)
                 Log.d("NfcHandler", "Received NFC Data: $receivedString")
+                receivedNfcData = receivedString
                 (context as Activity).runOnUiThread {
                     Toast.makeText(context, "Received: $receivedString", Toast.LENGTH_LONG).show()
                 }

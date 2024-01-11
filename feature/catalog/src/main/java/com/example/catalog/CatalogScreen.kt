@@ -1,13 +1,22 @@
 package com.example.catalog
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -54,35 +63,63 @@ internal fun Content(
     modifier: Modifier = Modifier,
     nfcHandler: NfcHandler
 ) {
-    LazyColumn(
+    var nfcMessageToSend by remember { mutableStateOf("") }
+
+    Column(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-
-        item {
-            // Button for preparing data to be sent via HCE
-            Button(onClick = {
-                nfcHandler.setHceData("Your Custom String")
-                // This will set the data in your HCE service to be sent when an NFC reader queries
-            }) {
-                Text("Prepare Data for NFC")
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            TextField(
+                value = nfcMessageToSend,
+                onValueChange = { nfcMessageToSend = it },
+                label = { Text("NFC Message to Send") },
+                modifier = Modifier.weight(1f)
+            )
+            Button(
+                onClick = { nfcHandler.setHceData(nfcMessageToSend) },
+                modifier = Modifier.padding(start = 8.dp)
+            ) {
+                Text("Send via NFC")
             }
         }
-        item {
-            // Button for starting the NFC reader mode
-            Button(onClick = {
-                nfcHandler.startNfcReaderMode()
-                // This will start the NFC reader mode to read data from an NFC tag or HCE device
-            }) {
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Button(
+                onClick = { nfcHandler.startNfcReaderMode() },
+                modifier = Modifier.weight(1f)
+            ) {
                 Text("Receive via NFC")
-            }}
-        items(books) { book ->
-            BookItem(
-                book = book,
-                onBookClick = {onBookClick(book.id)}
+            }
+            TextField(
+                value = nfcHandler.receivedNfcData,
+                onValueChange = {},
+                label = { Text("Received NFC Data") },
+                readOnly = true,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp)
             )
+        }
+
+        Button(onClick = { nfcHandler.stopNfcReaderMode() }) {
+            Text("Stop NFC Reader Mode")
+        }
+
+        // Your existing LazyColumn for books
+        LazyColumn {
+            items(books) { book ->
+                BookItem(
+                    book = book,
+                    onBookClick = { onBookClick(book.id) }
+                )
+            }
         }
     }
 }
+
 

@@ -22,21 +22,4 @@ class MainActivity : ComponentActivity() {
             ReadscapeApp(windowSizeClass = calculateWindowSizeClass(this))
         }
     }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED == intent.action) {
-            intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)?.also { rawMessages ->
-                val messages = rawMessages.map { it as NdefMessage }
-                for (message in messages) {
-                    for (record in message.records) {
-                        val payload = record.payload
-                        val text = String(payload, Charsets.UTF_8)
-                        Log.d("NFCmate", "Received text: $text")
-                        Toast.makeText(this, "Received: $text", Toast.LENGTH_LONG).show()
-                    }
-                }
-            }
-        }
-    }
 }
