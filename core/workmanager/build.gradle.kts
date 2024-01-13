@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.profile"
+    namespace = "com.example.workmanager"
     compileSdk = 34
 
     defaultConfig {
@@ -61,11 +61,11 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.android)
-    implementation(project(":core:workmanager"))
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.ext.compiler)
     implementation(libs.hilt.ext.work)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation ("androidx.work:work-runtime-ktx:2.9.0")
 
     testImplementation(libs.junit4)
     androidTestImplementation(libs.test.ext.junit)
@@ -81,6 +81,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
 
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 }
 
 kapt {
