@@ -12,9 +12,9 @@ import com.example.bookdetail.navigation.navigateToBookDetailScreen
 import com.example.booklistings.navigation.bookListingsScreen
 import com.example.bookshop.navigation.bookShopRoute
 import com.example.bookshop.navigation.bookShopScreen
-import com.example.bookshop.navigation.navigateToBookShopScreen
 import com.example.catalog.navigation.catalogScreen
 import com.example.catalog.navigation.navigateToCatalogScreen
+import com.example.profile.navigation.profileScreen
 import com.example.readscape.ui.ReadscapeAppState
 import com.example.search.navigation.cameraScreen
 import com.example.search.navigation.navigateToCamera
@@ -40,6 +40,7 @@ fun ReadscapeNavHost(
         registerScreen(onBackClick = navController::popBackStack, onRegisterClicked = navController::navigateToLoginScreen)
         bookShopScreen(onBookClick = navController::navigateToBookDetailScreen)
         bookListingsScreen()
+        profileScreen()
         catalogScreen(onBookClick = navController::navigateToBookDetailScreen)
         bookDetailScreen(onBack = navController::popBackStack)
         searchScreen(

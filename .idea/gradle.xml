@@ -25,6 +25,7 @@
             <option value="$PROJECT_DIR$/feature/booklistings" />
             <option value="$PROJECT_DIR$/feature/bookshop" />
             <option value="$PROJECT_DIR$/feature/catalog" />
+            <option value="$PROJECT_DIR$/feature/profile" />
             <option value="$PROJECT_DIR$/feature/search" />
             <option value="$PROJECT_DIR$/feature/settings" />
           </set>

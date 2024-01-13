@@ -24,6 +24,7 @@ import com.example.search.navigation.navigateToSearch
 import com.example.booklistings.navigation.bookListingsRoute
 import com.example.booklistings.navigation.navigateToBookListingsScreen
 import com.example.model.CurrentUserManager
+import com.example.profile.navigation.navigateToProfileScreen
 
 
 @Composable
@@ -110,6 +111,13 @@ class ReadscapeAppState(
                         inclusive = true
                     )
                     navController.navigateToBookListingsScreen(topLevelNavOptions)
+                }
+                TopLevelDestination.PROFILE -> {
+                    navController.popBackStack(
+                        bookListingsRoute,
+                        inclusive = true
+                    )
+                    navController.navigateToProfileScreen(topLevelNavOptions)
                 }
             }
         }
