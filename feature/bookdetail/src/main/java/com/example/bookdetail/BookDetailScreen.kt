@@ -72,7 +72,7 @@ internal fun BookDetailRoute(
         modifier = modifier,
         state = bookDetailsState,
         onAddToFavoritesClick = viewModel::addBookToFavorites,
-        onBack = viewModel::returnToBookDetailScreen,
+        onBack = onBack,
         onPublishBookListingClick = { isbn ->
             viewModel.publishBookListing(isbn)
         },
