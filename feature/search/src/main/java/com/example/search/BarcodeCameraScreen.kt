@@ -40,14 +40,13 @@ import com.google.accompanist.permissions.rememberPermissionState
 @Composable
 internal fun CameraRoute(
     onBackClick: () -> Unit,
-    searchViewModel: SearchViewModel = hiltViewModel()
+    onBarcodeScan: (String) -> Unit,
 ) {
   BarcodeCameraScreen(
       onBackClick = onBackClick,
       onBarcodeScanned = { barcode ->
           if (barcode.length > 1) {
-              searchViewModel.onSearchQueryChanged(barcode)
-              onBackClick()
+              onBarcodeScan(barcode)
           }
       }
   )

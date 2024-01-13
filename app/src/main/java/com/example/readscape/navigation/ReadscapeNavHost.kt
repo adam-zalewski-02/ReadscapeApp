@@ -37,17 +37,17 @@ fun ReadscapeNavHost(
             onRegisterClick = navController::navigateToRegisterScreen,
             onLoginClick = navController::navigateToCatalogScreen,
         )
-        registerScreen(onBackClick = navController::navigateToLoginScreen, onRegisterClicked = navController::navigateToLoginScreen)
+        registerScreen(onBackClick = navController::popBackStack, onRegisterClicked = navController::navigateToLoginScreen)
         bookShopScreen(onBookClick = navController::navigateToBookDetailScreen)
         bookListingsScreen()
         catalogScreen(onBookClick = navController::navigateToBookDetailScreen)
-        bookDetailScreen(onBack = navController::navigateToBookShopScreen)
+        bookDetailScreen(onBack = navController::popBackStack)
         searchScreen(
             onBackClick = navController::popBackStack,
             onBookClick = navController::navigateToBookDetailScreen,
             onScanClick = navController::navigateToCamera
         )
-        cameraScreen(onBackClick = navController::popBackStack)
+        cameraScreen(onBackClick = navController::popBackStack, onBarcodeScan = navController::navigateToSearch)
 
     }
 }

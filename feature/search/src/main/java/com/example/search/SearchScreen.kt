@@ -71,12 +71,16 @@ internal fun SearchRoute(
     onBackClick: () -> Unit,
     onBookClick: (String) -> Unit,
     onScanClick: () -> Unit,
+    isbn: String,
     searchViewModel: SearchViewModel = hiltViewModel(),
 ) {
     val recentSearchQueriesUiState by searchViewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by searchViewModel.books.collectAsStateWithLifecycle()
     val searchQuery by searchViewModel.searchQuery.collectAsStateWithLifecycle()
 
+    LaunchedEffect(isbn) {
+        searchViewModel.searchBooks(isbn)
+    }
     SearchScreen(
         modifier = modifier,
         onBackClick = onBackClick,
