@@ -27,7 +27,7 @@ class PollingWorker(appContext: Context, workerParams: WorkerParameters):
         return Result.success()
     }
 
-    private fun sendNotification() {
+    fun sendNotification() {
         val notificationManager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         Log.d("PollingWorker", "NotificationManager: $notificationManager")
@@ -54,3 +54,5 @@ class PollingWorker(appContext: Context, workerParams: WorkerParameters):
         notificationManager.notify(notificationId, notificationBuilder.build())
     }
 }
+
+
