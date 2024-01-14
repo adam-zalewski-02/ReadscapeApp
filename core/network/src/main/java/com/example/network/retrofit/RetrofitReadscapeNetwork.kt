@@ -7,6 +7,7 @@ import com.example.network.model.EmailResponse
 import com.example.network.model.NetworkUser
 import com.example.network.model.TransactionRequest
 import com.example.network.model.TransactionResponse
+import com.example.network.model.TransactionsResponse
 import com.example.network.model.catalog.CatalogPostResponse
 import com.example.network.model.catalog.CatalogRequest
 import com.example.network.model.catalog.CatalogResponse
@@ -43,6 +44,9 @@ private interface RetrofitReadscapeNetworkApi {
 
     @POST(value = "/transactions/lend")
     suspend fun insertIntoTransactions(@Body request: TransactionRequest) : TransactionResponse
+
+    @GET("/transactions/user/{userId}")
+    suspend fun getUserTransactions(@Path("userId") userId: String): Response<TransactionsResponse>
 
     @DELETE(value = "/users/{id}")
     suspend fun deleteUser(@Path("id") id: Int)
@@ -117,4 +121,16 @@ class RetrofitReadscapeNetwork @Inject constructor(
         return genericRetrofitNetwork.networkApi.insertIntoTransactions(transactionRequest)
     }
 
+    override suspend fun getUserTransactions(userId: String): Result<TransactionsResponse> {
+        return try {
+            val response = genericRetrofitNetwork.networkApi.getUserTransactions(userId)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(RuntimeException("Failed to fetch transactions: ${response.errorBody()?.string()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

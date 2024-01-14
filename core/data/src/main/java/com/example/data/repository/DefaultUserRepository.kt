@@ -1,10 +1,12 @@
 package com.example.data.repository
 
+import com.example.model.CurrentUserManager
 import com.example.network.ReadscapeNetworkDataSource
 import com.example.network.model.AuthResponse
 import com.example.network.model.EmailResponse
 import com.example.network.model.NetworkUser
 import com.example.network.model.TransactionResponse
+import com.example.network.model.TransactionsResponse
 import com.example.network.model.catalog.CatalogPostResponse
 import com.example.network.model.catalog.CatalogResponse
 import javax.inject.Inject
@@ -51,6 +53,11 @@ class DefaultUserRepository @Inject constructor(
         duration: Int
     ): TransactionResponse {
         return dataSource.insertIntoTransactions(userId,toUserId,isbn,duration)
+    }
+
+    override suspend fun getUserTransactions(): Result<TransactionsResponse>? {
+        return CurrentUserManager.getCurrentUser()
+            ?.let { dataSource.getUserTransactions(it.userId) }
     }
 
 }
