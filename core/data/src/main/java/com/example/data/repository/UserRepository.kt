@@ -1,4 +1,5 @@
 package com.example.data.repository
+import com.example.network.SensorKitResponse
 import com.example.network.model.AuthResponse
 import com.example.network.model.EmailResponse
 import com.example.network.model.NetworkUser
@@ -21,4 +22,5 @@ interface UserRepository {
     suspend fun insertIntoTransactions(userId: String, toUserId: String, isbn: String, duration: Int): TransactionResponse
 
     suspend fun getUserTransactions(): Result<TransactionsResponse>?
+    suspend fun getSensorKit(kitId: String): Result<SensorKitResponse>
 }

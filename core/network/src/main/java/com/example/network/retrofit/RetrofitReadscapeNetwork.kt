@@ -1,6 +1,7 @@
 package com.example.network.retrofit
 import com.example.network.BuildConfig
 import com.example.network.ReadscapeNetworkDataSource
+import com.example.network.SensorKitResponse
 import com.example.network.model.AuthRequest
 import com.example.network.model.AuthResponse
 import com.example.network.model.EmailResponse
@@ -50,6 +51,10 @@ private interface RetrofitReadscapeNetworkApi {
 
     @DELETE(value = "/users/{id}")
     suspend fun deleteUser(@Path("id") id: Int)
+
+    @GET("/sensorkits/{kitId}")
+    suspend fun getSensorKit(@Path("kitId") kitId: String): Response<SensorKitResponse>
+
 }
 
 @Singleton
@@ -128,6 +133,19 @@ class RetrofitReadscapeNetwork @Inject constructor(
                 Result.success(response.body()!!)
             } else {
                 Result.failure(RuntimeException("Failed to fetch transactions: ${response.errorBody()?.string()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun getSensorKit(kitId: String): Result<SensorKitResponse> {
+        return try {
+            val response = genericRetrofitNetwork.networkApi.getSensorKit(kitId)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(RuntimeException("Failed to fetch sensor kit data: ${response.errorBody()?.string()}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

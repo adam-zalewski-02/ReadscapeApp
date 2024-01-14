@@ -19,4 +19,5 @@ interface ReadscapeNetworkDataSource {
     suspend fun addToCollection(userId: String, bookId: String) : CatalogPostResponse
 
     suspend fun insertIntoTransactions(userId: String, toUserId: String, isbn: String, duration: Int) : TransactionResponse
+    suspend fun getSensorKit(kitId: String): Result<SensorKitResponse>
 }
