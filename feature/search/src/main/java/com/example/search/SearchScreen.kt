@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,6 +20,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Nfc
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -115,7 +120,8 @@ internal fun SearchScreen(
             onBackClick = onBackClick,
             onSearchQueryChanged = onSearchQueryChanged,
             onSearchTriggered = onSearchTriggered,
-            searchQuery = searchQuery
+            searchQuery = searchQuery,
+            onScanClick = onScanClick
         )
         when (searchResultUiState) {
             SearchResultUiState.Loading,
@@ -161,11 +167,24 @@ internal fun SearchScreen(
             }
         }
         Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
-        Button(onClick = {
-            onScanClick()
-        }) {
-            Text(text = "scan")
-        }
+        /*Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(onClick = { onScanClick() },
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .height(48.dp)
+            ) {
+                Icon(imageVector = Icons.Default.QrCodeScanner, contentDescription = "Scan isbn")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Scan")
+            }
+        }*/
+
     }
 }
 
@@ -176,6 +195,7 @@ private fun SearchToolBar(
     onSearchQueryChanged: (String) -> Unit,
     searchQuery: String = "",
     onSearchTriggered: (String) -> Unit,
+    onScanClick: () -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -189,11 +209,15 @@ private fun SearchToolBar(
                 ),
             )
         }
+        IconButton(onClick = { onScanClick() }) {
+            Icon(imageVector = Icons.Default.QrCodeScanner, contentDescription = "Scan isbn", tint = Color.Black)
+        }
         SearchTextField(
             onSearchQueryChanged = onSearchQueryChanged,
             onSearchTriggered = onSearchTriggered,
             searchQuery = searchQuery,
         )
+
     }
 }
 
@@ -435,7 +459,8 @@ private fun SearchToolBarPreview() {
         SearchToolBar(
             onBackClick = {},
             onSearchQueryChanged = {},
-            onSearchTriggered = {}
+            onSearchTriggered = {},
+            onScanClick = {}
         )
     }
 }
