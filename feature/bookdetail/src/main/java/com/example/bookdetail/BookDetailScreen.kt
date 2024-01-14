@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Nfc
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -419,6 +420,8 @@ internal fun Content(
                         .fillMaxWidth(0.8f)
                         .height(48.dp)
                 ) {
+                    Icon(imageVector = Icons.Default.Nfc, contentDescription = "Lend Icon")
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(text = "Lend out")
                 }
             }
