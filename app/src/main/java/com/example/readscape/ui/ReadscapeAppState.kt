@@ -70,7 +70,7 @@ class ReadscapeAppState(
     }
 
     fun navigateToSearch() {
-        navController.navigateToSearch()
+        navController.navigateToSearch(" ")
     }
 
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()

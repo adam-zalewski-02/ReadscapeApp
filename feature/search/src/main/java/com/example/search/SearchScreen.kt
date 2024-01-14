@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -59,6 +60,8 @@ import com.example.designsystem.theme.ReadscapeTheme
 import com.example.model.book.Volume
 import com.example.ui.BookItem
 import com.example.ui.R.string
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import com.example.search.R as searchR
 
 
@@ -67,36 +70,44 @@ internal fun SearchRoute(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
     onBookClick: (String) -> Unit,
-    searchViewModel: SearchViewModel = hiltViewModel()
+    onScanClick: () -> Unit,
+    isbn: String,
+    searchViewModel: SearchViewModel = hiltViewModel(),
 ) {
     val recentSearchQueriesUiState by searchViewModel.recentSearchQueriesUiState.collectAsStateWithLifecycle()
     val searchResultUiState by searchViewModel.books.collectAsStateWithLifecycle()
     val searchQuery by searchViewModel.searchQuery.collectAsStateWithLifecycle()
 
+    LaunchedEffect(isbn) {
+        searchViewModel.searchBooks(isbn)
+    }
     SearchScreen(
         modifier = modifier,
         onBackClick = onBackClick,
         onBookClick = onBookClick,
+        onScanClick = onScanClick,
         onClearRecentSearches = searchViewModel::clearRecentSearches,
         onSearchQueryChanged = searchViewModel::onSearchQueryChanged,
         onSearchTriggered = searchViewModel::searchBooks,
         searchQuery = searchQuery,
         searchResultUiState = searchResultUiState,
-        recentSearchesUiState = recentSearchQueriesUiState
+        recentSearchesUiState = recentSearchQueriesUiState,
     )
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 internal fun SearchScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     onBookClick: (String) -> Unit,
+    onScanClick: () -> Unit,
     onClearRecentSearches: () -> Unit = {},
     onSearchQueryChanged: (String) -> Unit = {},
     onSearchTriggered: (String) -> Unit = {},
     searchQuery: String = "",
     searchResultUiState: SearchResultUiState = SearchResultUiState.Loading,
-    recentSearchesUiState: RecentSearchQueriesUiState = RecentSearchQueriesUiState.Loading
+    recentSearchesUiState: RecentSearchQueriesUiState = RecentSearchQueriesUiState.Loading,
 ) {
     Column(modifier = modifier) {
         Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
@@ -150,6 +161,11 @@ internal fun SearchScreen(
             }
         }
         Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.safeDrawing))
+        Button(onClick = {
+            onScanClick()
+        }) {
+            Text(text = "scan")
+        }
     }
 }
 
