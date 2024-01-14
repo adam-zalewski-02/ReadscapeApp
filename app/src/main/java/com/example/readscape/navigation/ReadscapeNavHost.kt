@@ -39,7 +39,7 @@ fun ReadscapeNavHost(
         bookShopScreen(onBookClick = navController::navigateToBookDetailScreen)
         bookListingsScreen()
         catalogScreen(onBookClick = navController::navigateToBookDetailScreen)
-        bookDetailScreen(onBack = navController::navigateToBookShopScreen)
+        bookDetailScreen(onBack = navController::popBackStack)
         searchScreen(
             onBackClick = navController::popBackStack,
             onBookClick = navController::navigateToBookDetailScreen,

@@ -128,6 +128,18 @@ class BookDetailViewModel @Inject constructor(
         }
     }
 
+    fun lendOutBook(lenderId: String, volumeId: String) {
+        viewModelScope.launch {
+            try {
+                val response = userRepository.insertIntoCollection(lenderId, volumeId)
+                println(response)
+                println("LENDED OUT")
+            } catch (e: Exception) {
+                println(e.message)
+            }
+        }
+    }
+
     fun deleteBookListing(isbn: String) {
         viewModelScope.launch {
             val result = bookListingRepository.deleteBookListingByIsbnAndOwner(isbn)

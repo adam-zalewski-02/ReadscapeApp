@@ -24,6 +24,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.model.book.Volume
 import com.example.ui.BookItem
 import com.example.designsystem.component.Loading
+import com.example.model.CurrentUserManager
+import com.example.model.NfcHandler
 
 @Composable
 internal fun CatalogRoute(
@@ -37,7 +39,7 @@ internal fun CatalogRoute(
         onBookClick = onBookClick,
         modifier = modifier,
         catalogState,
-        nfcHandler
+        nfcHandler = nfcHandler
     )
 }
 
@@ -62,55 +64,9 @@ internal fun Content(
     modifier: Modifier = Modifier,
     nfcHandler: NfcHandler
 ) {
-    var nfcMessageToSend by remember { mutableStateOf("") }
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-            TextField(
-                value = nfcMessageToSend,
-                onValueChange = { nfcMessageToSend = it },
-                label = { Text("NFC Message to Send") },
-                modifier = Modifier.weight(1f)
-            )
-            Button(
-                onClick = { nfcHandler.setHceData(nfcMessageToSend) },
-                modifier = Modifier.padding(start = 8.dp)
-            ) {
-                Text("Send via NFC")
-            }
-        }
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Button(
-                onClick = { nfcHandler.startNfcReaderMode() },
-                modifier = Modifier.weight(1f)
-            ) {
-                Text("Receive via NFC")
-            }
-            TextField(
-                value = nfcHandler.receivedNfcData,
-                onValueChange = {},
-                label = { Text("Received NFC Data") },
-                readOnly = true,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 8.dp)
-            )
-        }
-
-        Button(onClick = { nfcHandler.stopNfcReaderMode() }) {
-            Text("Stop NFC Reader Mode")
-        }
-
         // Your existing LazyColumn for books
         LazyColumn {
+
             items(books) { book ->
                 BookItem(
                     book = book,
@@ -118,7 +74,14 @@ internal fun Content(
                 )
             }
         }
+    Button(
+        onClick = {
+            CurrentUserManager.getCurrentUser()?.let { nfcHandler.setHceData(it.userId) }
+        }
+    ) {
+        Text(text = "Lend a book")
     }
-}
+    }
+
 
 

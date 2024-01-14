@@ -3,7 +3,7 @@ package com.example.readscape
 import android.nfc.cardemulation.HostApduService
 import android.os.Bundle
 import android.util.Log
-import com.example.catalog.HceDataHolder
+import com.example.model.HceDataHolder
 
 class MyHostApduService : HostApduService() {
     companion object {
