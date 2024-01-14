@@ -8,20 +8,20 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import kotlinx.coroutines.delay
+import com.example.data.repository.DefaultUserRepository
 
 class PollingWorker(appContext: Context, workerParams: WorkerParameters):
     CoroutineWorker(appContext, workerParams) {
 
+    lateinit var userRepository: DefaultUserRepository
     override suspend fun doWork(): Result {
         Log.d("PollingWorker", "Worker started")
-        // Perform polling logic here
-        // ...
 
-        // If condition met, send notification
-        if (true) {
-            delay(5000)
-            sendNotification()
+        val sensorKitResult = userRepository.getSensorKit("fdqsf")
+        sensorKitResult.onSuccess { sensorKit ->
+            if (sensorKit.condition == "dangerous") {
+                sendNotification()
+            }
         }
 
         return Result.success()
@@ -44,9 +44,9 @@ class PollingWorker(appContext: Context, workerParams: WorkerParameters):
         }
 
         val notificationBuilder = NotificationCompat.Builder(applicationContext, "POLLING_CHANNEL_ID")
-            .setContentTitle("Polling Update")
-            .setContentText("Condition met during polling")
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle("Sensorkit Warning from workmanager")
+            .setContentText("Room conditions are dangerous! (from workmanager)")
+            .setSmallIcon(android.R.drawable.ic_dialog_alert)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         val notificationId = 1
