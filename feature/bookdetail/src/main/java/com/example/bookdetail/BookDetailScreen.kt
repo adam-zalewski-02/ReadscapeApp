@@ -402,35 +402,65 @@ internal fun Content(
                 }
             }
         }
-
+        
         item {
-            if (bookListingExists) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
                 Button(
-                    onClick = { onViewBookListingClick(volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: "") },
+                    onClick = {
+                        nfcHandler.startNfcReaderMode()
+                    },
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
+                        .fillMaxWidth(0.8f)
+                        .height(48.dp)
                 ) {
-                    Text("View Booklisting")
-                }
-            } else {
-                Button(
-                    onClick = { onPublishBookListingClick(volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: "") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                ) {
-                    Text("Publish Booklisting")
+                    Text(text = "Lend out")
                 }
             }
         }
-    }
-    Button(
-        onClick = {
-            nfcHandler.startNfcReaderMode()
+
+        item {
+            if (bookListingExists) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        onClick = { onViewBookListingClick(volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: "") },
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .height(48.dp)
+                    ) {
+                        Text("View Booklisting")
+                    }
+                }
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        onClick = { onPublishBookListingClick(volume.volumeInfo.industryIdentifiers?.firstOrNull()?.identifier ?: "") },
+                        modifier = Modifier
+                            .fillMaxWidth(0.8f)
+                            .height(48.dp)
+                    ) {
+                        Text("Publish Booklisting")
+                    }
+                }
+            }
         }
-    ) {
-        Text(text = "Lend out")
     }
 
     LaunchedEffect(NfcReceivedDataManager.getData()) {
