@@ -5,14 +5,11 @@ import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.data.repository.UserRepository
-import com.example.model.Transaction
 import com.example.network.model.TransactionsResponse
 import com.example.workmanager.PollingWorker
 import dagger.hilt.android.lifecycle.HiltViewModel

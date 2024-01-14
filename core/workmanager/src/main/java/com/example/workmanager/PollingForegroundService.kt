@@ -73,7 +73,6 @@ class PollingForegroundService : Service() {
     private fun sendNotification() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // Create Notification Channel for API 26+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "Polling Channel"
             val descriptionText = "Channel for Polling Notifications"
