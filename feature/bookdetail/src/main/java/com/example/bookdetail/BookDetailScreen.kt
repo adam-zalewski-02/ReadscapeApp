@@ -106,7 +106,7 @@ fun BookDetailScreen(
     onDeleteClicked: (String) -> Unit,
     nfcHandler: NfcHandler,
     onViewBookListingClick: (String) -> Unit,
-    onLendOut: (String, String) -> Unit,
+    onLendOut: (String, String, String) -> Unit,
 ) {
 
     when (state) {
@@ -313,7 +313,7 @@ internal fun Content(
     bookListingExists: Boolean,
     onViewBookListingClick: (String) -> Unit,
     nfcHandler: NfcHandler,
-    onLendOut: (String, String) -> Unit
+    onLendOut: (String, String, String) -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -434,6 +434,8 @@ internal fun Content(
     }
 
     LaunchedEffect(NfcReceivedDataManager.getData()) {
-        NfcReceivedDataManager.getData()?.let { onLendOut(it.data, volume.id) }
+        NfcReceivedDataManager.getData()?.let { volume.volumeInfo.industryIdentifiers?.firstOrNull()
+            ?.let { it1 -> onLendOut(it.data, volume.id, it1.identifier) } }
+        nfcHandler.stopNfcReaderMode()
     }
 }
