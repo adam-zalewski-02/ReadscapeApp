@@ -4,6 +4,7 @@ import com.example.network.ReadscapeNetworkDataSource
 import com.example.network.model.AuthResponse
 import com.example.network.model.EmailResponse
 import com.example.network.model.NetworkUser
+import com.example.network.model.TransactionResponse
 import com.example.network.model.catalog.CatalogPostResponse
 import com.example.network.model.catalog.CatalogResponse
 import javax.inject.Inject
@@ -41,6 +42,15 @@ class DefaultUserRepository @Inject constructor(
 
     override suspend fun insertIntoCollection(userId: String, bookId: String): CatalogPostResponse {
         return dataSource.addToCollection(userId, bookId)
+    }
+
+    override suspend fun insertIntoTransactions(
+        userId: String,
+        toUserId: String,
+        isbn: String,
+        duration: Int
+    ): TransactionResponse {
+        return dataSource.insertIntoTransactions(userId,toUserId,isbn,duration)
     }
 
 }
