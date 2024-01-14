@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">192.168.0.244</domain>
+        <domain includeSubdomains="true">192.168.0.152</domain>
+        <domain includeSubdomains="true">books.google.com</domain>
+        <domain includeSubdomains="true">172.30.103.93</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <domain includeSubdomains="true">192.168.0.189</domain>
+        <domain includeSubdomains="true">35.181.176.249</domain>
+        <domain includeSubdomains="true">15.236.49.68</domain>
+    </domain-config>
+</network-security-config>

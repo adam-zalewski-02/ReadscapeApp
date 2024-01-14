@@ -11,6 +11,27 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
+
 }
 rootProject.name = "Readscape"
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include ':app'
+//include ':core'
+include ':core:data'
+include ':core:database'
+include ':core:model'
+//include ':feature'
+include ':feature:authentication'
+include ':core:network'
+include ':feature:bookshop'
+include ':core:ui'
+include ':feature:catalog'
+include ':feature:bookdetail'
+include ':core:designsystem'
+include ':feature:search'
+include ':core:domain'
+include ':core:common'
+include ':feature:settings'
+include ':feature:booklistings'
+include ':feature:profile'
+include ':core:workmanager'
