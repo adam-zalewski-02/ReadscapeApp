@@ -19,12 +19,17 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -41,6 +46,7 @@ import com.example.designsystem.component.ReadscapeTextButton
 import com.example.designsystem.theme.ReadscapeTheme
 import com.example.designsystem.theme.supportsDynamicTheming
 import com.example.model.DarkThemeConfig
+import com.example.model.SensorKitManager
 import com.example.model.ThemeBrand
 import com.example.settings.R.string
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -99,6 +105,7 @@ fun SettingsDialog(
                             onChangeThemeBrand = onChangeThemeBrand,
                             onChangeDynamicColorPreference = onChangeDynamicColorPreference,
                             onChangeDarkThemeConfig = onChangeDarkThemeConfig,
+
                         )
                     }
                 }
@@ -142,21 +149,19 @@ private fun ColumnScope.SettingsPanel(
             )
         }
     }
-    AnimatedVisibility(visible = settings.brand == ThemeBrand.DEFAULT && supportDynamicColor) {
-        Column {
-            SettingsDialogSectionTitle(text = stringResource(string.dynamic_color_preference))
-            Column(Modifier.selectableGroup()) {
-                SettingsDialogThemeChooserRow(
-                    text = stringResource(string.dynamic_color_yes),
-                    selected = settings.useDynamicColor,
-                    onClick = { onChangeDynamicColorPreference(true) },
-                )
-                SettingsDialogThemeChooserRow(
-                    text = stringResource(string.dynamic_color_no),
-                    selected = !settings.useDynamicColor,
-                    onClick = { onChangeDynamicColorPreference(false) },
-                )
-            }
+    Column {
+        SettingsDialogSectionTitle(text = stringResource(string.dynamic_color_preference))
+        Column(Modifier.selectableGroup()) {
+            SettingsDialogThemeChooserRow(
+                text = stringResource(string.dynamic_color_yes),
+                selected = settings.useDynamicColor,
+                onClick = { onChangeDynamicColorPreference(true) },
+            )
+            SettingsDialogThemeChooserRow(
+                text = stringResource(string.dynamic_color_no),
+                selected = !settings.useDynamicColor,
+                onClick = { onChangeDynamicColorPreference(false) },
+            )
         }
     }
     SettingsDialogSectionTitle(text = stringResource(string.dark_mode_preference))
@@ -176,6 +181,23 @@ private fun ColumnScope.SettingsPanel(
             selected = settings.darkThemeConfig == DarkThemeConfig.DARK,
             onClick = { onChangeDarkThemeConfig(DarkThemeConfig.DARK) },
         )
+    }
+
+    var sensorId by remember { mutableStateOf("") }
+
+    TextField(
+        value = sensorId,
+        onValueChange = {
+            sensorId = it
+        },
+        placeholder = {  SensorKitManager.getSensorKit()?.sensorKitId?.let { Text(it) } ?: Text("SensorKitId")  }
+    )
+
+    Button(onClick = {
+        SensorKitManager.setSensorKit(sensorId)
+        println(sensorId)
+    }) {
+        Text(text = "Save Id")
     }
 }
 
