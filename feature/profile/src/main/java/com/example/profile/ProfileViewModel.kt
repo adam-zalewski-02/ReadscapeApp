@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.data.repository.UserRepository
+import com.example.model.CurrentUserManager
 import com.example.network.model.TransactionsResponse
 import com.example.workmanager.PollingWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,8 @@ class ProfileViewModel @Inject constructor(
     private val _transactions = MutableStateFlow<Result<TransactionsResponse>>(Result.success(TransactionsResponse(false, emptyList())))
     val transactions: StateFlow<Result<TransactionsResponse>> = _transactions
 
+    private val _userEmail = MutableStateFlow<String?>(null)
+    val userEmail: StateFlow<String?> = _userEmail
     init {
         val pollingWork = PeriodicWorkRequestBuilder<PollingWorker>(1, TimeUnit.HOURS)
             .build()
@@ -37,6 +40,7 @@ class ProfileViewModel @Inject constructor(
         val startIntent = Intent(applicationContext, PollingForegroundService::class.java)
         applicationContext.startForegroundService(startIntent)
         fetchUserTransactions()
+        getUser()
     }
 
     private fun fetchUserTransactions() {
@@ -46,6 +50,24 @@ class ProfileViewModel @Inject constructor(
             if (result != null) {
                 _transactions.value = result
                 Log.d("ProfileViewModel" ,"${result.getOrNull()?.transactions}")
+            }
+        }
+    }
+
+    private fun getUser() {
+        viewModelScope.launch {
+            val currentUserId = CurrentUserManager.getCurrentUser()?.userId
+
+            if (currentUserId != null) {
+                try {
+                    val response = userRepository.getUserEmail(currentUserId)
+
+                    val userEmail = response.getOrNull()?.email ?: "Default User"
+                    _userEmail.value = userEmail  // Update the MutableState with the user's email
+                    Log.d("ProfileViewModel", "User email: $userEmail")
+                } catch (e: Exception) {
+                    Log.e("ProfileViewModel", "Exception while fetching user email: $e")
+                }
             }
         }
     }
