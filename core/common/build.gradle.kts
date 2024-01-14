@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit4)
+    testImplementation("org.testng:testng:6.9.6")
     androidTestImplementation(libs.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation("javax.inject:javax.inject:1")
