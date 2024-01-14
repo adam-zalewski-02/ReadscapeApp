@@ -44,6 +44,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.designsystem.icon.ReadscapeIcons
 import com.example.model.book.BookListing
 import androidx.compose.material3.ButtonDefaults
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.model.NfcHandler
+import com.example.model.NfcReceivedDataManager
 import com.example.ui.BookDetail
 import com.example.ui.BorrowLendStatus
 
@@ -56,7 +59,7 @@ internal fun BookDetailRoute(
 ) {
     val bookDetailsState by viewModel.bookDetails.collectAsStateWithLifecycle()
     val bookListingExists by viewModel.bookListingExists.collectAsStateWithLifecycle()
-
+    val nfcHandler = NfcHandler(LocalContext.current)
     LaunchedEffect(volumeId) {
         viewModel.getBookDetails(volumeId)
     }
@@ -85,7 +88,9 @@ internal fun BookDetailRoute(
         bookListingExists = bookListingExists,
         onDeleteClicked = { isbn ->
             viewModel.deleteBookListing(isbn)
-        }
+        },
+        nfcHandler = nfcHandler,
+        onLendOut = viewModel::lendOutBook
     )
 }
 
@@ -99,7 +104,9 @@ fun BookDetailScreen(
     bookListingExists: Boolean,
     onEditListing: (BookListing) -> Unit,
     onDeleteClicked: (String) -> Unit,
-    onViewBookListingClick: (String) -> Unit
+    nfcHandler: NfcHandler,
+    onViewBookListingClick: (String) -> Unit,
+    onLendOut: (String, String, String) -> Unit,
 ) {
 
     when (state) {
@@ -111,7 +118,9 @@ fun BookDetailScreen(
             onBack = onBack,
             onPublishBookListingClick = onPublishBookListingClick,
             bookListingExists = bookListingExists,
-            onViewBookListingClick = onViewBookListingClick
+            onViewBookListingClick = onViewBookListingClick,
+            nfcHandler,
+            onLendOut = onLendOut
         )
         is BookDetailUiState.Error -> Text("Error")
         is BookDetailUiState.EditBookListing -> EditBookListingScreen(
@@ -251,7 +260,8 @@ fun ViewBookListingScreen(
             }
             Spacer(modifier = Modifier.height(5.dp))
             LazyColumn(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
                     .padding(16.dp)
             ) {
                 items(
@@ -301,7 +311,9 @@ internal fun Content(
     onBack: () -> Unit,
     onPublishBookListingClick: (String) -> Unit,
     bookListingExists: Boolean,
-    onViewBookListingClick: (String) -> Unit
+    onViewBookListingClick: (String) -> Unit,
+    nfcHandler: NfcHandler,
+    onLendOut: (String, String, String) -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -412,5 +424,18 @@ internal fun Content(
                 }
             }
         }
+    }
+    Button(
+        onClick = {
+            nfcHandler.startNfcReaderMode()
+        }
+    ) {
+        Text(text = "Lend out")
+    }
+
+    LaunchedEffect(NfcReceivedDataManager.getData()) {
+        NfcReceivedDataManager.getData()?.let { volume.volumeInfo.industryIdentifiers?.firstOrNull()
+            ?.let { it1 -> onLendOut(it.data, volume.id, it1.identifier) } }
+        nfcHandler.stopNfcReaderMode()
     }
 }

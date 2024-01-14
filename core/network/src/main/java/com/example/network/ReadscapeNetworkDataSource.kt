@@ -3,6 +3,7 @@ package com.example.network
 import com.example.network.model.AuthResponse
 import com.example.network.model.EmailResponse
 import com.example.network.model.NetworkUser
+import com.example.network.model.TransactionResponse
 import com.example.network.model.catalog.CatalogPostResponse
 import com.example.network.model.catalog.CatalogResponse
 
@@ -15,4 +16,6 @@ interface ReadscapeNetworkDataSource {
 
     suspend fun getCollection(userId: String) : CatalogResponse
     suspend fun addToCollection(userId: String, bookId: String) : CatalogPostResponse
+
+    suspend fun insertIntoTransactions(userId: String, toUserId: String, isbn: String, duration: Int) : TransactionResponse
 }

@@ -5,6 +5,8 @@ import com.example.network.model.AuthRequest
 import com.example.network.model.AuthResponse
 import com.example.network.model.EmailResponse
 import com.example.network.model.NetworkUser
+import com.example.network.model.TransactionRequest
+import com.example.network.model.TransactionResponse
 import com.example.network.model.catalog.CatalogPostResponse
 import com.example.network.model.catalog.CatalogRequest
 import com.example.network.model.catalog.CatalogResponse
@@ -38,6 +40,9 @@ private interface RetrofitReadscapeNetworkApi {
     suspend fun register(@Body request: AuthRequest): AuthResponse
     @POST(value = "/collections/{userId}")
     suspend fun insertIntoCollection(@Path("userId") userId: String, @Body request: CatalogRequest) : CatalogPostResponse
+
+    @POST(value = "/transactions/lend")
+    suspend fun insertIntoTransactions(@Body request: TransactionRequest) : TransactionResponse
 
     @DELETE(value = "/users/{id}")
     suspend fun deleteUser(@Path("id") id: Int)
@@ -100,6 +105,16 @@ class RetrofitReadscapeNetwork @Inject constructor(
             bookId = bookId
         )
         return genericRetrofitNetwork.networkApi.insertIntoCollection(userId, postRequest)
+    }
+
+    override suspend fun insertIntoTransactions(userId: String, toUserId: String, isbn: String, duration: Int): TransactionResponse {
+        val transactionRequest = TransactionRequest(
+            userId = userId,
+            toUserId = toUserId,
+            isbn = isbn,
+            duration = duration
+        )
+        return genericRetrofitNetwork.networkApi.insertIntoTransactions(transactionRequest)
     }
 
 }

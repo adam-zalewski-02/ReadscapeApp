@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Readscape</string>
+    <string name="servicedesc" />
 </resources>

@@ -7,6 +7,7 @@ import com.example.data.repository.BookListingRepository
 import com.example.data.repository.DefaultBookRepository
 import com.example.data.repository.DefaultUserRepository
 import com.example.model.CurrentUserManager
+import com.example.model.Transaction
 import com.example.model.book.BookListing
 import com.example.model.book.Volume
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -122,6 +123,22 @@ class BookDetailViewModel @Inject constructor(
                 val currentUser = CurrentUserManager.getCurrentUser()
                 val response = userRepository.insertIntoCollection(currentUser?.userId.toString(), volumeId)
                 println(response)
+            } catch (e: Exception) {
+                println(e.message)
+            }
+        }
+    }
+
+    fun lendOutBook(lenderId: String, volumeId: String, isbn: String) {
+        viewModelScope.launch {
+            try {
+                val currentUser = CurrentUserManager.getCurrentUser()
+                val response = userRepository.insertIntoCollection(lenderId, volumeId)
+                println(response)
+                if (currentUser != null) {
+                    val transaction = userRepository.insertIntoTransactions(currentUser.userId, lenderId, isbn, 30)
+                    println(transaction)
+                }
             } catch (e: Exception) {
                 println(e.message)
             }
