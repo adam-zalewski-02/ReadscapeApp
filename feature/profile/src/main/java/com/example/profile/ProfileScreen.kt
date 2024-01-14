@@ -22,16 +22,19 @@ import com.example.model.Transaction
 fun ProfileScreen(viewModel: ProfileViewModel = hiltViewModel()) {
 
     val transactionsResult by viewModel.transactions.collectAsStateWithLifecycle()
+    val userEmail by viewModel.userEmail.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = "John Doe",
-            fontSize = 24.sp,
-            textAlign = TextAlign.Center
-        )
+        userEmail?.let {
+            Text(
+                text = it,
+                fontSize = 24.sp,
+                textAlign = TextAlign.Center
+            )
+        }
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "Android Developer",

@@ -7,8 +7,8 @@ data class Transaction (
     val toUser: String,
     val isbn: String,
     val transactionType: String,
-    val lendDate: String,
+    val lendDate: String? = null,
     val sellDate: String? = null,
-    val duration: Int,
+    val duration: Int? = null,
     val _id: String,
 )

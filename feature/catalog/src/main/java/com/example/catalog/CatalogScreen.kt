@@ -2,12 +2,18 @@ package com.example.catalog
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Nfc
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -66,6 +72,11 @@ internal fun Content(
 ) {
         // Your existing LazyColumn for books
         LazyColumn {
+            item {
+                LendButton(onClick = {
+                    CurrentUserManager.getCurrentUser()?.let { nfcHandler.setHceData(it.userId) }
+                })
+            }
 
             items(books) { book ->
                 BookItem(
@@ -74,14 +85,25 @@ internal fun Content(
                 )
             }
         }
+}
+
+@Composable
+internal fun LendButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Button(
-        onClick = {
-            CurrentUserManager.getCurrentUser()?.let { nfcHandler.setHceData(it.userId) }
-        }
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp)
     ) {
-        Text(text = "Lend a book")
+
+        Icon(imageVector = Icons.Default.Nfc, contentDescription = "Lend Icon")
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = "Lend a Book")
     }
-    }
+}
 
 
 
