@@ -22,15 +22,11 @@ class PollingForegroundService : Service() {
 
         CoroutineScope(Dispatchers.IO).launch {
             while (isActive) {
-                // Perform your polling logic here
-                // ...
 
-                // If a condition is met, send a notification
                 if (true) {
                     sendNotification()
                 }
 
-                // Delay for the next poll (example: 30 seconds)
                 delay(100000)
             }
         }
