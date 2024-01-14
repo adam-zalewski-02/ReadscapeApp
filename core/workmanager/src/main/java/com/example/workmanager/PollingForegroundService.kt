@@ -8,14 +8,20 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.example.data.repository.DefaultUserRepository
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PollingForegroundService : Service() {
 
+    @Inject
+    lateinit var userRepository: DefaultUserRepository
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         createNotificationChannel()
         startForeground(NOTIFICATION_ID, createNotification())
@@ -23,11 +29,14 @@ class PollingForegroundService : Service() {
         CoroutineScope(Dispatchers.IO).launch {
             while (isActive) {
 
-                if (true) {
-                    sendNotification()
+                val sensorKitResult = userRepository.getSensorKit("fdqsf")
+                sensorKitResult.onSuccess { sensorKit ->
+                    if (sensorKit.condition == "dangerous") {
+                        sendNotification()
+                    }
                 }
 
-                delay(100000)
+                delay(15000)
             }
         }
 
@@ -76,12 +85,12 @@ class PollingForegroundService : Service() {
         }
 
         val notificationBuilder = NotificationCompat.Builder(this, "POLLING_CHANNEL_ID")
-            .setContentTitle("Polling Update")
-            .setContentText("Condition met during polling")
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setContentTitle("Sensorkit Warning")
+            .setContentText("Room conditions are dangerous!")
+            .setSmallIcon(android.R.drawable.ic_dialog_alert)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-        val notificationId = 2 // Use a different ID from the foreground notification
+        val notificationId = 2
         notificationManager.notify(notificationId, notificationBuilder.build())
     }
 }

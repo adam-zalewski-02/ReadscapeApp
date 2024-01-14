@@ -61,7 +61,6 @@ class DefaultUserRepository @Inject constructor(
             ?.let { dataSource.getUserTransactions(it.userId) }
     }
 
-    // You can also add a function that allows fetching sensor kit data with a specified kit ID
     override suspend fun getSensorKit(kitId: String): Result<SensorKitResponse> {
         val defaultKitId = "jso6f-pd4r6-ans45-86e32"
         return dataSource.getSensorKit(defaultKitId)
