@@ -65,14 +65,14 @@ Everything is deployed, except for the Android application and the sensorkit its
 - Flutter dart as frontend for the above 2 servers
 - Golang getting the sensordata, labeling it and putting it on the database
 
-1. [BrokerMongoPipeline](https://gitlab.ti.howest.be/ti/2023-2024/s5/ccett/projects/group11/code/brokermongopipeline)
-2. [ConfigurationClient](https://gitlab.ti.howest.be/ti/2023-2024/s5/ccett/projects/group11/code/configurationclient)
-3. [ConfigurationServer](https://gitlab.ti.howest.be/ti/2023-2024/s5/ccett/projects/group11/code/configurationserver)
-4. [LiveSensorDataServer](https://gitlab.ti.howest.be/ti/2023-2024/s5/ccett/projects/group11/code/livesensordataserver)
-5. [ReadScapeAPI](https://gitlab.ti.howest.be/ti/2023-2024/s5/ccett/projects/group11/code/readscapeapi)
-6. [ReadScapeApp](https://gitlab.ti.howest.be/ti/2023-2024/s5/ccett/projects/group11/code/readscapeapp)
-7. [ReadScapeStrapi](https://gitlab.ti.howest.be/ti/2023-2024/s5/ccett/projects/group11/code/readscapestrapi)
-8. [ReadScapeTensorFlowRecommender](https://gitlab.ti.howest.be/ti/2023-2024/s5/ccett/projects/group11/code/readscapetensorflowrecommender)
-9. [SensorKit](https://gitlab.ti.howest.be/ti/2023-2024/s5/ccett/projects/group11/code/sensorkit)
+1. [BrokerMongoPipeline]()
+2. [ConfigurationClient]()
+3. [ConfigurationServer]()
+4. [LiveSensorDataServer]()
+5. [ReadScapeAPI]()
+6. [ReadScapeApp]()
+7. [ReadScapeStrapi]()
+8. [ReadScapeTensorFlowRecommender]()
+9. [SensorKit]()
 
 ![system-architecture-diagram](system-architecture-diagram.png)
